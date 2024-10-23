@@ -28,6 +28,7 @@ from resiliparse_inc.lexbor cimport *
 from resiliparse_inc.re2 cimport Options as RE2Options, RE2Stack as RE2, PartialMatch
 from resiliparse_inc.string_view cimport string_view
 from resiliparse_inc.utility cimport move
+from resiliparse_inc.lexbor cimport lxb_html_serialize_tree_str, lexbor_str_create, lexbor_str_destroy
 
 
 __all__ = [
@@ -220,10 +221,41 @@ cdef inline string _indent_newlines(const string& element_text, size_t depth) no
     return tmp_text
 
 
+cdef string serialize_node(lxb_dom_node_t* node) nogil:
+    """
+    Serialize a DOM node to a C++ std::string without requiring the GIL.
+    Returns an empty string if serialization fails.
+    """
+    if node is NULL:
+        return string()
+
+    # Create a new Lexbor string
+    cdef lexbor_str_t* serialized_str = lexbor_str_create()
+    if not serialized_str:
+        return string()  # Return an empty C++ string
+
+    # Serialize the DOM node into the Lexbor string
+    cdef lxb_status_t status = lxb_html_serialize_tree_str(node, serialized_str)
+    
+    if status != LXB_STATUS_OK:
+        lexbor_str_destroy(serialized_str, NULL, True)
+        return string()
+
+    # Convert the serialized data to a C++ std::string
+    cdef string html_str = string(<const char*>serialized_str.data, serialized_str.length+1)
+
+    # Clean up the Lexbor string
+    # lexbor_str_destroy(serialized_str, NULL, True)
+
+    return html_str
+
+
 cdef string _serialize_extract_nodes(vector[shared_ptr[ExtractNode]]& extract_nodes, const ExtractOpts& opts) noexcept nogil:
     cdef size_t i
     cdef string output
+    cdef string html_output
     cdef string element_text
+    cdef string element_html
     cdef ExtractNode* current_node = NULL
     cdef bint bullet_deferred = False
     cdef size_t list_depth = 0
@@ -261,6 +293,10 @@ cdef string _serialize_extract_nodes(vector[shared_ptr[ExtractNode]]& extract_no
             continue
 
         element_text = deref(current_node.text_contents)
+        
+        if not current_node is NULL or not current_node.reference_node is NULL:
+            element_html = rstrip_str(serialize_node(current_node.reference_node))
+        
         if not current_node.is_pre or current_node.is_end_tag:
             element_text = rstrip_str(move(element_text))
 
@@ -287,8 +323,9 @@ cdef string _serialize_extract_nodes(vector[shared_ptr[ExtractNode]]& extract_no
                 output.append(b'\t\t')
 
         output.append(element_text)
+        html_output.append(element_html)
 
-    return output
+    return html_output
 
 
 cdef inline bint _is_unprintable_pua(lxb_dom_node_t* node) noexcept nogil:
@@ -650,9 +687,9 @@ def extract_plain_text(html,
         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
     cdef string skip_selector = <string>b','.join(skip_selectors)
 
-    cdef string extracted
+    cdef string extracted_dom
     with nogil:
-        extracted = _extract_plain_text_impl(
+        extracted_dom = _extract_plain_text_impl(
             tree,
             preserve_formatting,
             main_content,
@@ -663,7 +700,9 @@ def extract_plain_text(html,
             noscript,
             comments,
             skip_selector)
-    return extracted.decode(errors='ignore')
+    
+    filtered_dom = HTMLTree.parse(extracted_dom.decode(errors='ignore'))
+    return filtered_dom
 
 cdef string _extract_plain_text_impl(HTMLTree tree,
                                      bint preserve_formatting,
