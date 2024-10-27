@@ -616,7 +616,7 @@ cdef inline lxb_status_t _exists_cb(lxb_dom_node_t *node, lxb_css_selector_speci
     return LXB_STATUS_STOP
 
 
-def extract_plain_text(html,
+def extract_main_dom_tree(html,
                        bint preserve_formatting=True,
                        bint main_content=False,
                        bint list_bullets=True,
