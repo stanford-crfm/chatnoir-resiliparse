@@ -1,5 +1,5 @@
-recursive-include resiliparse *.pyx *.pxd *.h
+recursive-include resiliparse_dom *.pyx *.pxd *.h
 recursive-include fastwarc *.pxd
-recursive-exclude resiliparse *.cpp
+recursive-exclude resiliparse_dom *.cpp
 graft resiliparse_common
 graft resiliparse_inc

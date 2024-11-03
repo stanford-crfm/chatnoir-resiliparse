@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from apache_beam.coders import StrUtf8Coder as _StrUtf8Coder
-from resiliparse.parse.encoding import bytes_to_str
+from resiliparse_dom.parse.encoding import bytes_to_str
 
 __all__ = [
     'StrUtf8Coder'

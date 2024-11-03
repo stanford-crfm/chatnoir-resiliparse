@@ -86,23 +86,23 @@ def get_ext_modules():
     cpp_args = get_cpp_args()
 
     resiliparse_extensions = [
-        Extension('resiliparse.itertools',
-                  sources=[f'resiliparse/itertools.pyx'], **cpp_args),
-        Extension('resiliparse.extract.html2text',
-                  sources=[f'resiliparse/extract/html2text.pyx'], libraries=['lexbor', 're2'], **cpp_args),
-        Extension('resiliparse.parse.encoding',
-                  sources=[f'resiliparse/parse/encoding.pyx'], libraries=['uchardet', 'lexbor'], **cpp_args),
-        Extension('resiliparse.parse.html',
-                  sources=[f'resiliparse/parse/html.pyx'], libraries=['lexbor'], **cpp_args),
-        Extension('resiliparse.parse.http',
-                  sources=[f'resiliparse/parse/http.pyx'], **cpp_args),
-        Extension('resiliparse.parse.lang',
-                  sources=[f'resiliparse/parse/lang.pyx'], **cpp_args),
+        Extension('resiliparse_dom.itertools',
+                  sources=[f'resiliparse_dom/itertools.pyx'], **cpp_args),
+        Extension('resiliparse_dom.extract.html2text',
+                  sources=[f'resiliparse_dom/extract/html2text.pyx'], libraries=['lexbor', 're2'], **cpp_args),
+        Extension('resiliparse_dom.parse.encoding',
+                  sources=[f'resiliparse_dom/parse/encoding.pyx'], libraries=['uchardet', 'lexbor'], **cpp_args),
+        Extension('resiliparse_dom.parse.html',
+                  sources=[f'resiliparse_dom/parse/html.pyx'], libraries=['lexbor'], **cpp_args),
+        Extension('resiliparse_dom.parse.http',
+                  sources=[f'resiliparse_dom/parse/http.pyx'], **cpp_args),
+        Extension('resiliparse_dom.parse.lang',
+                  sources=[f'resiliparse_dom/parse/lang.pyx'], **cpp_args),
     ]
     if os.name == 'posix':
         # Process Guards are unsupported on Windows
         resiliparse_extensions.append(
-            Extension('resiliparse.process_guard', sources=[f'resiliparse/process_guard.pyx'],
+            Extension('resiliparse_dom.process_guard', sources=[f'resiliparse_dom/process_guard.pyx'],
                       libraries=['pthread'], **cpp_args)
         )
 

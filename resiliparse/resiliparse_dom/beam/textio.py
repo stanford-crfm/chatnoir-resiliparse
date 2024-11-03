@@ -19,8 +19,8 @@ from apache_beam.io.filesystems import FileSystems
 from apache_beam.io.filesystem import CompressionTypes, FileMetadata, CompressedFile
 from apache_beam.io.restriction_trackers import OffsetRange, OffsetRestrictionTracker
 
-from resiliparse.beam.coders import StrUtf8Coder
-from resiliparse.beam.fileio import MatchFiles
+from resiliparse_dom.beam.coders import StrUtf8Coder
+from resiliparse_dom.beam.fileio import MatchFiles
 
 __all__ = [
     'ReadAllFromText',

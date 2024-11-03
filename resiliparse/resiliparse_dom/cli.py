@@ -27,9 +27,9 @@ from urllib.error import HTTPError
 import sys
 
 from fastwarc import ArchiveIterator, WarcRecordType
-from resiliparse.parse.encoding import detect_encoding, bytes_to_str
-from resiliparse.parse.html import HTMLTree
-import resiliparse.parse.lang as rlang
+from resiliparse_dom.parse.encoding import detect_encoding, bytes_to_str
+from resiliparse_dom.parse.html import HTMLTree
+import resiliparse_dom.parse.lang as rlang
 
 
 # Optional 'cli' dependencies

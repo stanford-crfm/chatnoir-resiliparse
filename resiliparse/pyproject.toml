@@ -3,7 +3,7 @@ requires = ["setuptools>=65.0", "Cython>=0.29.33"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "Resiliparse"
+name = "resiliparse_dom"
 version = "0.14.9"
 description = "A collection of robust and fast processing tools for parsing and analyzing (not only) web archive data."
 authors = [
@@ -23,7 +23,7 @@ documentation = "https://resiliparse.chatnoir.eu"
 
 [project.optional-dependencies]
 all = [
-  "resiliparse[beam,cli]"
+  "resiliparse_dom[beam,cli]"
 ]
 beam = [
   "apache_beam[aws]>=2.37.0; python_version<'3.12'",
@@ -46,7 +46,7 @@ test = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["resiliparse*"]
+include = ["resiliparse_dom*"]
 
 [tool.cibuildwheel]
 archs = "native"
