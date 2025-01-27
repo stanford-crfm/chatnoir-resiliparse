@@ -300,7 +300,7 @@ cdef string _serialize_extract_nodes(vector[shared_ptr[ExtractNode]]& extract_no
         if not current_node.is_pre or current_node.is_end_tag:
             element_text = rstrip_str(move(element_text))
 
-        if element_text.empty():
+        if element_text.empty() or element_text == b' ':
             continue
 
         if list_depth > 0:
