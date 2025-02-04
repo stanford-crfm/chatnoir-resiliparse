@@ -21,14 +21,13 @@ from libcpp.memory cimport make_shared, shared_ptr
 from libcpp.string cimport string, to_string
 from libcpp.vector cimport vector
 
-from resiliparse_common.string_util cimport rstrip_str, strip_str, strip_sv
+from resiliparse_common.string_util cimport lstrip_str, rstrip_str, strip_str, strip_sv
 from resiliparse_inc.cctype cimport isspace
 from resiliparse_dom.parse.html cimport *
 from resiliparse_inc.lexbor cimport *
 from resiliparse_inc.re2 cimport Options as RE2Options, RE2Stack as RE2, PartialMatch
 from resiliparse_inc.string_view cimport string_view
 from resiliparse_inc.utility cimport move
-from resiliparse_inc.lexbor cimport lxb_html_serialize_tree_str, lexbor_str_create, lexbor_str_destroy
 
 
 __all__ = [
@@ -38,8 +37,14 @@ __all__ = [
 
 cdef extern from * nogil:
     """
+    enum FormattingOpts {
+        FORMAT_OFF = 0,
+        FORMAT_BASIC = 1,
+        FORMAT_MINIMAL_HTML = 2
+    };
+
     struct ExtractOpts {
-        bool preserve_formatting = true;
+        FormattingOpts preserve_formatting = FORMAT_BASIC;
         bool list_bullets = true;
         bool links = false;
         bool alt_texts = true;
@@ -58,16 +63,23 @@ cdef extern from * nogil:
         lxb_dom_node_t* reference_node = NULL;
         lxb_tag_id_t tag_id = LXB_TAG__UNDEF;
         size_t depth = 0;
+        size_t pre_depth = 0;
         bool space_after = false;
         bool collapse_margins = true;
-        bool is_big_block = false;
-        bool is_pre = false;
+        bool make_block = true;
+        bool make_big_block = false;
         bool is_end_tag = false;
+        bool escape_text_contents = false;
         std::shared_ptr<std::string> text_contents = NULL;
     };
     """
+    ctypedef enum FormattingOpts:
+        FORMAT_OFF
+        FORMAT_BASIC
+        FORMAT_MINIMAL_HTML
+
     cdef struct ExtractOpts:
-        bint preserve_formatting
+        FormattingOpts preserve_formatting
         bint list_bullets
         bint links
         bint alt_texts
@@ -84,11 +96,13 @@ cdef extern from * nogil:
         lxb_dom_node_t* reference_node
         lxb_tag_id_t tag_id
         size_t depth
+        size_t pre_depth
         bint space_after
         bint collapse_margins
-        bint is_big_block
-        bint is_pre
+        bint make_block
+        bint make_big_block
         bint is_end_tag
+        bint escape_text_contents
         shared_ptr[string] text_contents
 
 
@@ -125,73 +139,109 @@ cdef inline void _ensure_space(string& in_str, char space_char) noexcept nogil:
         in_str.push_back(space_char)
 
 
+cdef string _escape_html(const char* data, size_t length) noexcept nogil:
+    cdef size_t i
+    cdef char c
+    cdef string data_escaped
+    data_escaped.reserve(length)
+    for i in range(length):
+        c = data[i]
+        if c == b'&':
+            data_escaped.append(b'&amp;')
+        elif c == b'"':
+            data_escaped.append(b'&quot;')
+        elif c == b'<':
+            data_escaped.append(b'&lt;')
+        elif c == b'>':
+            data_escaped.append(b'&gt;')
+        else:
+            data_escaped.push_back(data[i])
+    return data_escaped
+
+
 cdef void _extract_cb(vector[shared_ptr[ExtractNode]]& extract_nodes, ExtractContext& ctx, bint is_end_tag) noexcept nogil:
-    cdef shared_ptr[ExtractNode] last_node_shared
-    cdef ExtractNode* last_node = NULL
-    cdef bint is_block = ctx.node.type == LXB_DOM_NODE_TYPE_ELEMENT and is_block_element(ctx.node.local_name)
+    cdef shared_ptr[ExtractNode] current_node
+    cdef shared_ptr[ExtractNode] last_node
+
     if not extract_nodes.empty():
-        last_node = extract_nodes.back().get()
+        last_node = extract_nodes.back()
+        current_node = last_node
 
-    if not last_node or is_block or ctx.depth < last_node.depth or ctx.node.local_name == LXB_TAG_TEXTAREA:
-        last_node_shared = make_shared[ExtractNode]()
-        extract_nodes.push_back(last_node_shared)
-        last_node = extract_nodes.back().get()
-        last_node.reference_node = ctx.node
-        last_node.depth = ctx.depth
-        last_node.is_big_block = ctx.node.local_name in [LXB_TAG_P, LXB_TAG_H1, LXB_TAG_H2, LXB_TAG_H3, LXB_TAG_H4]
-        last_node.tag_id = ctx.node.local_name
-        last_node.is_pre = not is_end_tag and ctx.node.local_name in [LXB_TAG_PRE, LXB_TAG_TEXTAREA]
-        last_node.is_end_tag = is_end_tag
+    cdef bint is_block = ctx.node.type == LXB_DOM_NODE_TYPE_ELEMENT and is_block_element(ctx.node.local_name)
 
-    cdef lxb_dom_character_data_t* char_data = NULL
+    if not last_node or is_block or ctx.depth < deref(last_node).depth or \
+            (ctx.opts.links and ctx.node.local_name == LXB_TAG_A) or ctx.node.local_name == LXB_TAG_TEXTAREA:
+        current_node = make_shared[ExtractNode]()
+        extract_nodes.push_back(current_node)
+        deref(current_node).reference_node = ctx.node
+        deref(current_node).depth = ctx.depth
+        deref(current_node).make_block = is_block
+        deref(current_node).make_big_block = ctx.node.local_name in [LXB_TAG_P, LXB_TAG_H1, LXB_TAG_H2, LXB_TAG_H3, LXB_TAG_H4]
+        deref(current_node).tag_id = ctx.node.local_name
+        deref(current_node).pre_depth = deref(last_node).pre_depth if last_node else 0
+        if ctx.node.local_name in [LXB_TAG_PRE, LXB_TAG_TEXTAREA]:
+            current_node.get().pre_depth += 1 if not is_end_tag else -1
+        deref(current_node).is_end_tag = is_end_tag
+        deref(current_node).escape_text_contents = ctx.opts.preserve_formatting == FormattingOpts.FORMAT_MINIMAL_HTML
+
+    cdef lxb_dom_character_data_t* node_char_data = NULL
+    cdef string node_char_data_escaped
     cdef string element_text
     cdef string_view element_text_sv
 
     if ctx.node.type == LXB_DOM_NODE_TYPE_TEXT:
         _ensure_text_contents(extract_nodes)
         node_char_data = <lxb_dom_character_data_t*>ctx.node
-        element_text_sv = string_view(<const char*>node_char_data.data.data, node_char_data.data.length)
-        if last_node.is_pre and ctx.opts.preserve_formatting:
-            deref(last_node.text_contents).append(<string>element_text_sv)
-        else:
-            element_text = _get_collapsed_string(<string>element_text_sv)
-            element_text_sv = <string_view>element_text
-            if deref(last_node.text_contents).empty() or isspace(deref(last_node.text_contents).back()):
-                while not element_text_sv.empty() and isspace(element_text_sv.front()):
-                    element_text_sv.remove_prefix(1)
-            if not element_text_sv.empty():
-                deref(last_node.text_contents).append(<string>element_text_sv)
+        element_text = string(<const char*>node_char_data.data.data, node_char_data.data.length)
+
+        if deref(current_node).tag_id == LXB_TAG_A and ctx.opts.preserve_formatting >= FormattingOpts.FORMAT_MINIMAL_HTML:
+            # Escape <a> inner text
+            element_text = _escape_html(element_text.data(), element_text.size())
+
+        if not element_text.empty():
+            deref(deref(current_node).text_contents).append(element_text)
 
     elif ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT:
         return
 
-    elif ctx.node.local_name in [LXB_TAG_BR, LXB_TAG_HR]:
+    elif ctx.node.local_name == LXB_TAG_BR and ctx.opts.preserve_formatting == FormattingOpts.FORMAT_BASIC:
         _ensure_text_contents(extract_nodes)
-        last_node.collapse_margins = False
+        deref(current_node).collapse_margins = False
 
-    elif ctx.opts.links and is_end_tag and ctx.node.local_name == LXB_TAG_A:
+    elif ctx.opts.links and ctx.node.local_name == LXB_TAG_A:
         element_text_sv = strip_sv(get_node_attr_sv(ctx.node, b'href'))
-        if not element_text_sv.empty():
+        _ensure_text_contents(extract_nodes)
+        deref(current_node).make_block = False
+
+        if ctx.opts.preserve_formatting == FormattingOpts.FORMAT_MINIMAL_HTML:
+            if not is_end_tag:
+                element_text.append(b'<a href="')
+                element_text.append(_escape_html(element_text_sv.data(), element_text_sv.size()))
+                element_text.append(b'">')
+            else:
+                element_text.append(b'</a>')
+            deref(deref(current_node).text_contents).append(element_text)
+            deref(current_node).escape_text_contents = False
+
+        elif is_end_tag:
             element_text.append(b' (')
             element_text.append(<string>element_text_sv)
-            element_text.append(b') ')
-            _ensure_text_contents(extract_nodes)
-            deref(last_node.text_contents).append(element_text)
+            element_text.push_back(b')')
+            deref(deref(current_node).text_contents).append(element_text)
 
     elif ctx.opts.alt_texts and ctx.node.local_name in [LXB_TAG_IMG, LXB_TAG_AREA]:
         _ensure_text_contents(extract_nodes)
         element_text_sv = get_node_attr_sv(ctx.node, b'alt')
         if not element_text_sv.empty():
-            deref(last_node.text_contents).append(<string>element_text_sv)
+            deref(deref(current_node).text_contents).append(<string>element_text_sv)
 
     elif ctx.opts.form_fields and ctx.node.local_name in [LXB_TAG_TEXTAREA, LXB_TAG_BUTTON]:
         if not is_end_tag:
             element_text.append(b'[ ')
         else:
-            element_text.append(b' ]')
+            element_text.append(b' ] ')
         _ensure_text_contents(extract_nodes)
-        deref(last_node.text_contents).append(element_text)
-        return
+        deref(deref(current_node).text_contents).append(element_text)
 
     elif ctx.opts.form_fields and ctx.node.local_name == LXB_TAG_INPUT:
         element_text_sv = strip_sv(get_node_attr_sv(ctx.node, b'type'))
@@ -204,128 +254,186 @@ cdef void _extract_cb(vector[shared_ptr[ExtractNode]]& extract_nodes, ExtractCon
                 _ensure_text_contents(extract_nodes)
                 element_text.append(b'[ ')
                 element_text.append(<string> element_text_sv)
-                element_text.append(b' ]')
+                element_text.append(b' ] ')
                 _ensure_text_contents(extract_nodes)
-                deref(last_node.text_contents).append(element_text)
+                deref(deref(current_node).text_contents).append(element_text)
 
 
-cdef inline string _indent_newlines(const string& element_text, size_t depth) noexcept nogil:
-    cdef string indent = string(2 * depth, <char>b' ')
-    cdef string tmp_text
-    tmp_text.reserve(element_text.size() + 10 * indent.size())
-    for i in range(element_text.size()):
-        tmp_text.push_back(element_text[i])
-        if element_text[i] == b'\n':
-            tmp_text.append(indent)
-
-    return tmp_text
+cdef inline void _make_indent(string& output, size_t list_depth, const ExtractNode* current_node, const ExtractOpts& opts) noexcept nogil:
+    if not list_depth:
+        return
+    if opts.preserve_formatting == FormattingOpts.FORMAT_OFF:
+        output = rstrip_str(move(output))
+    output.append(list_depth * 2u, <char>b' ')
 
 
-cdef string serialize_node(lxb_dom_node_t* node) nogil:
-    """
-    Serialize a DOM node to a C++ std::string without requiring the GIL.
-    Returns an empty string if serialization fails.
-    """
-    if node is NULL:
-        return string()
-
-    # Create a new Lexbor string
-    cdef lexbor_str_t* serialized_str = lexbor_str_create()
-    if not serialized_str:
-        return string()  # Return an empty C++ string
-
-    # Serialize the DOM node into the Lexbor string
-    cdef lxb_status_t status = lxb_html_serialize_tree_str(node, serialized_str)
-    
-    if status != LXB_STATUS_OK:
-        lexbor_str_destroy(serialized_str, NULL, True)
-        return string()
-
-    # Convert the serialized data to a C++ std::string
-    cdef string html_str = string(<const char*>serialized_str.data, serialized_str.length+1)
-
-    # Clean up the Lexbor string
-    # lexbor_str_destroy(serialized_str, NULL, True)
-
-    return html_str
+cdef inline void _make_margin(string& output, size_t& margin_size, const ExtractNode* current_node, const ExtractOpts& opts) noexcept nogil:
+    if not margin_size:
+        return
+    if not current_node.pre_depth or opts.preserve_formatting == FormattingOpts.FORMAT_OFF:
+        output = rstrip_str(move(output))
+    if opts.preserve_formatting == FormattingOpts.FORMAT_OFF and not output.empty():
+        output.push_back(<char>b' ')
+    elif opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and not output.empty():
+        output.append(margin_size, <char>b'\n')
+    margin_size = 0
 
 
-cdef string _serialize_extract_nodes(vector[shared_ptr[ExtractNode]]& extract_nodes, const ExtractOpts& opts) noexcept nogil:
+cdef string _serialize_extract_nodes(vector[shared_ptr[ExtractNode]]& extract_nodes,
+                                     const ExtractOpts& opts, size_t reserve_size) noexcept nogil:
     cdef size_t i
     cdef string output
-    cdef string html_output
     cdef string element_text
-    cdef string element_html
+    cdef string element_text_prefix
     cdef ExtractNode* current_node = NULL
-    cdef bint bullet_deferred = False
+    cdef bint bullet_inserted = False
     cdef size_t list_depth = 0
+    cdef size_t margin_size = 0
+    cdef size_t uncollapsed_margin_count = 0
     cdef vector[size_t] list_numbering
     cdef string list_item_indent = <const char*>b' '
+    cdef const char* element_name = NULL
+    cdef size_t element_name_len = 0
+
+    output.reserve(reserve_size)
 
     for i in range(extract_nodes.size()):
         current_node = extract_nodes[i].get()
 
-        if opts.preserve_formatting:
-            if current_node.tag_id in [LXB_TAG_UL, LXB_TAG_OL] \
-                    or (current_node.tag_id == LXB_TAG_LI and list_depth == 0):
+        # Basic and minimal HTML formatting
+        if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC:
+            if current_node.make_block and not current_node.collapse_margins:
+                uncollapsed_margin_count += 1
+
+            # List tags
+            if (current_node.tag_id in [LXB_TAG_UL, LXB_TAG_OL]
+                    or (current_node.tag_id == LXB_TAG_LI and list_depth == 0)):
                 if current_node.is_end_tag:
                     predec(list_depth)
                     list_numbering.pop_back()
-                    bullet_deferred = False
+                    bullet_inserted = False
+                    element_text_prefix.clear()
                 else:
                     preinc(list_depth)
                     list_numbering.push_back(<size_t>(current_node.tag_id == LXB_TAG_OL))
 
-            if current_node.tag_id == LXB_TAG_LI:
-                bullet_deferred = True
+            # List item tags
+            if opts.list_bullets and current_node.tag_id == LXB_TAG_LI:
+                if opts.preserve_formatting == FormattingOpts.FORMAT_BASIC:
+                    if list_numbering.back() == 0:
+                        element_text_prefix = LIST_BULLET + <const char*>b' '
+                    else:
+                        element_text_prefix = to_string(list_numbering.back()) + <const char*>b'. '
+                        if not current_node.is_end_tag:
+                            preinc(list_numbering.back())
+                    bullet_inserted = not current_node.is_end_tag
 
-            # Add margins
-            if current_node.tag_id != LXB_TAG_TEXTAREA:
-                if not current_node.collapse_margins or (not output.empty() and output.back() != b'\n'):
-                    output.push_back(<char> b'\n')
-                if current_node.is_big_block and not bullet_deferred and \
-                        output.size() >= 2 and output[output.size() - 2] != b'\n':
-                    output.push_back(<char> b'\n')
-        elif not output.empty() and output.back() != b' ':
-            output.push_back(<char> b' ')
+                elif opts.list_bullets and opts.preserve_formatting == FormattingOpts.FORMAT_MINIMAL_HTML:
+                    _make_margin(output, margin_size, current_node, opts)
+                    if not current_node.is_end_tag:
+                        output.append(2 * list_depth, <char>b' ')
+                        output.append(b'<li>')
+                        margin_size = 0
+                        current_node.make_block = False
+                    else:
+                        if not current_node.pre_depth:
+                            output = rstrip_str(move(output))
+                        output.append(b'</li>\n')
 
+        # Minimal HTML formatting only
+        if opts.preserve_formatting == FormattingOpts.FORMAT_MINIMAL_HTML:
+            # Add <pre> tags immediately with newlines and skip usual block logic for opening tags
+            if current_node.tag_id == LXB_TAG_PRE and opts.preserve_formatting == FormattingOpts.FORMAT_MINIMAL_HTML:
+                if not current_node.is_end_tag:
+                    _make_margin(output, margin_size, current_node, opts)
+                output.append(b'</pre>' if current_node.is_end_tag else b'<pre>')
+                margin_size = 0
+
+            if current_node.pre_depth:
+                current_node.make_block = False
+
+            # Explicit line breaks
+            if current_node.tag_id == LXB_TAG_BR:
+                output.append(b'<br>')
+
+            # Add a select number of start/end tags if minimal HTML formatting is on.
+            if opts.preserve_formatting == FormattingOpts.FORMAT_MINIMAL_HTML and (
+                    current_node.tag_id in [LXB_TAG_H1, LXB_TAG_H2, LXB_TAG_H3, LXB_TAG_H4, LXB_TAG_H5, LXB_TAG_H6, LXB_TAG_P]
+                    or (current_node.tag_id in [LXB_TAG_UL, LXB_TAG_OL] and opts.list_bullets)):
+
+                # Add margin before start tag and skip after
+                if (not current_node.is_end_tag and not current_node.pre_depth) or (
+                        uncollapsed_margin_count and current_node.collapse_margins):
+                    if current_node.collapse_margins:
+                        margin_size = max(margin_size, <size_t>(current_node.make_block + current_node.make_big_block))
+                    else:
+                        margin_size += <size_t>(current_node.make_block + current_node.make_big_block)
+                    _make_margin(output, margin_size, current_node, opts)
+                    current_node.make_block = False
+                    uncollapsed_margin_count = 0
+
+                # Indent if in list (indent ul and ol start tags on level less)
+                if opts.list_bullets:
+                    _make_indent(output, list_depth - (<size_t>(current_node.tag_id in [LXB_TAG_UL, LXB_TAG_OL])
+                                                       if list_depth > 0 and not current_node.is_end_tag else 0u),
+                                 current_node, opts)
+                output.push_back(b'<')
+                if current_node.is_end_tag:
+                    output.push_back(b'/')
+                element_name = <const char*>lxb_dom_element_qualified_name(<lxb_dom_element_t*>current_node.reference_node, &element_name_len)
+                output.append(element_name, element_name_len)
+                output.push_back(b'>')
+
+                # Add extra newline after opening <ul> / <ol>
+                if not output.empty() and current_node.tag_id in [LXB_TAG_UL, LXB_TAG_OL] \
+                        and not current_node.is_end_tag and not current_node.pre_depth:
+                    output.push_back(b'\n')
+
+
+        # Record size follow-up margins
+        if current_node.make_block:
+            if current_node.collapse_margins:
+                margin_size = max(margin_size, 2u if current_node.make_big_block and not current_node.pre_depth else 1u)
+            else:
+                margin_size += 2u if current_node.make_big_block else 1u
+
+        # From here on process only text nodes
         if current_node.text_contents.get() == NULL:
             continue
 
         element_text = deref(current_node.text_contents)
-        
-        if not current_node is NULL or not current_node.reference_node is NULL:
-            element_html = rstrip_str(serialize_node(current_node.reference_node))
-        
-        if not current_node.is_pre or current_node.is_end_tag:
-            element_text = rstrip_str(move(element_text))
+        if not current_node.pre_depth or opts.preserve_formatting == FormattingOpts.FORMAT_OFF:
+            element_text = _get_collapsed_string(element_text)
+            if current_node.make_block or (not output.empty() and isspace(output.back())):
+                # Strip inline elements only if previous text ended with space
+                element_text = lstrip_str(move(element_text))
 
-        if element_text.empty() or element_text == b' ':
+        if element_text.empty():
             continue
 
-        if list_depth > 0:
-            if current_node.is_pre and opts.preserve_formatting:
-                element_text = _indent_newlines(element_text, list_depth + <size_t>opts.list_bullets)
-            if opts.preserve_formatting:
-                list_item_indent = string(2 * list_depth + 2 * <size_t>(
-                        not bullet_deferred and opts.list_bullets), <char>b' ')
-            if bullet_deferred:
-                if opts.list_bullets and list_numbering.back() == 0:
-                    list_item_indent += LIST_BULLET + <const char*>b' '
-                elif opts.list_bullets:
-                    list_item_indent += to_string(list_numbering.back()) + <const char*>b'. '
-                    preinc(list_numbering.back())
-                bullet_deferred = False
-            element_text = list_item_indent + element_text
+        if current_node.escape_text_contents:
+            element_text = _escape_html(element_text.data(), element_text.size())
 
-        if opts.preserve_formatting and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
+        # Make margins and indents
+        _make_margin(output, margin_size, current_node, opts)
+        uncollapsed_margin_count = 0
+
+        # Indent list items if basic formatting is used (follow-up lines without bullets are indented more)
+        if list_depth and opts.preserve_formatting == FormattingOpts.FORMAT_BASIC:
+            _make_indent(output, list_depth + <size_t>(opts.list_bullets and not bullet_inserted),
+                         current_node, opts)
+            bullet_inserted = False
+
+
+        if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
             if not output.empty() and output.back() != b'\n':
                 output.append(b'\t\t')
 
+        output.append(element_text_prefix)
+        element_text_prefix.clear()
         output.append(element_text)
-        html_output.append(element_html)
 
-    return html_output
+    return output
 
 
 cdef inline bint _is_unprintable_pua(lxb_dom_node_t* node) noexcept nogil:
@@ -616,8 +724,212 @@ cdef inline lxb_status_t _exists_cb(lxb_dom_node_t *node, lxb_css_selector_speci
     return LXB_STATUS_STOP
 
 
-def extract_main_dom_tree(html,
-                       bint preserve_formatting=True,
+cdef string serialize_node(lxb_dom_node_t* node) nogil:
+    """
+    Serialize a DOM node to a C++ std::string without requiring the GIL.
+    Returns an empty string if serialization fails.
+    """
+    if node is NULL:
+        return string()
+
+    # Create a new Lexbor string
+    cdef lexbor_str_t* serialized_str = lexbor_str_create()
+    if not serialized_str:
+        return string()  # Return an empty C++ string
+
+    # Serialize the DOM node into the Lexbor string
+    cdef lxb_status_t status = lxb_html_serialize_tree_str(node, serialized_str)
+    
+    if status != LXB_STATUS_OK:
+        lexbor_str_destroy(serialized_str, NULL, True)
+        return string()
+
+    # Convert the serialized data to a C++ std::string
+    cdef string html_str = string(<const char*>serialized_str.data, serialized_str.length+1)
+
+    # Clean up the Lexbor string
+    # lexbor_str_destroy(serialized_str, NULL, True)
+
+    return html_str
+
+
+def extract_simplified_dom(html,
+                          bint main_content=False,
+                          bint list_bullets=True,
+                          bint alt_texts=True,
+                          bint links=False,
+                          bint form_fields=False,
+                          bint noscript=False,
+                          bint comments=True,
+                          skip_elements=None):
+    """
+    extract_simplified_dom(html, preserve_formatting=True, main_content=False, list_bullets=True, alt_texts=False, \
+                       links=True, form_fields=False, noscript=False, comments=None, skip_elements=None)
+
+    Perform a simplified DOM extraction from the given DOM node and follow same rules as extract_plain_text.
+    """
+    cdef HTMLTree tree
+    if isinstance(html, str):
+        tree = HTMLTree.parse(html)
+    elif isinstance(html, HTMLTree):
+        tree = <HTMLTree>html
+    else:
+        raise TypeError('Parameter "html" is neither string nor HTMLTree.')
+
+    if not check_node(tree.body):
+        return ''
+
+    skip_selectors = {e.encode() for e in skip_elements or []}
+    skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})
+    
+    if not alt_texts:
+        skip_selectors.update({b'object', b'video', b'audio', b'embed', b'img', b'area',
+                               b'svg', b'figcaption', b'figure'})
+    if not noscript:
+        skip_selectors.add(b'noscript')
+    if not form_fields:
+        skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
+
+    cdef string skip_selector = <string>b','.join(skip_selectors)
+
+    cdef string extracted
+    with nogil:
+        extracted = _extract_simplified_dom_impl(
+            tree,
+            FormattingOpts.FORMAT_OFF,
+            main_content,
+            list_bullets,
+            alt_texts,
+            links,
+            form_fields,
+            noscript,
+            comments,
+            skip_selector)
+    return extracted.decode(errors='ignore')
+
+cdef string _extract_simplified_dom_impl(HTMLTree tree,
+                                       FormattingOpts preserve_formatting,
+                                       bint main_content,
+                                       bint list_bullets,
+                                       bint alt_texts,
+                                       bint links,
+                                       bint form_fields,
+                                       bint noscript,
+                                       bint comments,
+                                       string skip_selector) noexcept nogil:
+    """Internal simplified DOM extractor implementation not requiring GIL."""
+    
+    # Initialize context similar to plain text extraction
+    cdef ExtractContext ctx
+    ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body
+    ctx.node = ctx.root_node
+    ctx.opts = [
+        preserve_formatting,
+        list_bullets,
+        links,
+        alt_texts,
+        form_fields,
+        noscript]
+
+    if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:
+        ctx.root_node = next_element_node(ctx.node, ctx.node.first_child)
+        ctx.node = ctx.root_node
+
+    # Calculate base depth
+    cdef size_t base_depth = 0
+    cdef lxb_dom_node_t* pnode = ctx.node
+    while pnode.local_name != LXB_TAG_BODY and pnode.parent:
+        preinc(base_depth)
+        pnode = pnode.parent
+
+    # Get blacklisted nodes using the skip selector
+    cdef lxb_dom_collection_t* blacklist_coll = NULL
+    cdef stl_set[lxb_dom_node_t*] blacklisted_nodes
+    cdef lxb_dom_node_t* node
+    cdef lxb_dom_node_t* descendant
+    
+    if skip_selector.size() > 0:
+        blacklist_coll = query_selector_all_impl(ctx.root_node, tree,
+                                               skip_selector.data(), skip_selector.size(), 30)
+        if blacklist_coll != NULL:
+            for i in range(lxb_dom_collection_length(blacklist_coll)):
+                node = lxb_dom_collection_node(blacklist_coll, i)
+                blacklisted_nodes.insert(node)
+                # Also blacklist all descendants
+                descendant = node.first_child
+                while descendant:
+                    blacklisted_nodes.insert(descendant)
+                    descendant = next_element_node(node, descendant)
+            lxb_dom_collection_destroy(blacklist_coll, True)
+
+    # Modified traversal logic
+    cdef bint is_end_tag = False
+    cdef lxb_dom_node_t* current = ctx.root_node
+    cdef lxb_dom_node_t* next_node = NULL
+    cdef lxb_dom_node_t* parent = NULL
+    cdef const lxb_char_t* tag_name
+    cdef size_t tag_name_len
+    cdef lxb_dom_node_t* child = NULL
+    cdef lxb_dom_node_t* next_child = NULL
+    cdef size_t depth = 0
+    
+    while current:
+        # Store the next node before potentially removing current
+        parent = current.parent
+
+        # Determine next node in traversal order
+        if current.first_child:
+            next_node = current.first_child
+        elif current.next:
+            next_node = current.next
+        else:
+            next_node = parent
+            while next_node and not next_node.next:
+                next_node = next_node.parent
+            if next_node:
+                next_node = next_node.next
+
+        # Process node
+        if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:
+            lxb_dom_node_remove(current)
+        elif blacklisted_nodes.find(current) != blacklisted_nodes.end() or \
+             (main_content and not _is_main_content_node(current, depth + base_depth, False)):
+            # If we're about to remove a node that has children,
+            # make sure next_node isn't pointing to one of them
+            if next_node and (next_node == current.first_child or is_descendant(current, next_node)):
+                if current.next:
+                    next_node = current.next
+                else:
+                    next_node = parent
+                    while next_node and not next_node.next:
+                        next_node = next_node.parent
+                    if next_node:
+                        next_node = next_node.next
+            
+            # Remove all children first
+            child = current.first_child
+            while child:
+                next_child = child.next
+                lxb_dom_node_remove(child)
+                child = next_child
+                
+            # Then remove the current node
+            lxb_dom_node_remove(current)
+            
+        current = next_node
+
+    return rstrip_str(serialize_node(ctx.root_node))
+
+cdef inline bint is_descendant(lxb_dom_node_t* ancestor, lxb_dom_node_t* descendant) nogil:
+    """Check if one node is a descendant of another."""
+    while descendant:
+        if descendant.parent == ancestor:
+            return True
+        descendant = descendant.parent
+    return False
+
+def extract_plain_text(html,
+                       preserve_formatting=True,
                        bint main_content=False,
                        bint list_bullets=True,
                        bint alt_texts=True,
@@ -633,9 +945,12 @@ def extract_main_dom_tree(html,
     Perform a simple plain-text extraction from the given DOM node and its children.
 
     Extracts all visible text (excluding script/style elements, comment nodes etc.)
-    and collapses consecutive white space characters. If ``preserve_formatting`` is
-    ``True``, line breaks, paragraphs, other block-level elements, list elements, and
-    ``<pre>``-formatted text will be preserved.
+    and collapses consecutive white space characters.
+
+    If ``preserve_formatting`` is ``True``, line breaks, paragraphs, other block-level elements,
+    list elements, and pre-formatted text will be preserved. Use the special value ``'minimal_html'`` to
+    add reduced HTML markup to the formatted output, preserving headings (``<h1-6>``), paragraphs (``<p>``),
+    lists (``<ul>``, ``<ol>``), ``<pre>`` text, ``<br>`` line breaks, and links (``<a>``, if ``links=True``).
 
     Extraction of particular elements and attributes such as links, alt texts, or form fields
     can be configured individually by setting the corresponding parameter to ``True``.
@@ -643,8 +958,9 @@ def extract_main_dom_tree(html,
 
     :param html: HTML as DOM tree or Unicode string
     :type html: HTMLTree or str
-    :param preserve_formatting: preserve basic block-level formatting
-    :type preserve_formatting: bool
+    :param preserve_formatting: preserve basic block-level formatting (use ``'minimal_html'`` for minimal HTML
+                                markup in output)
+    :type preserve_formatting: bool or t.Literal['minimal_html']
     :param main_content: apply simple heuristics for extracting only "main-content" elements
     :type main_content: bool
     :param list_bullets: insert bullets / numbers for list items
@@ -687,11 +1003,17 @@ def extract_main_dom_tree(html,
         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
     cdef string skip_selector = <string>b','.join(skip_selectors)
 
-    cdef string extracted_dom
+    cdef FormattingOpts formatting_opts = FormattingOpts.FORMAT_OFF
+    if preserve_formatting == 'minimal_html':
+        formatting_opts = FormattingOpts.FORMAT_MINIMAL_HTML
+    elif preserve_formatting:
+        formatting_opts = FormattingOpts.FORMAT_BASIC
+
+    cdef string extracted
     with nogil:
-        extracted_dom = _extract_plain_text_impl(
+        extracted = _extract_plain_text_impl(
             tree,
-            preserve_formatting,
+            formatting_opts,
             main_content,
             list_bullets,
             alt_texts,
@@ -700,12 +1022,10 @@ def extract_main_dom_tree(html,
             noscript,
             comments,
             skip_selector)
-    
-    filtered_dom = HTMLTree.parse(extracted_dom.decode(errors='ignore'))
-    return filtered_dom
+    return extracted.decode(errors='ignore')
 
 cdef string _extract_plain_text_impl(HTMLTree tree,
-                                     bint preserve_formatting,
+                                     FormattingOpts preserve_formatting,
                                      bint main_content,
                                      bint list_bullets,
                                      bint alt_texts,
@@ -770,6 +1090,8 @@ cdef string _extract_plain_text_impl(HTMLTree tree,
         pnode = pnode.parent
 
     cdef vector[shared_ptr[ExtractNode]] extract_nodes
+    cdef size_t chars_extracted = 0
+    cdef size_t nodes_extracted = 0
     extract_nodes.reserve(150)
     while ctx.node:
         # Skip everything except element and text nodes
@@ -786,6 +1108,10 @@ cdef string _extract_plain_text_impl(HTMLTree tree,
             continue
 
         _extract_cb(extract_nodes, ctx, is_end_tag)
+        if extract_nodes.size() > nodes_extracted and deref(extract_nodes.back()).text_contents:
+            chars_extracted += deref(deref(extract_nodes.back()).text_contents).size()
+            preinc(nodes_extracted)
+
         ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
 
-    return rstrip_str(_serialize_extract_nodes(extract_nodes, ctx.opts))
+    return rstrip_str(_serialize_extract_nodes(extract_nodes, ctx.opts, <size_t>(chars_extracted * 1.2)))
