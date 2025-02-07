@@ -754,6 +754,7 @@ cdef string serialize_node(lxb_dom_node_t* node) nogil:
 
 
 def extract_simplified_dom(html,
+                          bint preserve_formatting=True,
                           bint main_content=False,
                           bint list_bullets=True,
                           bint alt_texts=True,
