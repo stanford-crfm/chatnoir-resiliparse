@@ -2858,8 +2858,9 @@ static PyObject *__pyx_builtin_TypeError;
 static const char __pyx_k_e[] = "e";
 static const char __pyx_k__2[] = "";
 static const char __pyx_k__3[] = ",";
-static const char __pyx_k__8[] = "?";
+static const char __pyx_k__4[] = "\000";
 static const char __pyx_k_id[] = "id";
+static const char __pyx_k__10[] = "?";
 static const char __pyx_k_all[] = "__all__";
 static const char __pyx_k_alt[] = "alt";
 static const char __pyx_k_img[] = "img";
@@ -2909,6 +2910,7 @@ static const char __pyx_k_select[] = "select";
 static const char __pyx_k_update[] = "update";
 static const char __pyx_k_comment[] = "comment";
 static const char __pyx_k_menubar[] = "menubar";
+static const char __pyx_k_replace[] = "replace";
 static const char __pyx_k_toolbar[] = "toolbar";
 static const char __pyx_k_tooltip[] = "tooltip";
 static const char __pyx_k_checkbox[] = "checkbox";
@@ -3021,9 +3023,10 @@ typedef struct {
   #endif
   PyObject *__pyx_kp_u_Parameter_html_is_neither_string;
   PyObject *__pyx_n_s_TypeError;
+  PyObject *__pyx_n_s__10;
   PyObject *__pyx_kp_u__2;
   PyObject *__pyx_kp_b__3;
-  PyObject *__pyx_n_s__8;
+  PyObject *__pyx_kp_u__4;
   PyObject *__pyx_n_b_alert;
   PyObject *__pyx_n_s_all;
   PyObject *__pyx_n_s_alt_texts;
@@ -3083,6 +3086,7 @@ typedef struct {
   PyObject *__pyx_n_s_pyx_vtable;
   PyObject *__pyx_n_b_radio;
   PyObject *__pyx_n_s_range;
+  PyObject *__pyx_n_s_replace;
   PyObject *__pyx_kp_s_resiliparse_dom_extract_html2tex;
   PyObject *__pyx_n_s_resiliparse_dom_extract_html2tex_2;
   PyObject *__pyx_n_b_script;
@@ -3105,10 +3109,11 @@ typedef struct {
   PyObject *__pyx_n_s_update;
   PyObject *__pyx_n_b_video;
   PyObject *__pyx_tuple_;
-  PyObject *__pyx_tuple__4;
+  PyObject *__pyx_tuple__5;
   PyObject *__pyx_tuple__6;
-  PyObject *__pyx_codeobj__5;
+  PyObject *__pyx_tuple__8;
   PyObject *__pyx_codeobj__7;
+  PyObject *__pyx_codeobj__9;
 } __pyx_mstate;
 
 #if CYTHON_USE_MODULE_STATE
@@ -3157,9 +3162,10 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree);
   Py_CLEAR(clear_module_state->__pyx_kp_u_Parameter_html_is_neither_string);
   Py_CLEAR(clear_module_state->__pyx_n_s_TypeError);
+  Py_CLEAR(clear_module_state->__pyx_n_s__10);
   Py_CLEAR(clear_module_state->__pyx_kp_u__2);
   Py_CLEAR(clear_module_state->__pyx_kp_b__3);
-  Py_CLEAR(clear_module_state->__pyx_n_s__8);
+  Py_CLEAR(clear_module_state->__pyx_kp_u__4);
   Py_CLEAR(clear_module_state->__pyx_n_b_alert);
   Py_CLEAR(clear_module_state->__pyx_n_s_all);
   Py_CLEAR(clear_module_state->__pyx_n_s_alt_texts);
@@ -3219,6 +3225,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_vtable);
   Py_CLEAR(clear_module_state->__pyx_n_b_radio);
   Py_CLEAR(clear_module_state->__pyx_n_s_range);
+  Py_CLEAR(clear_module_state->__pyx_n_s_replace);
   Py_CLEAR(clear_module_state->__pyx_kp_s_resiliparse_dom_extract_html2tex);
   Py_CLEAR(clear_module_state->__pyx_n_s_resiliparse_dom_extract_html2tex_2);
   Py_CLEAR(clear_module_state->__pyx_n_b_script);
@@ -3241,10 +3248,11 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_update);
   Py_CLEAR(clear_module_state->__pyx_n_b_video);
   Py_CLEAR(clear_module_state->__pyx_tuple_);
-  Py_CLEAR(clear_module_state->__pyx_tuple__4);
+  Py_CLEAR(clear_module_state->__pyx_tuple__5);
   Py_CLEAR(clear_module_state->__pyx_tuple__6);
-  Py_CLEAR(clear_module_state->__pyx_codeobj__5);
+  Py_CLEAR(clear_module_state->__pyx_tuple__8);
   Py_CLEAR(clear_module_state->__pyx_codeobj__7);
+  Py_CLEAR(clear_module_state->__pyx_codeobj__9);
   return 0;
 }
 #endif
@@ -3271,9 +3279,10 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree);
   Py_VISIT(traverse_module_state->__pyx_kp_u_Parameter_html_is_neither_string);
   Py_VISIT(traverse_module_state->__pyx_n_s_TypeError);
+  Py_VISIT(traverse_module_state->__pyx_n_s__10);
   Py_VISIT(traverse_module_state->__pyx_kp_u__2);
   Py_VISIT(traverse_module_state->__pyx_kp_b__3);
-  Py_VISIT(traverse_module_state->__pyx_n_s__8);
+  Py_VISIT(traverse_module_state->__pyx_kp_u__4);
   Py_VISIT(traverse_module_state->__pyx_n_b_alert);
   Py_VISIT(traverse_module_state->__pyx_n_s_all);
   Py_VISIT(traverse_module_state->__pyx_n_s_alt_texts);
@@ -3333,6 +3342,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_vtable);
   Py_VISIT(traverse_module_state->__pyx_n_b_radio);
   Py_VISIT(traverse_module_state->__pyx_n_s_range);
+  Py_VISIT(traverse_module_state->__pyx_n_s_replace);
   Py_VISIT(traverse_module_state->__pyx_kp_s_resiliparse_dom_extract_html2tex);
   Py_VISIT(traverse_module_state->__pyx_n_s_resiliparse_dom_extract_html2tex_2);
   Py_VISIT(traverse_module_state->__pyx_n_b_script);
@@ -3355,10 +3365,11 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_update);
   Py_VISIT(traverse_module_state->__pyx_n_b_video);
   Py_VISIT(traverse_module_state->__pyx_tuple_);
-  Py_VISIT(traverse_module_state->__pyx_tuple__4);
+  Py_VISIT(traverse_module_state->__pyx_tuple__5);
   Py_VISIT(traverse_module_state->__pyx_tuple__6);
-  Py_VISIT(traverse_module_state->__pyx_codeobj__5);
+  Py_VISIT(traverse_module_state->__pyx_tuple__8);
   Py_VISIT(traverse_module_state->__pyx_codeobj__7);
+  Py_VISIT(traverse_module_state->__pyx_codeobj__9);
   return 0;
 }
 #endif
@@ -3427,9 +3438,10 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #endif
 #define __pyx_kp_u_Parameter_html_is_neither_string __pyx_mstate_global->__pyx_kp_u_Parameter_html_is_neither_string
 #define __pyx_n_s_TypeError __pyx_mstate_global->__pyx_n_s_TypeError
+#define __pyx_n_s__10 __pyx_mstate_global->__pyx_n_s__10
 #define __pyx_kp_u__2 __pyx_mstate_global->__pyx_kp_u__2
 #define __pyx_kp_b__3 __pyx_mstate_global->__pyx_kp_b__3
-#define __pyx_n_s__8 __pyx_mstate_global->__pyx_n_s__8
+#define __pyx_kp_u__4 __pyx_mstate_global->__pyx_kp_u__4
 #define __pyx_n_b_alert __pyx_mstate_global->__pyx_n_b_alert
 #define __pyx_n_s_all __pyx_mstate_global->__pyx_n_s_all
 #define __pyx_n_s_alt_texts __pyx_mstate_global->__pyx_n_s_alt_texts
@@ -3489,6 +3501,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_pyx_vtable __pyx_mstate_global->__pyx_n_s_pyx_vtable
 #define __pyx_n_b_radio __pyx_mstate_global->__pyx_n_b_radio
 #define __pyx_n_s_range __pyx_mstate_global->__pyx_n_s_range
+#define __pyx_n_s_replace __pyx_mstate_global->__pyx_n_s_replace
 #define __pyx_kp_s_resiliparse_dom_extract_html2tex __pyx_mstate_global->__pyx_kp_s_resiliparse_dom_extract_html2tex
 #define __pyx_n_s_resiliparse_dom_extract_html2tex_2 __pyx_mstate_global->__pyx_n_s_resiliparse_dom_extract_html2tex_2
 #define __pyx_n_b_script __pyx_mstate_global->__pyx_n_b_script
@@ -3511,10 +3524,11 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_update __pyx_mstate_global->__pyx_n_s_update
 #define __pyx_n_b_video __pyx_mstate_global->__pyx_n_b_video
 #define __pyx_tuple_ __pyx_mstate_global->__pyx_tuple_
-#define __pyx_tuple__4 __pyx_mstate_global->__pyx_tuple__4
+#define __pyx_tuple__5 __pyx_mstate_global->__pyx_tuple__5
 #define __pyx_tuple__6 __pyx_mstate_global->__pyx_tuple__6
-#define __pyx_codeobj__5 __pyx_mstate_global->__pyx_codeobj__5
+#define __pyx_tuple__8 __pyx_mstate_global->__pyx_tuple__8
 #define __pyx_codeobj__7 __pyx_mstate_global->__pyx_codeobj__7
+#define __pyx_codeobj__9 __pyx_mstate_global->__pyx_codeobj__9
 /* #### Code section: module_code ### */
 
 /* "string.from_py":13
@@ -11774,7 +11788,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   /* "resiliparse_dom/extract/html2text.pyx":809
  *             comments,
  *             skip_selector)
- *     return extracted.decode(errors='ignore')             # <<<<<<<<<<<<<<
+ *     return extracted.decode(errors='ignore').replace('\x00', '')             # <<<<<<<<<<<<<<
  * 
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,
  */
@@ -11790,6 +11804,12 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 809, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_replace); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -11822,7 +11842,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
 }
 
 /* "resiliparse_dom/extract/html2text.pyx":811
- *     return extracted.decode(errors='ignore')
+ *     return extracted.decode(errors='ignore').replace('\x00', '')
  * 
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,             # <<<<<<<<<<<<<<
  *                                        FormattingOpts preserve_formatting,
@@ -12671,7 +12691,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   goto __pyx_L0;
 
   /* "resiliparse_dom/extract/html2text.pyx":811
- *     return extracted.decode(errors='ignore')
+ *     return extracted.decode(errors='ignore').replace('\x00', '')
  * 
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,             # <<<<<<<<<<<<<<
  *                                        FormattingOpts preserve_formatting,
@@ -14405,9 +14425,10 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
   __Pyx_StringTabEntry __pyx_string_tab[] = {
     {&__pyx_kp_u_Parameter_html_is_neither_string, __pyx_k_Parameter_html_is_neither_string, sizeof(__pyx_k_Parameter_html_is_neither_string), 0, 1, 0, 0},
     {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
+    {&__pyx_n_s__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 1, 1},
     {&__pyx_kp_u__2, __pyx_k__2, sizeof(__pyx_k__2), 0, 1, 0, 0},
     {&__pyx_kp_b__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 0, 0},
-    {&__pyx_n_s__8, __pyx_k__8, sizeof(__pyx_k__8), 0, 0, 1, 1},
+    {&__pyx_kp_u__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 1, 0, 0},
     {&__pyx_n_b_alert, __pyx_k_alert, sizeof(__pyx_k_alert), 0, 0, 0, 1},
     {&__pyx_n_s_all, __pyx_k_all, sizeof(__pyx_k_all), 0, 0, 1, 1},
     {&__pyx_n_s_alt_texts, __pyx_k_alt_texts, sizeof(__pyx_k_alt_texts), 0, 0, 1, 1},
@@ -14467,6 +14488,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
     {&__pyx_n_b_radio, __pyx_k_radio, sizeof(__pyx_k_radio), 0, 0, 0, 1},
     {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
+    {&__pyx_n_s_replace, __pyx_k_replace, sizeof(__pyx_k_replace), 0, 0, 1, 1},
     {&__pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_k_resiliparse_dom_extract_html2tex, sizeof(__pyx_k_resiliparse_dom_extract_html2tex), 0, 0, 1, 0},
     {&__pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_k_resiliparse_dom_extract_html2tex_2, sizeof(__pyx_k_resiliparse_dom_extract_html2tex_2), 0, 0, 1, 1},
     {&__pyx_n_b_script, __pyx_k_script, sizeof(__pyx_k_script), 0, 0, 0, 1},
@@ -14517,6 +14539,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
+  /* "resiliparse_dom/extract/html2text.pyx":809
+ *             comments,
+ *             skip_selector)
+ *     return extracted.decode(errors='ignore').replace('\x00', '')             # <<<<<<<<<<<<<<
+ * 
+ * cdef string _extract_simplified_dom_impl(HTMLTree tree,
+ */
+  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_kp_u__4, __pyx_kp_u__2); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__5);
+  __Pyx_GIVEREF(__pyx_tuple__5);
+
   /* "resiliparse_dom/extract/html2text.pyx":756
  * 
  * 
@@ -14524,10 +14557,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,
  */
-  __pyx_tuple__4 = PyTuple_Pack(15, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 756, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__4);
-  __Pyx_GIVEREF(__pyx_tuple__4);
-  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_simplified_dom, 756, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(15, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_simplified_dom, 756, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 756, __pyx_L1_error)
 
   /* "resiliparse_dom/extract/html2text.pyx":932
  *     return False
@@ -14536,10 +14569,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                        preserve_formatting=True,
  *                        bint main_content=False,
  */
-  __pyx_tuple__6 = PyTuple_Pack(16, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_formatting_opts, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 932, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__6);
-  __Pyx_GIVEREF(__pyx_tuple__6);
-  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_plain_text, 932, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(16, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_formatting_opts, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_plain_text, 932, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 932, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -15350,7 +15383,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_8 = 0;
   __pyx_t_9 = 0;
   __pyx_t_10 = 0;
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_1extract_simplified_dom, 0, __pyx_n_s_extract_simplified_dom, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_1extract_simplified_dom, 0, __pyx_n_s_extract_simplified_dom, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 756, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -15463,7 +15496,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_7 = 0;
   __pyx_t_6 = 0;
   __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_3extract_plain_text, 0, __pyx_n_s_extract_plain_text, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_3extract_plain_text, 0, __pyx_n_s_extract_plain_text, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__9)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 932, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -19291,7 +19324,7 @@ __Pyx_PyType_GetName(PyTypeObject* tp)
     if (unlikely(name == NULL) || unlikely(!PyUnicode_Check(name))) {
         PyErr_Clear();
         Py_XDECREF(name);
-        name = __Pyx_NewRef(__pyx_n_s__8);
+        name = __Pyx_NewRef(__pyx_n_s__10);
     }
     return name;
 }

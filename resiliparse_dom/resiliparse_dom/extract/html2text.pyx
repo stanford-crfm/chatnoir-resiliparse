@@ -806,7 +806,7 @@ def extract_simplified_dom(html,
             noscript,
             comments,
             skip_selector)
-    return extracted.decode(errors='ignore')
+    return extracted.decode(errors='ignore').replace('\x00', '')
 
 cdef string _extract_simplified_dom_impl(HTMLTree tree,
                                        FormattingOpts preserve_formatting,
