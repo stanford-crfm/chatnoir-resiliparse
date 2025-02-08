@@ -8321,7 +8321,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:             # <<<<<<<<<<<<<<
  *             if not output.empty() and output.back() != b'\n':
- *                 output.append(b'\t\t')
+ *                 output.append(b'\t')
  */
     __pyx_t_5 = (__pyx_v_opts.preserve_formatting >= FORMAT_BASIC);
     if (__pyx_t_5) {
@@ -8347,7 +8347,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
  *             if not output.empty() and output.back() != b'\n':             # <<<<<<<<<<<<<<
- *                 output.append(b'\t\t')
+ *                 output.append(b'\t')
  * 
  */
       __pyx_t_6 = (!__pyx_v_output.empty());
@@ -8364,12 +8364,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
         /* "resiliparse_dom/extract/html2text.pyx":430
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
  *             if not output.empty() and output.back() != b'\n':
- *                 output.append(b'\t\t')             # <<<<<<<<<<<<<<
+ *                 output.append(b'\t')             # <<<<<<<<<<<<<<
  * 
  *         output.append(element_text_prefix)
  */
         try {
-          __pyx_v_output.append(((char const *)"\t\t"));
+          __pyx_v_output.append(((char const *)"\t"));
         } catch(...) {
           #ifdef WITH_THREAD
           PyGILState_STATE __pyx_gilstate_save = __Pyx_PyGILState_Ensure();
@@ -8385,7 +8385,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
  *             if not output.empty() and output.back() != b'\n':             # <<<<<<<<<<<<<<
- *                 output.append(b'\t\t')
+ *                 output.append(b'\t')
  * 
  */
       }
@@ -8395,12 +8395,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:             # <<<<<<<<<<<<<<
  *             if not output.empty() and output.back() != b'\n':
- *                 output.append(b'\t\t')
+ *                 output.append(b'\t')
  */
     }
 
     /* "resiliparse_dom/extract/html2text.pyx":432
- *                 output.append(b'\t\t')
+ *                 output.append(b'\t')
  * 
  *         output.append(element_text_prefix)             # <<<<<<<<<<<<<<
  *         element_text_prefix.clear()
@@ -9041,9 +9041,9 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   int __pyx_r;
   int __pyx_t_1;
   int __pyx_t_2;
-  lxb_dom_node_t *__pyx_t_3;
-  std::string_view __pyx_t_4;
-  int __pyx_t_5;
+  int __pyx_t_3;
+  lxb_dom_node_t *__pyx_t_4;
+  std::string_view __pyx_t_5;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -9095,7 +9095,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  *     elif node.type != LXB_DOM_NODE_TYPE_ELEMENT:
  *         return True             # <<<<<<<<<<<<<<
  * 
- * 
+ *     # Lists in article content should be preserved regardless of depth
  */
     __pyx_r = 1;
     goto __pyx_L0;
@@ -9109,7 +9109,137 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":547
+  /* "resiliparse_dom/extract/html2text.pyx":544
+ * 
+ *     # Lists in article content should be preserved regardless of depth
+ *     if node.local_name == LXB_TAG_UL and node.parent and (             # <<<<<<<<<<<<<<
+ *         node.parent.local_name in [LXB_TAG_ARTICLE, LXB_TAG_MAIN] or
+ *         regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)
+ */
+  __pyx_t_2 = (__pyx_v_node->local_name == LXB_TAG_UL);
+  if (__pyx_t_2) {
+  } else {
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L5_bool_binop_done;
+  }
+  __pyx_t_2 = (__pyx_v_node->parent != 0);
+  if (__pyx_t_2) {
+  } else {
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L5_bool_binop_done;
+  }
+
+  /* "resiliparse_dom/extract/html2text.pyx":545
+ *     # Lists in article content should be preserved regardless of depth
+ *     if node.local_name == LXB_TAG_UL and node.parent and (
+ *         node.parent.local_name in [LXB_TAG_ARTICLE, LXB_TAG_MAIN] or             # <<<<<<<<<<<<<<
+ *         regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)
+ *     ):
+ */
+  switch (__pyx_v_node->parent->local_name) {
+    case LXB_TAG_ARTICLE:
+    case LXB_TAG_MAIN:
+    __pyx_t_2 = 1;
+    break;
+    default:
+    __pyx_t_2 = 0;
+    break;
+  }
+  __pyx_t_3 = __pyx_t_2;
+  if (!__pyx_t_3) {
+  } else {
+    __pyx_t_1 = __pyx_t_3;
+    goto __pyx_L5_bool_binop_done;
+  }
+
+  /* "resiliparse_dom/extract/html2text.pyx":546
+ *     if node.local_name == LXB_TAG_UL and node.parent and (
+ *         node.parent.local_name in [LXB_TAG_ARTICLE, LXB_TAG_MAIN] or
+ *         regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)             # <<<<<<<<<<<<<<
+ *     ):
+ *         return True
+ */
+  __pyx_t_3 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node->parent, __pyx_k_class), __pyx_v_15resiliparse_dom_7extract_9html2text_article_cls_regex);
+  __pyx_t_1 = __pyx_t_3;
+  __pyx_L5_bool_binop_done:;
+
+  /* "resiliparse_dom/extract/html2text.pyx":544
+ * 
+ *     # Lists in article content should be preserved regardless of depth
+ *     if node.local_name == LXB_TAG_UL and node.parent and (             # <<<<<<<<<<<<<<
+ *         node.parent.local_name in [LXB_TAG_ARTICLE, LXB_TAG_MAIN] or
+ *         regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)
+ */
+  if (__pyx_t_1) {
+
+    /* "resiliparse_dom/extract/html2text.pyx":548
+ *         regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)
+ *     ):
+ *         return True             # <<<<<<<<<<<<<<
+ * 
+ *     # Original list depth check, but only for navigation/menu lists
+ */
+    __pyx_r = 1;
+    goto __pyx_L0;
+
+    /* "resiliparse_dom/extract/html2text.pyx":544
+ * 
+ *     # Lists in article content should be preserved regardless of depth
+ *     if node.local_name == LXB_TAG_UL and node.parent and (             # <<<<<<<<<<<<<<
+ *         node.parent.local_name in [LXB_TAG_ARTICLE, LXB_TAG_MAIN] or
+ *         regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)
+ */
+  }
+
+  /* "resiliparse_dom/extract/html2text.pyx":551
+ * 
+ *     # Original list depth check, but only for navigation/menu lists
+ *     elif node.local_name == LXB_TAG_UL:             # <<<<<<<<<<<<<<
+ *         if _is_link_cluster(node, 0.2, 0):
+ *             return False
+ */
+  __pyx_t_1 = (__pyx_v_node->local_name == LXB_TAG_UL);
+  if (__pyx_t_1) {
+
+    /* "resiliparse_dom/extract/html2text.pyx":552
+ *     # Original list depth check, but only for navigation/menu lists
+ *     elif node.local_name == LXB_TAG_UL:
+ *         if _is_link_cluster(node, 0.2, 0):             # <<<<<<<<<<<<<<
+ *             return False
+ * 
+ */
+    __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.2, 0);
+    if (__pyx_t_1) {
+
+      /* "resiliparse_dom/extract/html2text.pyx":553
+ *     elif node.local_name == LXB_TAG_UL:
+ *         if _is_link_cluster(node, 0.2, 0):
+ *             return False             # <<<<<<<<<<<<<<
+ * 
+ *     # ------ Section 1: Tag name matching ------
+ */
+      __pyx_r = 0;
+      goto __pyx_L0;
+
+      /* "resiliparse_dom/extract/html2text.pyx":552
+ *     # Original list depth check, but only for navigation/menu lists
+ *     elif node.local_name == LXB_TAG_UL:
+ *         if _is_link_cluster(node, 0.2, 0):             # <<<<<<<<<<<<<<
+ *             return False
+ * 
+ */
+    }
+
+    /* "resiliparse_dom/extract/html2text.pyx":551
+ * 
+ *     # Original list depth check, but only for navigation/menu lists
+ *     elif node.local_name == LXB_TAG_UL:             # <<<<<<<<<<<<<<
+ *         if _is_link_cluster(node, 0.2, 0):
+ *             return False
+ */
+  }
+
+  /* "resiliparse_dom/extract/html2text.pyx":558
  * 
  *     # Main elements and headings
  *     if node.local_name in [LXB_TAG_BODY, LXB_TAG_MAIN, LXB_TAG_H1]:             # <<<<<<<<<<<<<<
@@ -9121,7 +9251,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     case LXB_TAG_MAIN:
     case LXB_TAG_H1:
 
-    /* "resiliparse_dom/extract/html2text.pyx":548
+    /* "resiliparse_dom/extract/html2text.pyx":559
  *     # Main elements and headings
  *     if node.local_name in [LXB_TAG_BODY, LXB_TAG_MAIN, LXB_TAG_H1]:
  *         return True             # <<<<<<<<<<<<<<
@@ -9131,7 +9261,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 1;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":547
+    /* "resiliparse_dom/extract/html2text.pyx":558
  * 
  *     # Main elements and headings
  *     if node.local_name in [LXB_TAG_BODY, LXB_TAG_MAIN, LXB_TAG_H1]:             # <<<<<<<<<<<<<<
@@ -9141,25 +9271,25 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     break;
     case LXB_TAG_FOOTER:
 
-    /* "resiliparse_dom/extract/html2text.pyx":552
+    /* "resiliparse_dom/extract/html2text.pyx":563
  *     # Global footer
  *     elif node.local_name == LXB_TAG_FOOTER:
  *         if body_depth < 3 or _is_link_cluster(node, 0.2, 0):             # <<<<<<<<<<<<<<
  *             return False
  * 
  */
-    __pyx_t_2 = (__pyx_v_body_depth < 3);
-    if (!__pyx_t_2) {
+    __pyx_t_3 = (__pyx_v_body_depth < 3);
+    if (!__pyx_t_3) {
     } else {
-      __pyx_t_1 = __pyx_t_2;
-      goto __pyx_L5_bool_binop_done;
+      __pyx_t_1 = __pyx_t_3;
+      goto __pyx_L11_bool_binop_done;
     }
-    __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.2, 0);
-    __pyx_t_1 = __pyx_t_2;
-    __pyx_L5_bool_binop_done:;
+    __pyx_t_3 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.2, 0);
+    __pyx_t_1 = __pyx_t_3;
+    __pyx_L11_bool_binop_done:;
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":553
+      /* "resiliparse_dom/extract/html2text.pyx":564
  *     elif node.local_name == LXB_TAG_FOOTER:
  *         if body_depth < 3 or _is_link_cluster(node, 0.2, 0):
  *             return False             # <<<<<<<<<<<<<<
@@ -9169,7 +9299,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":552
+      /* "resiliparse_dom/extract/html2text.pyx":563
  *     # Global footer
  *     elif node.local_name == LXB_TAG_FOOTER:
  *         if body_depth < 3 or _is_link_cluster(node, 0.2, 0):             # <<<<<<<<<<<<<<
@@ -9178,7 +9308,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":556
+    /* "resiliparse_dom/extract/html2text.pyx":567
  * 
  *         # Check if footer is recursive last element node of a direct body child
  *         pnode = node             # <<<<<<<<<<<<<<
@@ -9187,7 +9317,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     __pyx_v_pnode = __pyx_v_node;
 
-    /* "resiliparse_dom/extract/html2text.pyx":557
+    /* "resiliparse_dom/extract/html2text.pyx":568
  *         # Check if footer is recursive last element node of a direct body child
  *         pnode = node
  *         while pnode and pnode.parent and pnode.parent.local_name != LXB_TAG_BODY:             # <<<<<<<<<<<<<<
@@ -9195,52 +9325,52 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  *                 pnode = pnode.next
  */
     while (1) {
-      __pyx_t_2 = (__pyx_v_pnode != 0);
-      if (__pyx_t_2) {
+      __pyx_t_3 = (__pyx_v_pnode != 0);
+      if (__pyx_t_3) {
       } else {
-        __pyx_t_1 = __pyx_t_2;
-        goto __pyx_L9_bool_binop_done;
+        __pyx_t_1 = __pyx_t_3;
+        goto __pyx_L15_bool_binop_done;
       }
-      __pyx_t_2 = (__pyx_v_pnode->parent != 0);
-      if (__pyx_t_2) {
+      __pyx_t_3 = (__pyx_v_pnode->parent != 0);
+      if (__pyx_t_3) {
       } else {
-        __pyx_t_1 = __pyx_t_2;
-        goto __pyx_L9_bool_binop_done;
+        __pyx_t_1 = __pyx_t_3;
+        goto __pyx_L15_bool_binop_done;
       }
-      __pyx_t_2 = (__pyx_v_pnode->parent->local_name != LXB_TAG_BODY);
-      __pyx_t_1 = __pyx_t_2;
-      __pyx_L9_bool_binop_done:;
+      __pyx_t_3 = (__pyx_v_pnode->parent->local_name != LXB_TAG_BODY);
+      __pyx_t_1 = __pyx_t_3;
+      __pyx_L15_bool_binop_done:;
       if (!__pyx_t_1) break;
 
-      /* "resiliparse_dom/extract/html2text.pyx":558
+      /* "resiliparse_dom/extract/html2text.pyx":569
  *         pnode = node
  *         while pnode and pnode.parent and pnode.parent.local_name != LXB_TAG_BODY:
  *             if pnode.next and pnode.next.type == LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
  *                 pnode = pnode.next
  *             if pnode.next:
  */
-      __pyx_t_2 = (__pyx_v_pnode->next != 0);
-      if (__pyx_t_2) {
+      __pyx_t_3 = (__pyx_v_pnode->next != 0);
+      if (__pyx_t_3) {
       } else {
-        __pyx_t_1 = __pyx_t_2;
-        goto __pyx_L13_bool_binop_done;
+        __pyx_t_1 = __pyx_t_3;
+        goto __pyx_L19_bool_binop_done;
       }
-      __pyx_t_2 = (__pyx_v_pnode->next->type == LXB_DOM_NODE_TYPE_TEXT);
-      __pyx_t_1 = __pyx_t_2;
-      __pyx_L13_bool_binop_done:;
+      __pyx_t_3 = (__pyx_v_pnode->next->type == LXB_DOM_NODE_TYPE_TEXT);
+      __pyx_t_1 = __pyx_t_3;
+      __pyx_L19_bool_binop_done:;
       if (__pyx_t_1) {
 
-        /* "resiliparse_dom/extract/html2text.pyx":559
+        /* "resiliparse_dom/extract/html2text.pyx":570
  *         while pnode and pnode.parent and pnode.parent.local_name != LXB_TAG_BODY:
  *             if pnode.next and pnode.next.type == LXB_DOM_NODE_TYPE_TEXT:
  *                 pnode = pnode.next             # <<<<<<<<<<<<<<
  *             if pnode.next:
  *                 # There is at least one more element node
  */
-        __pyx_t_3 = __pyx_v_pnode->next;
-        __pyx_v_pnode = __pyx_t_3;
+        __pyx_t_4 = __pyx_v_pnode->next;
+        __pyx_v_pnode = __pyx_t_4;
 
-        /* "resiliparse_dom/extract/html2text.pyx":558
+        /* "resiliparse_dom/extract/html2text.pyx":569
  *         pnode = node
  *         while pnode and pnode.parent and pnode.parent.local_name != LXB_TAG_BODY:
  *             if pnode.next and pnode.next.type == LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
@@ -9249,7 +9379,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":560
+      /* "resiliparse_dom/extract/html2text.pyx":571
  *             if pnode.next and pnode.next.type == LXB_DOM_NODE_TYPE_TEXT:
  *                 pnode = pnode.next
  *             if pnode.next:             # <<<<<<<<<<<<<<
@@ -9259,7 +9389,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       __pyx_t_1 = (__pyx_v_pnode->next != 0);
       if (__pyx_t_1) {
 
-        /* "resiliparse_dom/extract/html2text.pyx":562
+        /* "resiliparse_dom/extract/html2text.pyx":573
  *             if pnode.next:
  *                 # There is at least one more element node
  *                 return True             # <<<<<<<<<<<<<<
@@ -9269,7 +9399,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
         __pyx_r = 1;
         goto __pyx_L0;
 
-        /* "resiliparse_dom/extract/html2text.pyx":560
+        /* "resiliparse_dom/extract/html2text.pyx":571
  *             if pnode.next and pnode.next.type == LXB_DOM_NODE_TYPE_TEXT:
  *                 pnode = pnode.next
  *             if pnode.next:             # <<<<<<<<<<<<<<
@@ -9278,28 +9408,28 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":563
+      /* "resiliparse_dom/extract/html2text.pyx":574
  *                 # There is at least one more element node
  *                 return True
  *             pnode = pnode.parent             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-      __pyx_t_3 = __pyx_v_pnode->parent;
-      __pyx_v_pnode = __pyx_t_3;
+      __pyx_t_4 = __pyx_v_pnode->parent;
+      __pyx_v_pnode = __pyx_t_4;
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":564
+    /* "resiliparse_dom/extract/html2text.pyx":575
  *                 return True
  *             pnode = pnode.parent
  *         return False             # <<<<<<<<<<<<<<
  * 
- *     elif node.local_name == LXB_TAG_UL:
+ *     # Teaser articles
  */
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":551
+    /* "resiliparse_dom/extract/html2text.pyx":562
  * 
  *     # Global footer
  *     elif node.local_name == LXB_TAG_FOOTER:             # <<<<<<<<<<<<<<
@@ -9307,74 +9437,27 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  *             return False
  */
     break;
-    case LXB_TAG_UL:
-
-    /* "resiliparse_dom/extract/html2text.pyx":567
- * 
- *     elif node.local_name == LXB_TAG_UL:
- *         if body_depth < 4 or _is_link_cluster(node, 0.2, 0):             # <<<<<<<<<<<<<<
- *             return False
- * 
- */
-    __pyx_t_2 = (__pyx_v_body_depth < 4);
-    if (!__pyx_t_2) {
-    } else {
-      __pyx_t_1 = __pyx_t_2;
-      goto __pyx_L17_bool_binop_done;
-    }
-    __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.2, 0);
-    __pyx_t_1 = __pyx_t_2;
-    __pyx_L17_bool_binop_done:;
-    if (__pyx_t_1) {
-
-      /* "resiliparse_dom/extract/html2text.pyx":568
- *     elif node.local_name == LXB_TAG_UL:
- *         if body_depth < 4 or _is_link_cluster(node, 0.2, 0):
- *             return False             # <<<<<<<<<<<<<<
- * 
- *     # Teaser articles
- */
-      __pyx_r = 0;
-      goto __pyx_L0;
-
-      /* "resiliparse_dom/extract/html2text.pyx":567
- * 
- *     elif node.local_name == LXB_TAG_UL:
- *         if body_depth < 4 or _is_link_cluster(node, 0.2, 0):             # <<<<<<<<<<<<<<
- *             return False
- * 
- */
-    }
-
-    /* "resiliparse_dom/extract/html2text.pyx":566
- *         return False
- * 
- *     elif node.local_name == LXB_TAG_UL:             # <<<<<<<<<<<<<<
- *         if body_depth < 4 or _is_link_cluster(node, 0.2, 0):
- *             return False
- */
-    break;
     case LXB_TAG_ARTICLE:
 
-    /* "resiliparse_dom/extract/html2text.pyx":572
+    /* "resiliparse_dom/extract/html2text.pyx":579
  *     # Teaser articles
  *     elif node.local_name == LXB_TAG_ARTICLE:
  *         if body_depth > 2 and _is_link_cluster(node, 0.2, 500):             # <<<<<<<<<<<<<<
  *             return False
  * 
  */
-    __pyx_t_2 = (__pyx_v_body_depth > 2);
-    if (__pyx_t_2) {
+    __pyx_t_3 = (__pyx_v_body_depth > 2);
+    if (__pyx_t_3) {
     } else {
-      __pyx_t_1 = __pyx_t_2;
-      goto __pyx_L20_bool_binop_done;
+      __pyx_t_1 = __pyx_t_3;
+      goto __pyx_L23_bool_binop_done;
     }
-    __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.2, 0x1F4);
-    __pyx_t_1 = __pyx_t_2;
-    __pyx_L20_bool_binop_done:;
+    __pyx_t_3 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.2, 0x1F4);
+    __pyx_t_1 = __pyx_t_3;
+    __pyx_L23_bool_binop_done:;
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":573
+      /* "resiliparse_dom/extract/html2text.pyx":580
  *     elif node.local_name == LXB_TAG_ARTICLE:
  *         if body_depth > 2 and _is_link_cluster(node, 0.2, 500):
  *             return False             # <<<<<<<<<<<<<<
@@ -9384,7 +9467,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":572
+      /* "resiliparse_dom/extract/html2text.pyx":579
  *     # Teaser articles
  *     elif node.local_name == LXB_TAG_ARTICLE:
  *         if body_depth > 2 and _is_link_cluster(node, 0.2, 500):             # <<<<<<<<<<<<<<
@@ -9393,7 +9476,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":571
+    /* "resiliparse_dom/extract/html2text.pyx":578
  * 
  *     # Teaser articles
  *     elif node.local_name == LXB_TAG_ARTICLE:             # <<<<<<<<<<<<<<
@@ -9403,7 +9486,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     break;
     case LXB_TAG_NAV:
 
-    /* "resiliparse_dom/extract/html2text.pyx":576
+    /* "resiliparse_dom/extract/html2text.pyx":583
  * 
  *     # Navigation, sidebar, other hard-blacklisted elements
  *     elif node.local_name in [LXB_TAG_NAV, LXB_TAG_ASIDE, LXB_TAG_AUDIO, LXB_TAG_VIDEO, LXB_TAG_TIME]:             # <<<<<<<<<<<<<<
@@ -9415,7 +9498,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     case LXB_TAG_VIDEO:
     case LXB_TAG_TIME:
 
-    /* "resiliparse_dom/extract/html2text.pyx":577
+    /* "resiliparse_dom/extract/html2text.pyx":584
  *     # Navigation, sidebar, other hard-blacklisted elements
  *     elif node.local_name in [LXB_TAG_NAV, LXB_TAG_ASIDE, LXB_TAG_AUDIO, LXB_TAG_VIDEO, LXB_TAG_TIME]:
  *         return False             # <<<<<<<<<<<<<<
@@ -9425,7 +9508,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":576
+    /* "resiliparse_dom/extract/html2text.pyx":583
  * 
  *     # Navigation, sidebar, other hard-blacklisted elements
  *     elif node.local_name in [LXB_TAG_NAV, LXB_TAG_ASIDE, LXB_TAG_AUDIO, LXB_TAG_VIDEO, LXB_TAG_TIME]:             # <<<<<<<<<<<<<<
@@ -9436,7 +9519,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     default: break;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":583
+  /* "resiliparse_dom/extract/html2text.pyx":590
  * 
  *     # Hidden elements
  *     if lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'hidden', 6):             # <<<<<<<<<<<<<<
@@ -9446,7 +9529,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"hidden"))), 6);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":584
+    /* "resiliparse_dom/extract/html2text.pyx":591
  *     # Hidden elements
  *     if lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'hidden', 6):
  *         return False             # <<<<<<<<<<<<<<
@@ -9456,7 +9539,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":583
+    /* "resiliparse_dom/extract/html2text.pyx":590
  * 
  *     # Hidden elements
  *     if lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'hidden', 6):             # <<<<<<<<<<<<<<
@@ -9465,7 +9548,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":587
+  /* "resiliparse_dom/extract/html2text.pyx":594
  * 
  *     # rel attributes
  *     cdef string_view rel_attr = strip_sv(get_node_attr_sv(node, b'rel'))             # <<<<<<<<<<<<<<
@@ -9474,59 +9557,59 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_rel_attr = __pyx_f_18resiliparse_common_11string_util_strip_sv(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_rel));
 
-  /* "resiliparse_dom/extract/html2text.pyx":588
+  /* "resiliparse_dom/extract/html2text.pyx":595
  *     # rel attributes
  *     cdef string_view rel_attr = strip_sv(get_node_attr_sv(node, b'rel'))
  *     if not rel_attr.empty() and rel_attr in [b'author', b'icon', b'search', b'prev', b'next', b'tag']:             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_2 = (!__pyx_v_rel_attr.empty());
-  if (__pyx_t_2) {
+  __pyx_t_3 = (!__pyx_v_rel_attr.empty());
+  if (__pyx_t_3) {
   } else {
-    __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L24_bool_binop_done;
+    __pyx_t_1 = __pyx_t_3;
+    goto __pyx_L27_bool_binop_done;
   }
-  __pyx_t_4 = __pyx_v_rel_attr;
-  __pyx_t_5 = (__pyx_t_4 == ((char const *)"author"));
-  if (!__pyx_t_5) {
+  __pyx_t_5 = __pyx_v_rel_attr;
+  __pyx_t_2 = (__pyx_t_5 == ((char const *)"author"));
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_2 = __pyx_t_5;
-    goto __pyx_L26_bool_binop_done;
+    __pyx_t_3 = __pyx_t_2;
+    goto __pyx_L29_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_t_4 == ((char const *)"icon"));
-  if (!__pyx_t_5) {
+  __pyx_t_2 = (__pyx_t_5 == ((char const *)"icon"));
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_2 = __pyx_t_5;
-    goto __pyx_L26_bool_binop_done;
+    __pyx_t_3 = __pyx_t_2;
+    goto __pyx_L29_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_t_4 == ((char const *)"search"));
-  if (!__pyx_t_5) {
+  __pyx_t_2 = (__pyx_t_5 == ((char const *)"search"));
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_2 = __pyx_t_5;
-    goto __pyx_L26_bool_binop_done;
+    __pyx_t_3 = __pyx_t_2;
+    goto __pyx_L29_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_t_4 == ((char const *)"prev"));
-  if (!__pyx_t_5) {
+  __pyx_t_2 = (__pyx_t_5 == ((char const *)"prev"));
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_2 = __pyx_t_5;
-    goto __pyx_L26_bool_binop_done;
+    __pyx_t_3 = __pyx_t_2;
+    goto __pyx_L29_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_t_4 == ((char const *)"next"));
-  if (!__pyx_t_5) {
+  __pyx_t_2 = (__pyx_t_5 == ((char const *)"next"));
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_2 = __pyx_t_5;
-    goto __pyx_L26_bool_binop_done;
+    __pyx_t_3 = __pyx_t_2;
+    goto __pyx_L29_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_t_4 == ((char const *)"tag"));
-  __pyx_t_2 = __pyx_t_5;
-  __pyx_L26_bool_binop_done:;
-  __pyx_t_5 = __pyx_t_2;
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L24_bool_binop_done:;
+  __pyx_t_2 = (__pyx_t_5 == ((char const *)"tag"));
+  __pyx_t_3 = __pyx_t_2;
+  __pyx_L29_bool_binop_done:;
+  __pyx_t_2 = __pyx_t_3;
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L27_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":589
+    /* "resiliparse_dom/extract/html2text.pyx":596
  *     cdef string_view rel_attr = strip_sv(get_node_attr_sv(node, b'rel'))
  *     if not rel_attr.empty() and rel_attr in [b'author', b'icon', b'search', b'prev', b'next', b'tag']:
  *         return False             # <<<<<<<<<<<<<<
@@ -9536,7 +9619,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":588
+    /* "resiliparse_dom/extract/html2text.pyx":595
  *     # rel attributes
  *     cdef string_view rel_attr = strip_sv(get_node_attr_sv(node, b'rel'))
  *     if not rel_attr.empty() and rel_attr in [b'author', b'icon', b'search', b'prev', b'next', b'tag']:             # <<<<<<<<<<<<<<
@@ -9545,7 +9628,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":592
+  /* "resiliparse_dom/extract/html2text.pyx":599
  * 
  *     # itemprop attributes
  *     cdef string_view itemprop_attr = strip_sv(get_node_attr_sv(node, b'itemprop'))             # <<<<<<<<<<<<<<
@@ -9554,41 +9637,41 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_itemprop_attr = __pyx_f_18resiliparse_common_11string_util_strip_sv(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_itemprop));
 
-  /* "resiliparse_dom/extract/html2text.pyx":593
+  /* "resiliparse_dom/extract/html2text.pyx":600
  *     # itemprop attributes
  *     cdef string_view itemprop_attr = strip_sv(get_node_attr_sv(node, b'itemprop'))
  *     if not itemprop_attr.empty() and itemprop_attr in [b'datePublished', b'author', b'url']:             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_5 = (!__pyx_v_itemprop_attr.empty());
-  if (__pyx_t_5) {
+  __pyx_t_2 = (!__pyx_v_itemprop_attr.empty());
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L33_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L36_bool_binop_done;
   }
-  __pyx_t_4 = __pyx_v_itemprop_attr;
-  __pyx_t_2 = (__pyx_t_4 == ((char const *)"datePublished"));
-  if (!__pyx_t_2) {
+  __pyx_t_5 = __pyx_v_itemprop_attr;
+  __pyx_t_3 = (__pyx_t_5 == ((char const *)"datePublished"));
+  if (!__pyx_t_3) {
   } else {
-    __pyx_t_5 = __pyx_t_2;
-    goto __pyx_L35_bool_binop_done;
+    __pyx_t_2 = __pyx_t_3;
+    goto __pyx_L38_bool_binop_done;
   }
-  __pyx_t_2 = (__pyx_t_4 == ((char const *)"author"));
-  if (!__pyx_t_2) {
+  __pyx_t_3 = (__pyx_t_5 == ((char const *)"author"));
+  if (!__pyx_t_3) {
   } else {
-    __pyx_t_5 = __pyx_t_2;
-    goto __pyx_L35_bool_binop_done;
+    __pyx_t_2 = __pyx_t_3;
+    goto __pyx_L38_bool_binop_done;
   }
-  __pyx_t_2 = (__pyx_t_4 == ((char const *)"url"));
-  __pyx_t_5 = __pyx_t_2;
-  __pyx_L35_bool_binop_done:;
-  __pyx_t_2 = __pyx_t_5;
-  __pyx_t_1 = __pyx_t_2;
-  __pyx_L33_bool_binop_done:;
+  __pyx_t_3 = (__pyx_t_5 == ((char const *)"url"));
+  __pyx_t_2 = __pyx_t_3;
+  __pyx_L38_bool_binop_done:;
+  __pyx_t_3 = __pyx_t_2;
+  __pyx_t_1 = __pyx_t_3;
+  __pyx_L36_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":594
+    /* "resiliparse_dom/extract/html2text.pyx":601
  *     cdef string_view itemprop_attr = strip_sv(get_node_attr_sv(node, b'itemprop'))
  *     if not itemprop_attr.empty() and itemprop_attr in [b'datePublished', b'author', b'url']:
  *         return False             # <<<<<<<<<<<<<<
@@ -9598,7 +9681,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":593
+    /* "resiliparse_dom/extract/html2text.pyx":600
  *     # itemprop attributes
  *     cdef string_view itemprop_attr = strip_sv(get_node_attr_sv(node, b'itemprop'))
  *     if not itemprop_attr.empty() and itemprop_attr in [b'datePublished', b'author', b'url']:             # <<<<<<<<<<<<<<
@@ -9607,7 +9690,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":597
+  /* "resiliparse_dom/extract/html2text.pyx":604
  * 
  *     # ARIA hidden
  *     if strip_sv(get_node_attr_sv(node, b'aria-hidden')) == b'true':             # <<<<<<<<<<<<<<
@@ -9617,7 +9700,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = (__pyx_f_18resiliparse_common_11string_util_strip_sv(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_aria_hidden)) == ((char const *)"true"));
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":598
+    /* "resiliparse_dom/extract/html2text.pyx":605
  *     # ARIA hidden
  *     if strip_sv(get_node_attr_sv(node, b'aria-hidden')) == b'true':
  *         return False             # <<<<<<<<<<<<<<
@@ -9627,7 +9710,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":597
+    /* "resiliparse_dom/extract/html2text.pyx":604
  * 
  *     # ARIA hidden
  *     if strip_sv(get_node_attr_sv(node, b'aria-hidden')) == b'true':             # <<<<<<<<<<<<<<
@@ -9636,7 +9719,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":601
+  /* "resiliparse_dom/extract/html2text.pyx":608
  * 
  *     # ARIA expanded
  *     if strip_sv(get_node_attr_sv(node, b'aria-expanded')) == b'false':             # <<<<<<<<<<<<<<
@@ -9646,7 +9729,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = (__pyx_f_18resiliparse_common_11string_util_strip_sv(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_aria_expanded)) == ((char const *)"false"));
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":602
+    /* "resiliparse_dom/extract/html2text.pyx":609
  *     # ARIA expanded
  *     if strip_sv(get_node_attr_sv(node, b'aria-expanded')) == b'false':
  *         return False             # <<<<<<<<<<<<<<
@@ -9656,7 +9739,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":601
+    /* "resiliparse_dom/extract/html2text.pyx":608
  * 
  *     # ARIA expanded
  *     if strip_sv(get_node_attr_sv(node, b'aria-expanded')) == b'false':             # <<<<<<<<<<<<<<
@@ -9665,7 +9748,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":607
+  /* "resiliparse_dom/extract/html2text.pyx":614
  *     # ------ Section 3: General class and ID matching ------
  * 
  *     cdef string_view cls_attr = get_node_attr_sv(node, b'class')             # <<<<<<<<<<<<<<
@@ -9674,7 +9757,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_cls_attr = __pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_class);
 
-  /* "resiliparse_dom/extract/html2text.pyx":608
+  /* "resiliparse_dom/extract/html2text.pyx":615
  * 
  *     cdef string_view cls_attr = get_node_attr_sv(node, b'class')
  *     cdef string_view id_attr = get_node_attr_sv(node, b'id')             # <<<<<<<<<<<<<<
@@ -9683,25 +9766,25 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_id_attr = __pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_id);
 
-  /* "resiliparse_dom/extract/html2text.pyx":610
+  /* "resiliparse_dom/extract/html2text.pyx":617
  *     cdef string_view id_attr = get_node_attr_sv(node, b'id')
  *     # Only elements with class or id attributes from here on
  *     if cls_attr.empty() and id_attr.empty():             # <<<<<<<<<<<<<<
  *         if node.local_name == LXB_TAG_DIV:
  *             return body_depth <= 5 or not _is_link_cluster(node, 0.6, 800)
  */
-  __pyx_t_2 = __pyx_v_cls_attr.empty();
-  if (__pyx_t_2) {
+  __pyx_t_3 = __pyx_v_cls_attr.empty();
+  if (__pyx_t_3) {
   } else {
-    __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L41_bool_binop_done;
+    __pyx_t_1 = __pyx_t_3;
+    goto __pyx_L44_bool_binop_done;
   }
-  __pyx_t_2 = __pyx_v_id_attr.empty();
-  __pyx_t_1 = __pyx_t_2;
-  __pyx_L41_bool_binop_done:;
+  __pyx_t_3 = __pyx_v_id_attr.empty();
+  __pyx_t_1 = __pyx_t_3;
+  __pyx_L44_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":611
+    /* "resiliparse_dom/extract/html2text.pyx":618
  *     # Only elements with class or id attributes from here on
  *     if cls_attr.empty() and id_attr.empty():
  *         if node.local_name == LXB_TAG_DIV:             # <<<<<<<<<<<<<<
@@ -9711,26 +9794,26 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_t_1 = (__pyx_v_node->local_name == LXB_TAG_DIV);
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":612
+      /* "resiliparse_dom/extract/html2text.pyx":619
  *     if cls_attr.empty() and id_attr.empty():
  *         if node.local_name == LXB_TAG_DIV:
  *             return body_depth <= 5 or not _is_link_cluster(node, 0.6, 800)             # <<<<<<<<<<<<<<
  *         return True
  * 
  */
-      __pyx_t_2 = (__pyx_v_body_depth <= 5);
-      if (!__pyx_t_2) {
+      __pyx_t_3 = (__pyx_v_body_depth <= 5);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_1 = __pyx_t_2;
-        goto __pyx_L44_bool_binop_done;
+        __pyx_t_1 = __pyx_t_3;
+        goto __pyx_L47_bool_binop_done;
       }
-      __pyx_t_2 = (!__pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.6, 0x320));
-      __pyx_t_1 = __pyx_t_2;
-      __pyx_L44_bool_binop_done:;
+      __pyx_t_3 = (!__pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.6, 0x320));
+      __pyx_t_1 = __pyx_t_3;
+      __pyx_L47_bool_binop_done:;
       __pyx_r = __pyx_t_1;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":611
+      /* "resiliparse_dom/extract/html2text.pyx":618
  *     # Only elements with class or id attributes from here on
  *     if cls_attr.empty() and id_attr.empty():
  *         if node.local_name == LXB_TAG_DIV:             # <<<<<<<<<<<<<<
@@ -9739,7 +9822,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":613
+    /* "resiliparse_dom/extract/html2text.pyx":620
  *         if node.local_name == LXB_TAG_DIV:
  *             return body_depth <= 5 or not _is_link_cluster(node, 0.6, 800)
  *         return True             # <<<<<<<<<<<<<<
@@ -9749,7 +9832,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 1;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":610
+    /* "resiliparse_dom/extract/html2text.pyx":617
  *     cdef string_view id_attr = get_node_attr_sv(node, b'id')
  *     # Only elements with class or id attributes from here on
  *     if cls_attr.empty() and id_attr.empty():             # <<<<<<<<<<<<<<
@@ -9758,7 +9841,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":615
+  /* "resiliparse_dom/extract/html2text.pyx":622
  *         return True
  * 
  *     cdef string cls_and_id_attr_str = <string>cls_attr             # <<<<<<<<<<<<<<
@@ -9767,7 +9850,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_cls_and_id_attr_str = ((std::string)__pyx_v_cls_attr);
 
-  /* "resiliparse_dom/extract/html2text.pyx":616
+  /* "resiliparse_dom/extract/html2text.pyx":623
  * 
  *     cdef string cls_and_id_attr_str = <string>cls_attr
  *     if not cls_and_id_attr_str.empty():             # <<<<<<<<<<<<<<
@@ -9777,7 +9860,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = (!__pyx_v_cls_and_id_attr_str.empty());
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":617
+    /* "resiliparse_dom/extract/html2text.pyx":624
  *     cdef string cls_and_id_attr_str = <string>cls_attr
  *     if not cls_and_id_attr_str.empty():
  *         cls_and_id_attr_str.push_back(b' ')             # <<<<<<<<<<<<<<
@@ -9794,10 +9877,10 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       #ifdef WITH_THREAD
       __Pyx_PyGILState_Release(__pyx_gilstate_save);
       #endif
-      __PYX_ERR(0, 617, __pyx_L1_error)
+      __PYX_ERR(0, 624, __pyx_L1_error)
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":616
+    /* "resiliparse_dom/extract/html2text.pyx":623
  * 
  *     cdef string cls_and_id_attr_str = <string>cls_attr
  *     if not cls_and_id_attr_str.empty():             # <<<<<<<<<<<<<<
@@ -9806,7 +9889,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":618
+  /* "resiliparse_dom/extract/html2text.pyx":625
  *     if not cls_and_id_attr_str.empty():
  *         cls_and_id_attr_str.push_back(b' ')
  *     cls_and_id_attr_str.append(<string>id_attr)             # <<<<<<<<<<<<<<
@@ -9823,10 +9906,10 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     #ifdef WITH_THREAD
     __Pyx_PyGILState_Release(__pyx_gilstate_save);
     #endif
-    __PYX_ERR(0, 618, __pyx_L1_error)
+    __PYX_ERR(0, 625, __pyx_L1_error)
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":619
+  /* "resiliparse_dom/extract/html2text.pyx":626
  *         cls_and_id_attr_str.push_back(b' ')
  *     cls_and_id_attr_str.append(<string>id_attr)
  *     cdef string_view cls_and_id_attr = <string_view>cls_and_id_attr_str             # <<<<<<<<<<<<<<
@@ -9835,32 +9918,32 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_cls_and_id_attr = ((std::string_view)__pyx_v_cls_and_id_attr_str);
 
-  /* "resiliparse_dom/extract/html2text.pyx":622
+  /* "resiliparse_dom/extract/html2text.pyx":629
  * 
  *     # Hidden elements
  *     if regex_search_not_empty(cls_attr, display_cls_regex) \             # <<<<<<<<<<<<<<
  *             or regex_search_not_empty(get_node_attr_sv(node, b'style'), display_css_regex):
  *         return False
  */
-  __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_display_cls_regex);
-  if (!__pyx_t_2) {
+  __pyx_t_3 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_display_cls_regex);
+  if (!__pyx_t_3) {
   } else {
-    __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L48_bool_binop_done;
+    __pyx_t_1 = __pyx_t_3;
+    goto __pyx_L51_bool_binop_done;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":623
+  /* "resiliparse_dom/extract/html2text.pyx":630
  *     # Hidden elements
  *     if regex_search_not_empty(cls_attr, display_cls_regex) \
  *             or regex_search_not_empty(get_node_attr_sv(node, b'style'), display_css_regex):             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_style), __pyx_v_15resiliparse_dom_7extract_9html2text_display_css_regex);
-  __pyx_t_1 = __pyx_t_2;
-  __pyx_L48_bool_binop_done:;
+  __pyx_t_3 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_style), __pyx_v_15resiliparse_dom_7extract_9html2text_display_css_regex);
+  __pyx_t_1 = __pyx_t_3;
+  __pyx_L51_bool_binop_done:;
 
-  /* "resiliparse_dom/extract/html2text.pyx":622
+  /* "resiliparse_dom/extract/html2text.pyx":629
  * 
  *     # Hidden elements
  *     if regex_search_not_empty(cls_attr, display_cls_regex) \             # <<<<<<<<<<<<<<
@@ -9869,7 +9952,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":624
+    /* "resiliparse_dom/extract/html2text.pyx":631
  *     if regex_search_not_empty(cls_attr, display_cls_regex) \
  *             or regex_search_not_empty(get_node_attr_sv(node, b'style'), display_css_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -9879,7 +9962,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":622
+    /* "resiliparse_dom/extract/html2text.pyx":629
  * 
  *     # Hidden elements
  *     if regex_search_not_empty(cls_attr, display_cls_regex) \             # <<<<<<<<<<<<<<
@@ -9888,7 +9971,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":627
+  /* "resiliparse_dom/extract/html2text.pyx":634
  * 
  *     # Skip links
  *     if node.local_name in [LXB_TAG_A, LXB_TAG_DIV, LXB_TAG_LI] and \             # <<<<<<<<<<<<<<
@@ -9899,31 +9982,31 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     case LXB_TAG_A:
     case LXB_TAG_DIV:
     case LXB_TAG_LI:
-    __pyx_t_2 = 1;
+    __pyx_t_3 = 1;
     break;
     default:
-    __pyx_t_2 = 0;
+    __pyx_t_3 = 0;
     break;
   }
-  __pyx_t_5 = __pyx_t_2;
-  if (__pyx_t_5) {
+  __pyx_t_2 = __pyx_t_3;
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L51_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L54_bool_binop_done;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":628
+  /* "resiliparse_dom/extract/html2text.pyx":635
  *     # Skip links
  *     if node.local_name in [LXB_TAG_A, LXB_TAG_DIV, LXB_TAG_LI] and \
  *             regex_search_not_empty(cls_and_id_attr, skip_link_cls_regex):             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_5 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_skip_link_cls_regex);
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L51_bool_binop_done:;
+  __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_skip_link_cls_regex);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L54_bool_binop_done:;
 
-  /* "resiliparse_dom/extract/html2text.pyx":627
+  /* "resiliparse_dom/extract/html2text.pyx":634
  * 
  *     # Skip links
  *     if node.local_name in [LXB_TAG_A, LXB_TAG_DIV, LXB_TAG_LI] and \             # <<<<<<<<<<<<<<
@@ -9932,7 +10015,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":629
+    /* "resiliparse_dom/extract/html2text.pyx":636
  *     if node.local_name in [LXB_TAG_A, LXB_TAG_DIV, LXB_TAG_LI] and \
  *             regex_search_not_empty(cls_and_id_attr, skip_link_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -9942,7 +10025,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":627
+    /* "resiliparse_dom/extract/html2text.pyx":634
  * 
  *     # Skip links
  *     if node.local_name in [LXB_TAG_A, LXB_TAG_DIV, LXB_TAG_LI] and \             # <<<<<<<<<<<<<<
@@ -9951,7 +10034,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":631
+  /* "resiliparse_dom/extract/html2text.pyx":638
  *         return False
  * 
  *     if body_depth > 2:             # <<<<<<<<<<<<<<
@@ -9961,7 +10044,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = (__pyx_v_body_depth > 2);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":633
+    /* "resiliparse_dom/extract/html2text.pyx":640
  *     if body_depth > 2:
  *         # Sign-in links
  *         if regex_search_not_empty(cls_attr, signin_cls_regex):             # <<<<<<<<<<<<<<
@@ -9971,7 +10054,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_signin_cls_regex);
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":634
+      /* "resiliparse_dom/extract/html2text.pyx":641
  *         # Sign-in links
  *         if regex_search_not_empty(cls_attr, signin_cls_regex):
  *             return False             # <<<<<<<<<<<<<<
@@ -9981,7 +10064,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":633
+      /* "resiliparse_dom/extract/html2text.pyx":640
  *     if body_depth > 2:
  *         # Sign-in links
  *         if regex_search_not_empty(cls_attr, signin_cls_regex):             # <<<<<<<<<<<<<<
@@ -9990,7 +10073,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":637
+    /* "resiliparse_dom/extract/html2text.pyx":644
  * 
  *         # Post meta
  *         if regex_search_not_empty(cls_attr, post_meta_cls_regex):             # <<<<<<<<<<<<<<
@@ -10000,7 +10083,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_post_meta_cls_regex);
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":638
+      /* "resiliparse_dom/extract/html2text.pyx":645
  *         # Post meta
  *         if regex_search_not_empty(cls_attr, post_meta_cls_regex):
  *             return False             # <<<<<<<<<<<<<<
@@ -10010,7 +10093,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":637
+      /* "resiliparse_dom/extract/html2text.pyx":644
  * 
  *         # Post meta
  *         if regex_search_not_empty(cls_attr, post_meta_cls_regex):             # <<<<<<<<<<<<<<
@@ -10019,7 +10102,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":641
+    /* "resiliparse_dom/extract/html2text.pyx":648
  * 
  *         # Social media and feedback forms
  *         if regex_search_not_empty(cls_attr, social_cls_regex):             # <<<<<<<<<<<<<<
@@ -10029,7 +10112,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_social_cls_regex);
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":642
+      /* "resiliparse_dom/extract/html2text.pyx":649
  *         # Social media and feedback forms
  *         if regex_search_not_empty(cls_attr, social_cls_regex):
  *             return False             # <<<<<<<<<<<<<<
@@ -10039,7 +10122,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":641
+      /* "resiliparse_dom/extract/html2text.pyx":648
  * 
  *         # Social media and feedback forms
  *         if regex_search_not_empty(cls_attr, social_cls_regex):             # <<<<<<<<<<<<<<
@@ -10048,7 +10131,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":631
+    /* "resiliparse_dom/extract/html2text.pyx":638
  *         return False
  * 
  *     if body_depth > 2:             # <<<<<<<<<<<<<<
@@ -10057,7 +10140,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":645
+  /* "resiliparse_dom/extract/html2text.pyx":652
  * 
  *     # Logos
  *     if regex_search_not_empty(cls_and_id_attr, logo_cls_regex):             # <<<<<<<<<<<<<<
@@ -10067,7 +10150,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_logo_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":646
+    /* "resiliparse_dom/extract/html2text.pyx":653
  *     # Logos
  *     if regex_search_not_empty(cls_and_id_attr, logo_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10077,7 +10160,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":645
+    /* "resiliparse_dom/extract/html2text.pyx":652
  * 
  *     # Logos
  *     if regex_search_not_empty(cls_and_id_attr, logo_cls_regex):             # <<<<<<<<<<<<<<
@@ -10086,60 +10169,60 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":649
+  /* "resiliparse_dom/extract/html2text.pyx":656
  * 
  *     # Ads
  *     if regex_search_not_empty(cls_and_id_attr, ads_cls_regex) \             # <<<<<<<<<<<<<<
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-ad', 7) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-advertisement', 18) \
  */
-  __pyx_t_5 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_ads_cls_regex);
-  if (!__pyx_t_5) {
+  __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_ads_cls_regex);
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L59_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L62_bool_binop_done;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":650
+  /* "resiliparse_dom/extract/html2text.pyx":657
  *     # Ads
  *     if regex_search_not_empty(cls_and_id_attr, ads_cls_regex) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-ad', 7) \             # <<<<<<<<<<<<<<
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-advertisement', 18) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-text-ad', 12):
  */
-  __pyx_t_5 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"data-ad"))), 7);
-  if (!__pyx_t_5) {
+  __pyx_t_2 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"data-ad"))), 7);
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L59_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L62_bool_binop_done;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":651
+  /* "resiliparse_dom/extract/html2text.pyx":658
  *     if regex_search_not_empty(cls_and_id_attr, ads_cls_regex) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-ad', 7) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-advertisement', 18) \             # <<<<<<<<<<<<<<
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-text-ad', 12):
  *         return False
  */
-  __pyx_t_5 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"data-advertisement"))), 18);
-  if (!__pyx_t_5) {
+  __pyx_t_2 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"data-advertisement"))), 18);
+  if (!__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L59_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L62_bool_binop_done;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":652
+  /* "resiliparse_dom/extract/html2text.pyx":659
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-ad', 7) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-advertisement', 18) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-text-ad', 12):             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_5 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"data-text-ad"))), 12);
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L59_bool_binop_done:;
+  __pyx_t_2 = lxb_dom_element_has_attribute(((lxb_dom_element_t *)__pyx_v_node), ((lxb_char_t const *)((lxb_char_t const *)((char const *)"data-text-ad"))), 12);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L62_bool_binop_done:;
 
-  /* "resiliparse_dom/extract/html2text.pyx":649
+  /* "resiliparse_dom/extract/html2text.pyx":656
  * 
  *     # Ads
  *     if regex_search_not_empty(cls_and_id_attr, ads_cls_regex) \             # <<<<<<<<<<<<<<
@@ -10148,7 +10231,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":653
+    /* "resiliparse_dom/extract/html2text.pyx":660
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-advertisement', 18) \
  *             or lxb_dom_element_has_attribute(<lxb_dom_element_t*>node, <const lxb_char_t*>b'data-text-ad', 12):
  *         return False             # <<<<<<<<<<<<<<
@@ -10158,7 +10241,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":649
+    /* "resiliparse_dom/extract/html2text.pyx":656
  * 
  *     # Ads
  *     if regex_search_not_empty(cls_and_id_attr, ads_cls_regex) \             # <<<<<<<<<<<<<<
@@ -10167,25 +10250,25 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":658
+  /* "resiliparse_dom/extract/html2text.pyx":665
  *     # ------ Section 4: Class and ID matching of block elements only ------
  * 
  *     if not is_block_element(node.local_name) and node.local_name != LXB_TAG_TD:             # <<<<<<<<<<<<<<
  *         return True
  * 
  */
-  __pyx_t_5 = (!__pyx_f_15resiliparse_dom_5parse_4html_is_block_element(__pyx_v_node->local_name));
-  if (__pyx_t_5) {
+  __pyx_t_2 = (!__pyx_f_15resiliparse_dom_5parse_4html_is_block_element(__pyx_v_node->local_name));
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L64_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L67_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_v_node->local_name != LXB_TAG_TD);
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L64_bool_binop_done:;
+  __pyx_t_2 = (__pyx_v_node->local_name != LXB_TAG_TD);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L67_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":659
+    /* "resiliparse_dom/extract/html2text.pyx":666
  * 
  *     if not is_block_element(node.local_name) and node.local_name != LXB_TAG_TD:
  *         return True             # <<<<<<<<<<<<<<
@@ -10195,7 +10278,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 1;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":658
+    /* "resiliparse_dom/extract/html2text.pyx":665
  *     # ------ Section 4: Class and ID matching of block elements only ------
  * 
  *     if not is_block_element(node.local_name) and node.local_name != LXB_TAG_TD:             # <<<<<<<<<<<<<<
@@ -10204,7 +10287,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":662
+  /* "resiliparse_dom/extract/html2text.pyx":669
  * 
  *     # ARIA roles
  *     cdef string_view role_attr = strip_sv(get_node_attr_sv(node, b'role'))             # <<<<<<<<<<<<<<
@@ -10213,7 +10296,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   __pyx_v_role_attr = __pyx_f_18resiliparse_common_11string_util_strip_sv(__pyx_f_15resiliparse_dom_5parse_4html_get_node_attr_sv(__pyx_v_node, __pyx_k_role));
 
-  /* "resiliparse_dom/extract/html2text.pyx":663
+  /* "resiliparse_dom/extract/html2text.pyx":670
  *     # ARIA roles
  *     cdef string_view role_attr = strip_sv(get_node_attr_sv(node, b'role'))
  *     if rel_attr == b'main':             # <<<<<<<<<<<<<<
@@ -10223,7 +10306,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = (__pyx_v_rel_attr == ((char const *)"main"));
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":664
+    /* "resiliparse_dom/extract/html2text.pyx":671
  *     cdef string_view role_attr = strip_sv(get_node_attr_sv(node, b'role'))
  *     if rel_attr == b'main':
  *         return True             # <<<<<<<<<<<<<<
@@ -10233,7 +10316,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 1;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":663
+    /* "resiliparse_dom/extract/html2text.pyx":670
  *     # ARIA roles
  *     cdef string_view role_attr = strip_sv(get_node_attr_sv(node, b'role'))
  *     if rel_attr == b'main':             # <<<<<<<<<<<<<<
@@ -10242,25 +10325,25 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":665
+  /* "resiliparse_dom/extract/html2text.pyx":672
  *     if rel_attr == b'main':
  *         return True
  *     if not role_attr.empty() and blacklist_aria_roles.find(<string>role_attr) != blacklist_aria_roles.end():             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_5 = (!__pyx_v_role_attr.empty());
-  if (__pyx_t_5) {
+  __pyx_t_2 = (!__pyx_v_role_attr.empty());
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L68_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L71_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_v_15resiliparse_dom_7extract_9html2text_blacklist_aria_roles.find(((std::string)__pyx_v_role_attr)) != __pyx_v_15resiliparse_dom_7extract_9html2text_blacklist_aria_roles.end());
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L68_bool_binop_done:;
+  __pyx_t_2 = (__pyx_v_15resiliparse_dom_7extract_9html2text_blacklist_aria_roles.find(((std::string)__pyx_v_role_attr)) != __pyx_v_15resiliparse_dom_7extract_9html2text_blacklist_aria_roles.end());
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L71_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":666
+    /* "resiliparse_dom/extract/html2text.pyx":673
  *         return True
  *     if not role_attr.empty() and blacklist_aria_roles.find(<string>role_attr) != blacklist_aria_roles.end():
  *         return False             # <<<<<<<<<<<<<<
@@ -10270,7 +10353,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":665
+    /* "resiliparse_dom/extract/html2text.pyx":672
  *     if rel_attr == b'main':
  *         return True
  *     if not role_attr.empty() and blacklist_aria_roles.find(<string>role_attr) != blacklist_aria_roles.end():             # <<<<<<<<<<<<<<
@@ -10279,7 +10362,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":669
+  /* "resiliparse_dom/extract/html2text.pyx":676
  * 
  *     # Whitelist article elements
  *     if regex_search_not_empty(cls_and_id_attr, article_cls_regex):             # <<<<<<<<<<<<<<
@@ -10289,7 +10372,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_article_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":670
+    /* "resiliparse_dom/extract/html2text.pyx":677
  *     # Whitelist article elements
  *     if regex_search_not_empty(cls_and_id_attr, article_cls_regex):
  *         return True             # <<<<<<<<<<<<<<
@@ -10299,7 +10382,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 1;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":669
+    /* "resiliparse_dom/extract/html2text.pyx":676
  * 
  *     # Whitelist article elements
  *     if regex_search_not_empty(cls_and_id_attr, article_cls_regex):             # <<<<<<<<<<<<<<
@@ -10308,7 +10391,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":673
+  /* "resiliparse_dom/extract/html2text.pyx":680
  * 
  *     # Global landmarks by ID
  *     if regex_search_not_empty(id_attr, landmark_id_regex):             # <<<<<<<<<<<<<<
@@ -10318,7 +10401,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_landmark_id_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":674
+    /* "resiliparse_dom/extract/html2text.pyx":681
  *     # Global landmarks by ID
  *     if regex_search_not_empty(id_attr, landmark_id_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10328,7 +10411,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":673
+    /* "resiliparse_dom/extract/html2text.pyx":680
  * 
  *     # Global landmarks by ID
  *     if regex_search_not_empty(id_attr, landmark_id_regex):             # <<<<<<<<<<<<<<
@@ -10337,7 +10420,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":677
+  /* "resiliparse_dom/extract/html2text.pyx":684
  * 
  *     # Global header
  *     if regex_search_not_empty(cls_and_id_attr, header_cls_regex):             # <<<<<<<<<<<<<<
@@ -10347,7 +10430,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_header_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":678
+    /* "resiliparse_dom/extract/html2text.pyx":685
  *     # Global header
  *     if regex_search_not_empty(cls_and_id_attr, header_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10357,7 +10440,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":677
+    /* "resiliparse_dom/extract/html2text.pyx":684
  * 
  *     # Global header
  *     if regex_search_not_empty(cls_and_id_attr, header_cls_regex):             # <<<<<<<<<<<<<<
@@ -10366,7 +10449,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":681
+  /* "resiliparse_dom/extract/html2text.pyx":688
  * 
  *     # Global footer
  *     if regex_search_not_empty(cls_and_id_attr, footer_cls_regex):             # <<<<<<<<<<<<<<
@@ -10376,7 +10459,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_footer_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":682
+    /* "resiliparse_dom/extract/html2text.pyx":689
  *     # Global footer
  *     if regex_search_not_empty(cls_and_id_attr, footer_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10386,7 +10469,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":681
+    /* "resiliparse_dom/extract/html2text.pyx":688
  * 
  *     # Global footer
  *     if regex_search_not_empty(cls_and_id_attr, footer_cls_regex):             # <<<<<<<<<<<<<<
@@ -10395,7 +10478,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":685
+  /* "resiliparse_dom/extract/html2text.pyx":692
  * 
  *     # Global navigation
  *     if regex_search_not_empty(cls_and_id_attr, nav_cls_regex):             # <<<<<<<<<<<<<<
@@ -10405,7 +10488,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_nav_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":686
+    /* "resiliparse_dom/extract/html2text.pyx":693
  *     # Global navigation
  *     if regex_search_not_empty(cls_and_id_attr, nav_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10415,7 +10498,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":685
+    /* "resiliparse_dom/extract/html2text.pyx":692
  * 
  *     # Global navigation
  *     if regex_search_not_empty(cls_and_id_attr, nav_cls_regex):             # <<<<<<<<<<<<<<
@@ -10424,7 +10507,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":689
+  /* "resiliparse_dom/extract/html2text.pyx":696
  * 
  *     # Recommended articles
  *     if regex_search_not_empty(cls_and_id_attr, recommended_cls_regex):             # <<<<<<<<<<<<<<
@@ -10434,7 +10517,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_recommended_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":690
+    /* "resiliparse_dom/extract/html2text.pyx":697
  *     # Recommended articles
  *     if regex_search_not_empty(cls_and_id_attr, recommended_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10444,7 +10527,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":689
+    /* "resiliparse_dom/extract/html2text.pyx":696
  * 
  *     # Recommended articles
  *     if regex_search_not_empty(cls_and_id_attr, recommended_cls_regex):             # <<<<<<<<<<<<<<
@@ -10453,31 +10536,31 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":693
+  /* "resiliparse_dom/extract/html2text.pyx":700
  * 
  *     # Comments section
  *     if not allow_comments and node.local_name and regex_search_not_empty(cls_and_id_attr, comments_cls_regex):             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_5 = (!__pyx_v_allow_comments);
-  if (__pyx_t_5) {
+  __pyx_t_2 = (!__pyx_v_allow_comments);
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L77_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L80_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_v_node->local_name != 0);
-  if (__pyx_t_5) {
+  __pyx_t_2 = (__pyx_v_node->local_name != 0);
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L77_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L80_bool_binop_done;
   }
-  __pyx_t_5 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_comments_cls_regex);
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L77_bool_binop_done:;
+  __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_comments_cls_regex);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L80_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":694
+    /* "resiliparse_dom/extract/html2text.pyx":701
  *     # Comments section
  *     if not allow_comments and node.local_name and regex_search_not_empty(cls_and_id_attr, comments_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10487,7 +10570,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":693
+    /* "resiliparse_dom/extract/html2text.pyx":700
  * 
  *     # Comments section
  *     if not allow_comments and node.local_name and regex_search_not_empty(cls_and_id_attr, comments_cls_regex):             # <<<<<<<<<<<<<<
@@ -10496,7 +10579,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":697
+  /* "resiliparse_dom/extract/html2text.pyx":704
  * 
  *     # Global search bar
  *     if regex_search_not_empty(cls_and_id_attr, search_cls_regex):             # <<<<<<<<<<<<<<
@@ -10506,7 +10589,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_search_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":698
+    /* "resiliparse_dom/extract/html2text.pyx":705
  *     # Global search bar
  *     if regex_search_not_empty(cls_and_id_attr, search_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10516,7 +10599,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":697
+    /* "resiliparse_dom/extract/html2text.pyx":704
  * 
  *     # Global search bar
  *     if regex_search_not_empty(cls_and_id_attr, search_cls_regex):             # <<<<<<<<<<<<<<
@@ -10525,7 +10608,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":701
+  /* "resiliparse_dom/extract/html2text.pyx":708
  * 
  *     # Global sidebar
  *     if regex_search_not_empty(cls_and_id_attr, sidebar_cls_regex):             # <<<<<<<<<<<<<<
@@ -10535,7 +10618,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_sidebar_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":702
+    /* "resiliparse_dom/extract/html2text.pyx":709
  *     # Global sidebar
  *     if regex_search_not_empty(cls_and_id_attr, sidebar_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10545,7 +10628,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":701
+    /* "resiliparse_dom/extract/html2text.pyx":708
  * 
  *     # Global sidebar
  *     if regex_search_not_empty(cls_and_id_attr, sidebar_cls_regex):             # <<<<<<<<<<<<<<
@@ -10554,7 +10637,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":705
+  /* "resiliparse_dom/extract/html2text.pyx":712
  * 
  *     # Modals
  *     if regex_search_not_empty(cls_and_id_attr, modal_cls_regex):             # <<<<<<<<<<<<<<
@@ -10564,7 +10647,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_modal_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":706
+    /* "resiliparse_dom/extract/html2text.pyx":713
  *     # Modals
  *     if regex_search_not_empty(cls_and_id_attr, modal_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10574,7 +10657,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":705
+    /* "resiliparse_dom/extract/html2text.pyx":712
  * 
  *     # Modals
  *     if regex_search_not_empty(cls_and_id_attr, modal_cls_regex):             # <<<<<<<<<<<<<<
@@ -10583,7 +10666,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":709
+  /* "resiliparse_dom/extract/html2text.pyx":716
  * 
  *     # Image galleries and carousels
  *     if regex_search_not_empty(cls_and_id_attr, gallery_cls_regex):             # <<<<<<<<<<<<<<
@@ -10593,7 +10676,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_gallery_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":710
+    /* "resiliparse_dom/extract/html2text.pyx":717
  *     # Image galleries and carousels
  *     if regex_search_not_empty(cls_and_id_attr, gallery_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10603,7 +10686,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":709
+    /* "resiliparse_dom/extract/html2text.pyx":716
  * 
  *     # Image galleries and carousels
  *     if regex_search_not_empty(cls_and_id_attr, gallery_cls_regex):             # <<<<<<<<<<<<<<
@@ -10612,7 +10695,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":713
+  /* "resiliparse_dom/extract/html2text.pyx":720
  * 
  *     # Print content
  *     if regex_search_not_empty(cls_and_id_attr, print_cls_regex):             # <<<<<<<<<<<<<<
@@ -10622,7 +10705,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   __pyx_t_1 = __pyx_f_15resiliparse_dom_7extract_9html2text_regex_search_not_empty(__pyx_v_cls_and_id_attr, __pyx_v_15resiliparse_dom_7extract_9html2text_print_cls_regex);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":714
+    /* "resiliparse_dom/extract/html2text.pyx":721
  *     # Print content
  *     if regex_search_not_empty(cls_and_id_attr, print_cls_regex):
  *         return False             # <<<<<<<<<<<<<<
@@ -10632,7 +10715,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":713
+    /* "resiliparse_dom/extract/html2text.pyx":720
  * 
  *     # Print content
  *     if regex_search_not_empty(cls_and_id_attr, print_cls_regex):             # <<<<<<<<<<<<<<
@@ -10641,31 +10724,31 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":716
+  /* "resiliparse_dom/extract/html2text.pyx":723
  *         return False
  * 
  *     if body_depth > 2 and node.local_name == LXB_TAG_DIV and _is_link_cluster(node, 0.6, 1500):             # <<<<<<<<<<<<<<
  *         return False
  * 
  */
-  __pyx_t_5 = (__pyx_v_body_depth > 2);
-  if (__pyx_t_5) {
+  __pyx_t_2 = (__pyx_v_body_depth > 2);
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L86_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L89_bool_binop_done;
   }
-  __pyx_t_5 = (__pyx_v_node->local_name == LXB_TAG_DIV);
-  if (__pyx_t_5) {
+  __pyx_t_2 = (__pyx_v_node->local_name == LXB_TAG_DIV);
+  if (__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_5;
-    goto __pyx_L86_bool_binop_done;
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L89_bool_binop_done;
   }
-  __pyx_t_5 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.6, 0x5DC);
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_L86_bool_binop_done:;
+  __pyx_t_2 = __pyx_f_15resiliparse_dom_7extract_9html2text__is_link_cluster(__pyx_v_node, 0.6, 0x5DC);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L89_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":717
+    /* "resiliparse_dom/extract/html2text.pyx":724
  * 
  *     if body_depth > 2 and node.local_name == LXB_TAG_DIV and _is_link_cluster(node, 0.6, 1500):
  *         return False             # <<<<<<<<<<<<<<
@@ -10675,7 +10758,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":716
+    /* "resiliparse_dom/extract/html2text.pyx":723
  *         return False
  * 
  *     if body_depth > 2 and node.local_name == LXB_TAG_DIV and _is_link_cluster(node, 0.6, 1500):             # <<<<<<<<<<<<<<
@@ -10684,7 +10767,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":719
+  /* "resiliparse_dom/extract/html2text.pyx":726
  *         return False
  * 
  *     return True             # <<<<<<<<<<<<<<
@@ -10716,7 +10799,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":722
+/* "resiliparse_dom/extract/html2text.pyx":729
  * 
  * 
  * cdef inline lxb_status_t _exists_cb(lxb_dom_node_t *node, lxb_css_selector_specificity_t *spec, void *ctx) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -10727,7 +10810,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text__is_main_
 static CYTHON_INLINE lxb_status_t __pyx_f_15resiliparse_dom_7extract_9html2text__exists_cb(CYTHON_UNUSED lxb_dom_node_t *__pyx_v_node, CYTHON_UNUSED lxb_css_selector_specificity_t *__pyx_v_spec, void *__pyx_v_ctx) {
   lxb_status_t __pyx_r;
 
-  /* "resiliparse_dom/extract/html2text.pyx":723
+  /* "resiliparse_dom/extract/html2text.pyx":730
  * 
  * cdef inline lxb_status_t _exists_cb(lxb_dom_node_t *node, lxb_css_selector_specificity_t *spec, void *ctx) noexcept nogil:
  *     (<bint*>ctx)[0] = True             # <<<<<<<<<<<<<<
@@ -10736,7 +10819,7 @@ static CYTHON_INLINE lxb_status_t __pyx_f_15resiliparse_dom_7extract_9html2text_
  */
   (((int *)__pyx_v_ctx)[0]) = 1;
 
-  /* "resiliparse_dom/extract/html2text.pyx":724
+  /* "resiliparse_dom/extract/html2text.pyx":731
  * cdef inline lxb_status_t _exists_cb(lxb_dom_node_t *node, lxb_css_selector_specificity_t *spec, void *ctx) noexcept nogil:
  *     (<bint*>ctx)[0] = True
  *     return LXB_STATUS_STOP             # <<<<<<<<<<<<<<
@@ -10746,7 +10829,7 @@ static CYTHON_INLINE lxb_status_t __pyx_f_15resiliparse_dom_7extract_9html2text_
   __pyx_r = LXB_STATUS_STOP;
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":722
+  /* "resiliparse_dom/extract/html2text.pyx":729
  * 
  * 
  * cdef inline lxb_status_t _exists_cb(lxb_dom_node_t *node, lxb_css_selector_specificity_t *spec, void *ctx) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -10759,7 +10842,7 @@ static CYTHON_INLINE lxb_status_t __pyx_f_15resiliparse_dom_7extract_9html2text_
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":727
+/* "resiliparse_dom/extract/html2text.pyx":734
  * 
  * 
  * cdef string serialize_node(lxb_dom_node_t* node) nogil:             # <<<<<<<<<<<<<<
@@ -10781,7 +10864,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
   PyGILState_STATE __pyx_gilstate_save;
   #endif
 
-  /* "resiliparse_dom/extract/html2text.pyx":732
+  /* "resiliparse_dom/extract/html2text.pyx":739
  *     Returns an empty string if serialization fails.
  *     """
  *     if node is NULL:             # <<<<<<<<<<<<<<
@@ -10791,7 +10874,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
   __pyx_t_1 = (__pyx_v_node == NULL);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":733
+    /* "resiliparse_dom/extract/html2text.pyx":740
  *     """
  *     if node is NULL:
  *         return string()             # <<<<<<<<<<<<<<
@@ -10808,12 +10891,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
       #ifdef WITH_THREAD
       __Pyx_PyGILState_Release(__pyx_gilstate_save);
       #endif
-      __PYX_ERR(0, 733, __pyx_L1_error)
+      __PYX_ERR(0, 740, __pyx_L1_error)
     }
     __pyx_r = __pyx_t_2;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":732
+    /* "resiliparse_dom/extract/html2text.pyx":739
  *     Returns an empty string if serialization fails.
  *     """
  *     if node is NULL:             # <<<<<<<<<<<<<<
@@ -10822,7 +10905,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":736
+  /* "resiliparse_dom/extract/html2text.pyx":743
  * 
  *     # Create a new Lexbor string
  *     cdef lexbor_str_t* serialized_str = lexbor_str_create()             # <<<<<<<<<<<<<<
@@ -10831,7 +10914,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
  */
   __pyx_v_serialized_str = lexbor_str_create();
 
-  /* "resiliparse_dom/extract/html2text.pyx":737
+  /* "resiliparse_dom/extract/html2text.pyx":744
  *     # Create a new Lexbor string
  *     cdef lexbor_str_t* serialized_str = lexbor_str_create()
  *     if not serialized_str:             # <<<<<<<<<<<<<<
@@ -10841,7 +10924,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
   __pyx_t_1 = (!(__pyx_v_serialized_str != 0));
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":738
+    /* "resiliparse_dom/extract/html2text.pyx":745
  *     cdef lexbor_str_t* serialized_str = lexbor_str_create()
  *     if not serialized_str:
  *         return string()  # Return an empty C++ string             # <<<<<<<<<<<<<<
@@ -10858,12 +10941,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
       #ifdef WITH_THREAD
       __Pyx_PyGILState_Release(__pyx_gilstate_save);
       #endif
-      __PYX_ERR(0, 738, __pyx_L1_error)
+      __PYX_ERR(0, 745, __pyx_L1_error)
     }
     __pyx_r = __pyx_t_2;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":737
+    /* "resiliparse_dom/extract/html2text.pyx":744
  *     # Create a new Lexbor string
  *     cdef lexbor_str_t* serialized_str = lexbor_str_create()
  *     if not serialized_str:             # <<<<<<<<<<<<<<
@@ -10872,7 +10955,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":741
+  /* "resiliparse_dom/extract/html2text.pyx":748
  * 
  *     # Serialize the DOM node into the Lexbor string
  *     cdef lxb_status_t status = lxb_html_serialize_tree_str(node, serialized_str)             # <<<<<<<<<<<<<<
@@ -10881,7 +10964,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
  */
   __pyx_v_status = lxb_html_serialize_tree_str(__pyx_v_node, __pyx_v_serialized_str);
 
-  /* "resiliparse_dom/extract/html2text.pyx":743
+  /* "resiliparse_dom/extract/html2text.pyx":750
  *     cdef lxb_status_t status = lxb_html_serialize_tree_str(node, serialized_str)
  * 
  *     if status != LXB_STATUS_OK:             # <<<<<<<<<<<<<<
@@ -10891,7 +10974,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
   __pyx_t_1 = (__pyx_v_status != LXB_STATUS_OK);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":744
+    /* "resiliparse_dom/extract/html2text.pyx":751
  * 
  *     if status != LXB_STATUS_OK:
  *         lexbor_str_destroy(serialized_str, NULL, True)             # <<<<<<<<<<<<<<
@@ -10900,7 +10983,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
  */
     (void)(lexbor_str_destroy(__pyx_v_serialized_str, NULL, 1));
 
-    /* "resiliparse_dom/extract/html2text.pyx":745
+    /* "resiliparse_dom/extract/html2text.pyx":752
  *     if status != LXB_STATUS_OK:
  *         lexbor_str_destroy(serialized_str, NULL, True)
  *         return string()             # <<<<<<<<<<<<<<
@@ -10917,12 +11000,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
       #ifdef WITH_THREAD
       __Pyx_PyGILState_Release(__pyx_gilstate_save);
       #endif
-      __PYX_ERR(0, 745, __pyx_L1_error)
+      __PYX_ERR(0, 752, __pyx_L1_error)
     }
     __pyx_r = __pyx_t_2;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":743
+    /* "resiliparse_dom/extract/html2text.pyx":750
  *     cdef lxb_status_t status = lxb_html_serialize_tree_str(node, serialized_str)
  * 
  *     if status != LXB_STATUS_OK:             # <<<<<<<<<<<<<<
@@ -10931,7 +11014,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":748
+  /* "resiliparse_dom/extract/html2text.pyx":755
  * 
  *     # Convert the serialized data to a C++ std::string
  *     cdef string html_str = string(<const char*>serialized_str.data, serialized_str.length+1)             # <<<<<<<<<<<<<<
@@ -10948,11 +11031,11 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
     #ifdef WITH_THREAD
     __Pyx_PyGILState_Release(__pyx_gilstate_save);
     #endif
-    __PYX_ERR(0, 748, __pyx_L1_error)
+    __PYX_ERR(0, 755, __pyx_L1_error)
   }
   __pyx_v_html_str = __PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_2);
 
-  /* "resiliparse_dom/extract/html2text.pyx":753
+  /* "resiliparse_dom/extract/html2text.pyx":760
  *     # lexbor_str_destroy(serialized_str, NULL, True)
  * 
  *     return html_str             # <<<<<<<<<<<<<<
@@ -10962,7 +11045,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
   __pyx_r = __pyx_v_html_str;
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":727
+  /* "resiliparse_dom/extract/html2text.pyx":734
  * 
  * 
  * cdef string serialize_node(lxb_dom_node_t* node) nogil:             # <<<<<<<<<<<<<<
@@ -10984,7 +11067,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":756
+/* "resiliparse_dom/extract/html2text.pyx":763
  * 
  * 
  * def extract_simplified_dom(html,             # <<<<<<<<<<<<<<
@@ -11041,7 +11124,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject **__pyx_pyargnames[] = {&__pyx_n_s_html,&__pyx_n_s_preserve_formatting,&__pyx_n_s_main_content,&__pyx_n_s_list_bullets,&__pyx_n_s_alt_texts,&__pyx_n_s_links,&__pyx_n_s_form_fields,&__pyx_n_s_noscript,&__pyx_n_s_comments,&__pyx_n_s_skip_elements,0};
 
-    /* "resiliparse_dom/extract/html2text.pyx":765
+    /* "resiliparse_dom/extract/html2text.pyx":772
  *                           bint noscript=False,
  *                           bint comments=True,
  *                           skip_elements=None):             # <<<<<<<<<<<<<<
@@ -11082,75 +11165,75 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_preserve_formatting);
           if (value) { values[1] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_main_content);
           if (value) { values[2] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_list_bullets);
           if (value) { values[3] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_alt_texts);
           if (value) { values[4] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_links);
           if (value) { values[5] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_form_fields);
           if (value) { values[6] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_noscript);
           if (value) { values[7] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_comments);
           if (value) { values[8] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  9:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_skip_elements);
           if (value) { values[9] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "extract_simplified_dom") < 0)) __PYX_ERR(0, 756, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "extract_simplified_dom") < 0)) __PYX_ERR(0, 763, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -11179,10 +11262,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     }
     __pyx_v_html = values[0];
     if (values[1]) {
-      __pyx_v_preserve_formatting = __Pyx_PyObject_IsTrue(values[1]); if (unlikely((__pyx_v_preserve_formatting == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 757, __pyx_L3_error)
+      __pyx_v_preserve_formatting = __Pyx_PyObject_IsTrue(values[1]); if (unlikely((__pyx_v_preserve_formatting == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 764, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":757
+      /* "resiliparse_dom/extract/html2text.pyx":764
  * 
  * def extract_simplified_dom(html,
  *                           bint preserve_formatting=True,             # <<<<<<<<<<<<<<
@@ -11192,10 +11275,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_preserve_formatting = ((int)((int)1));
     }
     if (values[2]) {
-      __pyx_v_main_content = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_main_content == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 758, __pyx_L3_error)
+      __pyx_v_main_content = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_main_content == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 765, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":758
+      /* "resiliparse_dom/extract/html2text.pyx":765
  * def extract_simplified_dom(html,
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,             # <<<<<<<<<<<<<<
@@ -11205,10 +11288,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_main_content = ((int)((int)0));
     }
     if (values[3]) {
-      __pyx_v_list_bullets = __Pyx_PyObject_IsTrue(values[3]); if (unlikely((__pyx_v_list_bullets == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 759, __pyx_L3_error)
+      __pyx_v_list_bullets = __Pyx_PyObject_IsTrue(values[3]); if (unlikely((__pyx_v_list_bullets == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 766, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":759
+      /* "resiliparse_dom/extract/html2text.pyx":766
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,
  *                           bint list_bullets=True,             # <<<<<<<<<<<<<<
@@ -11218,10 +11301,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_list_bullets = ((int)((int)1));
     }
     if (values[4]) {
-      __pyx_v_alt_texts = __Pyx_PyObject_IsTrue(values[4]); if (unlikely((__pyx_v_alt_texts == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 760, __pyx_L3_error)
+      __pyx_v_alt_texts = __Pyx_PyObject_IsTrue(values[4]); if (unlikely((__pyx_v_alt_texts == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 767, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":760
+      /* "resiliparse_dom/extract/html2text.pyx":767
  *                           bint main_content=False,
  *                           bint list_bullets=True,
  *                           bint alt_texts=True,             # <<<<<<<<<<<<<<
@@ -11231,10 +11314,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_alt_texts = ((int)((int)1));
     }
     if (values[5]) {
-      __pyx_v_links = __Pyx_PyObject_IsTrue(values[5]); if (unlikely((__pyx_v_links == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 761, __pyx_L3_error)
+      __pyx_v_links = __Pyx_PyObject_IsTrue(values[5]); if (unlikely((__pyx_v_links == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 768, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":761
+      /* "resiliparse_dom/extract/html2text.pyx":768
  *                           bint list_bullets=True,
  *                           bint alt_texts=True,
  *                           bint links=False,             # <<<<<<<<<<<<<<
@@ -11244,10 +11327,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_links = ((int)((int)0));
     }
     if (values[6]) {
-      __pyx_v_form_fields = __Pyx_PyObject_IsTrue(values[6]); if (unlikely((__pyx_v_form_fields == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 762, __pyx_L3_error)
+      __pyx_v_form_fields = __Pyx_PyObject_IsTrue(values[6]); if (unlikely((__pyx_v_form_fields == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 769, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":762
+      /* "resiliparse_dom/extract/html2text.pyx":769
  *                           bint alt_texts=True,
  *                           bint links=False,
  *                           bint form_fields=False,             # <<<<<<<<<<<<<<
@@ -11257,10 +11340,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_form_fields = ((int)((int)0));
     }
     if (values[7]) {
-      __pyx_v_noscript = __Pyx_PyObject_IsTrue(values[7]); if (unlikely((__pyx_v_noscript == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L3_error)
+      __pyx_v_noscript = __Pyx_PyObject_IsTrue(values[7]); if (unlikely((__pyx_v_noscript == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 770, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":763
+      /* "resiliparse_dom/extract/html2text.pyx":770
  *                           bint links=False,
  *                           bint form_fields=False,
  *                           bint noscript=False,             # <<<<<<<<<<<<<<
@@ -11270,10 +11353,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_noscript = ((int)((int)0));
     }
     if (values[8]) {
-      __pyx_v_comments = __Pyx_PyObject_IsTrue(values[8]); if (unlikely((__pyx_v_comments == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 764, __pyx_L3_error)
+      __pyx_v_comments = __Pyx_PyObject_IsTrue(values[8]); if (unlikely((__pyx_v_comments == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 771, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":764
+      /* "resiliparse_dom/extract/html2text.pyx":771
  *                           bint form_fields=False,
  *                           bint noscript=False,
  *                           bint comments=True,             # <<<<<<<<<<<<<<
@@ -11286,7 +11369,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("extract_simplified_dom", 0, 1, 10, __pyx_nargs); __PYX_ERR(0, 756, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("extract_simplified_dom", 0, 1, 10, __pyx_nargs); __PYX_ERR(0, 763, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -11302,7 +11385,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __pyx_L4_argument_unpacking_done:;
   __pyx_r = __pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplified_dom(__pyx_self, __pyx_v_html, __pyx_v_preserve_formatting, __pyx_v_main_content, __pyx_v_list_bullets, __pyx_v_alt_texts, __pyx_v_links, __pyx_v_form_fields, __pyx_v_noscript, __pyx_v_comments, __pyx_v_skip_elements);
 
-  /* "resiliparse_dom/extract/html2text.pyx":756
+  /* "resiliparse_dom/extract/html2text.pyx":763
  * 
  * 
  * def extract_simplified_dom(html,             # <<<<<<<<<<<<<<
@@ -11345,7 +11428,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("extract_simplified_dom", 1);
 
-  /* "resiliparse_dom/extract/html2text.pyx":773
+  /* "resiliparse_dom/extract/html2text.pyx":780
  *     """
  *     cdef HTMLTree tree
  *     if isinstance(html, str):             # <<<<<<<<<<<<<<
@@ -11355,14 +11438,14 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_t_1 = PyUnicode_Check(__pyx_v_html); 
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":774
+    /* "resiliparse_dom/extract/html2text.pyx":781
  *     cdef HTMLTree tree
  *     if isinstance(html, str):
  *         tree = HTMLTree.parse(html)             # <<<<<<<<<<<<<<
  *     elif isinstance(html, HTMLTree):
  *         tree = <HTMLTree>html
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree), __pyx_n_s_parse); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 774, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree), __pyx_n_s_parse); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 781, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     __pyx_t_5 = 0;
@@ -11382,15 +11465,15 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
       PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_v_html};
       __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 774, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 781, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree))))) __PYX_ERR(0, 774, __pyx_L1_error)
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree))))) __PYX_ERR(0, 781, __pyx_L1_error)
     __pyx_v_tree = ((struct __pyx_obj_15resiliparse_dom_5parse_4html_HTMLTree *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":773
+    /* "resiliparse_dom/extract/html2text.pyx":780
  *     """
  *     cdef HTMLTree tree
  *     if isinstance(html, str):             # <<<<<<<<<<<<<<
@@ -11400,7 +11483,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
     goto __pyx_L3;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":775
+  /* "resiliparse_dom/extract/html2text.pyx":782
  *     if isinstance(html, str):
  *         tree = HTMLTree.parse(html)
  *     elif isinstance(html, HTMLTree):             # <<<<<<<<<<<<<<
@@ -11410,7 +11493,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_html, __pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree); 
   if (likely(__pyx_t_1)) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":776
+    /* "resiliparse_dom/extract/html2text.pyx":783
  *         tree = HTMLTree.parse(html)
  *     elif isinstance(html, HTMLTree):
  *         tree = <HTMLTree>html             # <<<<<<<<<<<<<<
@@ -11422,7 +11505,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
     __pyx_v_tree = ((struct __pyx_obj_15resiliparse_dom_5parse_4html_HTMLTree *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":775
+    /* "resiliparse_dom/extract/html2text.pyx":782
  *     if isinstance(html, str):
  *         tree = HTMLTree.parse(html)
  *     elif isinstance(html, HTMLTree):             # <<<<<<<<<<<<<<
@@ -11432,7 +11515,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
     goto __pyx_L3;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":778
+  /* "resiliparse_dom/extract/html2text.pyx":785
  *         tree = <HTMLTree>html
  *     else:
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')             # <<<<<<<<<<<<<<
@@ -11440,29 +11523,29 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  *     if not check_node(tree.body):
  */
   /*else*/ {
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 778, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 785, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 778, __pyx_L1_error)
+    __PYX_ERR(0, 785, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "resiliparse_dom/extract/html2text.pyx":780
+  /* "resiliparse_dom/extract/html2text.pyx":787
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')
  * 
  *     if not check_node(tree.body):             # <<<<<<<<<<<<<<
  *         return ''
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tree), __pyx_n_s_body); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 780, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tree), __pyx_n_s_body); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 787, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_DOMNode))))) __PYX_ERR(0, 780, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_DOMNode))))) __PYX_ERR(0, 787, __pyx_L1_error)
   __pyx_t_1 = (!__pyx_f_15resiliparse_dom_5parse_4html_check_node(((struct __pyx_obj_15resiliparse_dom_5parse_4html_DOMNode *)__pyx_t_2)));
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":781
+    /* "resiliparse_dom/extract/html2text.pyx":788
  * 
  *     if not check_node(tree.body):
  *         return ''             # <<<<<<<<<<<<<<
@@ -11474,7 +11557,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
     __pyx_r = __pyx_kp_u__2;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":780
+    /* "resiliparse_dom/extract/html2text.pyx":787
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')
  * 
  *     if not check_node(tree.body):             # <<<<<<<<<<<<<<
@@ -11483,7 +11566,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":783
+  /* "resiliparse_dom/extract/html2text.pyx":790
  *         return ''
  * 
  *     skip_selectors = {e.encode() for e in skip_elements or []}             # <<<<<<<<<<<<<<
@@ -11491,16 +11574,16 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  * 
  */
   { /* enter inner scope */
-    __pyx_t_2 = PySet_New(NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 783, __pyx_L7_error)
+    __pyx_t_2 = PySet_New(NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 790, __pyx_L7_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_skip_elements); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 783, __pyx_L7_error)
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_skip_elements); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 790, __pyx_L7_error)
     if (!__pyx_t_1) {
     } else {
       __Pyx_INCREF(__pyx_v_skip_elements);
       __pyx_t_3 = __pyx_v_skip_elements;
       goto __pyx_L10_bool_binop_done;
     }
-    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 783, __pyx_L7_error)
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 790, __pyx_L7_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_t_4);
     __pyx_t_3 = __pyx_t_4;
@@ -11511,9 +11594,9 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
       __pyx_t_6 = 0;
       __pyx_t_7 = NULL;
     } else {
-      __pyx_t_6 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 783, __pyx_L7_error)
+      __pyx_t_6 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 790, __pyx_L7_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 783, __pyx_L7_error)
+      __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 790, __pyx_L7_error)
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     for (;;) {
@@ -11522,28 +11605,28 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
           {
             Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_4);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 783, __pyx_L7_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 790, __pyx_L7_error)
             #endif
             if (__pyx_t_6 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 783, __pyx_L7_error)
+          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 790, __pyx_L7_error)
           #else
-          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 783, __pyx_L7_error)
+          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 790, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         } else {
           {
             Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_4);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 783, __pyx_L7_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 790, __pyx_L7_error)
             #endif
             if (__pyx_t_6 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 783, __pyx_L7_error)
+          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 790, __pyx_L7_error)
           #else
-          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 783, __pyx_L7_error)
+          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 790, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         }
@@ -11553,7 +11636,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 783, __pyx_L7_error)
+            else __PYX_ERR(0, 790, __pyx_L7_error)
           }
           break;
         }
@@ -11561,7 +11644,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
       }
       __Pyx_XDECREF_SET(__pyx_7genexpr__pyx_v_e, __pyx_t_3);
       __pyx_t_3 = 0;
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_7genexpr__pyx_v_e, __pyx_n_s_encode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 783, __pyx_L7_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_7genexpr__pyx_v_e, __pyx_n_s_encode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 790, __pyx_L7_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = NULL;
       __pyx_t_5 = 0;
@@ -11581,11 +11664,11 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
         PyObject *__pyx_callargs[2] = {__pyx_t_9, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_8, __pyx_callargs+1-__pyx_t_5, 0+__pyx_t_5);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 783, __pyx_L7_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 790, __pyx_L7_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
-      if (unlikely(PySet_Add(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 783, __pyx_L7_error)
+      if (unlikely(PySet_Add(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 790, __pyx_L7_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -11599,26 +11682,26 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_v_skip_selectors = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":784
+  /* "resiliparse_dom/extract/html2text.pyx":791
  * 
  *     skip_selectors = {e.encode() for e in skip_elements or []}
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})             # <<<<<<<<<<<<<<
  * 
  *     if not alt_texts:
  */
-  __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 784, __pyx_L1_error)
+  __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 791, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_script) < 0) __PYX_ERR(0, 784, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_style) < 0) __PYX_ERR(0, 784, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_iframe) < 0) __PYX_ERR(0, 784, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_frame) < 0) __PYX_ERR(0, 784, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_template) < 0) __PYX_ERR(0, 784, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 784, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_script) < 0) __PYX_ERR(0, 791, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_style) < 0) __PYX_ERR(0, 791, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_iframe) < 0) __PYX_ERR(0, 791, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_frame) < 0) __PYX_ERR(0, 791, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_template) < 0) __PYX_ERR(0, 791, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 791, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":786
+  /* "resiliparse_dom/extract/html2text.pyx":793
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})
  * 
  *     if not alt_texts:             # <<<<<<<<<<<<<<
@@ -11628,30 +11711,30 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_t_1 = (!__pyx_v_alt_texts);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":787
+    /* "resiliparse_dom/extract/html2text.pyx":794
  * 
  *     if not alt_texts:
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed', b'img', b'area',             # <<<<<<<<<<<<<<
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:
  */
-    __pyx_t_4 = PySet_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 787, __pyx_L1_error)
+    __pyx_t_4 = PySet_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 794, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_object) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_video) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_audio) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_embed) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_img) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_area) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_svg) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_figcaption) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_figure) < 0) __PYX_ERR(0, 787, __pyx_L1_error)
-    __pyx_t_2 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 787, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_object) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_video) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_audio) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_embed) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_img) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_area) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_svg) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_figcaption) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_figure) < 0) __PYX_ERR(0, 794, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 794, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":786
+    /* "resiliparse_dom/extract/html2text.pyx":793
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})
  * 
  *     if not alt_texts:             # <<<<<<<<<<<<<<
@@ -11660,7 +11743,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":789
+  /* "resiliparse_dom/extract/html2text.pyx":796
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed', b'img', b'area',
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:             # <<<<<<<<<<<<<<
@@ -11670,16 +11753,16 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_t_1 = (!__pyx_v_noscript);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":790
+    /* "resiliparse_dom/extract/html2text.pyx":797
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:
  *         skip_selectors.add(b'noscript')             # <<<<<<<<<<<<<<
  *     if not form_fields:
  *         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
  */
-    __pyx_t_10 = PySet_Add(__pyx_v_skip_selectors, __pyx_n_b_noscript); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 790, __pyx_L1_error)
+    __pyx_t_10 = PySet_Add(__pyx_v_skip_selectors, __pyx_n_b_noscript); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 797, __pyx_L1_error)
 
-    /* "resiliparse_dom/extract/html2text.pyx":789
+    /* "resiliparse_dom/extract/html2text.pyx":796
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed', b'img', b'area',
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:             # <<<<<<<<<<<<<<
@@ -11688,7 +11771,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":791
+  /* "resiliparse_dom/extract/html2text.pyx":798
  *     if not noscript:
  *         skip_selectors.add(b'noscript')
  *     if not form_fields:             # <<<<<<<<<<<<<<
@@ -11698,27 +11781,27 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   __pyx_t_1 = (!__pyx_v_form_fields);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":792
+    /* "resiliparse_dom/extract/html2text.pyx":799
  *         skip_selectors.add(b'noscript')
  *     if not form_fields:
  *         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })             # <<<<<<<<<<<<<<
  * 
  *     cdef string skip_selector = <string>b','.join(skip_selectors)
  */
-    __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 792, __pyx_L1_error)
+    __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 799, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_textarea) < 0) __PYX_ERR(0, 792, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_input) < 0) __PYX_ERR(0, 792, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_button) < 0) __PYX_ERR(0, 792, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_select) < 0) __PYX_ERR(0, 792, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_option) < 0) __PYX_ERR(0, 792, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_label) < 0) __PYX_ERR(0, 792, __pyx_L1_error)
-    __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 792, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_textarea) < 0) __PYX_ERR(0, 799, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_input) < 0) __PYX_ERR(0, 799, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_button) < 0) __PYX_ERR(0, 799, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_select) < 0) __PYX_ERR(0, 799, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_option) < 0) __PYX_ERR(0, 799, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_label) < 0) __PYX_ERR(0, 799, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 799, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":791
+    /* "resiliparse_dom/extract/html2text.pyx":798
  *     if not noscript:
  *         skip_selectors.add(b'noscript')
  *     if not form_fields:             # <<<<<<<<<<<<<<
@@ -11727,20 +11810,20 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":794
+  /* "resiliparse_dom/extract/html2text.pyx":801
  *         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
  * 
  *     cdef string skip_selector = <string>b','.join(skip_selectors)             # <<<<<<<<<<<<<<
  * 
  *     cdef string extracted
  */
-  __pyx_t_4 = __Pyx_PyBytes_Join(__pyx_kp_b__3, __pyx_v_skip_selectors); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 794, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyBytes_Join(__pyx_kp_b__3, __pyx_v_skip_selectors); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 801, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_11 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 794, __pyx_L1_error)
+  __pyx_t_11 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 801, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_skip_selector = ((std::string)__pyx_t_11);
 
-  /* "resiliparse_dom/extract/html2text.pyx":797
+  /* "resiliparse_dom/extract/html2text.pyx":804
  * 
  *     cdef string extracted
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -11756,7 +11839,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
       #endif
       /*try:*/ {
 
-        /* "resiliparse_dom/extract/html2text.pyx":798
+        /* "resiliparse_dom/extract/html2text.pyx":805
  *     cdef string extracted
  *     with nogil:
  *         extracted = _extract_simplified_dom_impl(             # <<<<<<<<<<<<<<
@@ -11766,7 +11849,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
         __pyx_v_extracted = __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simplified_dom_impl(__pyx_v_tree, FORMAT_OFF, __pyx_v_main_content, __pyx_v_list_bullets, __pyx_v_alt_texts, __pyx_v_links, __pyx_v_form_fields, __pyx_v_noscript, __pyx_v_comments, __pyx_v_skip_selector);
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":797
+      /* "resiliparse_dom/extract/html2text.pyx":804
  * 
  *     cdef string extracted
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -11785,7 +11868,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
       }
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":809
+  /* "resiliparse_dom/extract/html2text.pyx":816
  *             comments,
  *             skip_selector)
  *     return extracted.decode(errors='ignore').replace('\x00', '')             # <<<<<<<<<<<<<<
@@ -11793,29 +11876,29 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __pyx_convert_PyBytes_string_to_py_6libcpp_6string_std__in_string(__pyx_v_extracted); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __pyx_t_4 = __pyx_convert_PyBytes_string_to_py_6libcpp_6string_std__in_string(__pyx_v_extracted); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_decode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_decode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_errors, __pyx_n_u_ignore) < 0) __PYX_ERR(0, 809, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 809, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_errors, __pyx_n_u_ignore) < 0) __PYX_ERR(0, 816, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_replace); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_replace); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":756
+  /* "resiliparse_dom/extract/html2text.pyx":763
  * 
  * 
  * def extract_simplified_dom(html,             # <<<<<<<<<<<<<<
@@ -11841,7 +11924,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_extract_simplifi
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":811
+/* "resiliparse_dom/extract/html2text.pyx":818
  *     return extracted.decode(errors='ignore').replace('\x00', '')
  * 
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,             # <<<<<<<<<<<<<<
@@ -11883,7 +11966,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   PyGILState_STATE __pyx_gilstate_save;
   #endif
 
-  /* "resiliparse_dom/extract/html2text.pyx":825
+  /* "resiliparse_dom/extract/html2text.pyx":832
  *     # Initialize context similar to plain text extraction
  *     cdef ExtractContext ctx
  *     ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body             # <<<<<<<<<<<<<<
@@ -11892,7 +11975,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_ctx.root_node = ((lxb_dom_node_t *)__pyx_v_tree->dom_document->body);
 
-  /* "resiliparse_dom/extract/html2text.pyx":826
+  /* "resiliparse_dom/extract/html2text.pyx":833
  *     cdef ExtractContext ctx
  *     ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body
  *     ctx.node = ctx.root_node             # <<<<<<<<<<<<<<
@@ -11902,7 +11985,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   __pyx_t_1 = __pyx_v_ctx.root_node;
   __pyx_v_ctx.node = __pyx_t_1;
 
-  /* "resiliparse_dom/extract/html2text.pyx":827
+  /* "resiliparse_dom/extract/html2text.pyx":834
  *     ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body
  *     ctx.node = ctx.root_node
  *     ctx.opts = [             # <<<<<<<<<<<<<<
@@ -11917,7 +12000,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   __pyx_t_2.noscript = __pyx_v_noscript;
   __pyx_v_ctx.opts = __pyx_t_2;
 
-  /* "resiliparse_dom/extract/html2text.pyx":835
+  /* "resiliparse_dom/extract/html2text.pyx":842
  *         noscript]
  * 
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:             # <<<<<<<<<<<<<<
@@ -11927,7 +12010,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   __pyx_t_3 = (__pyx_v_ctx.node->type == LXB_DOM_NODE_TYPE_DOCUMENT);
   if (__pyx_t_3) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":836
+    /* "resiliparse_dom/extract/html2text.pyx":843
  * 
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:
  *         ctx.root_node = next_element_node(ctx.node, ctx.node.first_child)             # <<<<<<<<<<<<<<
@@ -11936,7 +12019,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
     __pyx_v_ctx.root_node = __pyx_f_15resiliparse_dom_5parse_4html_next_element_node(__pyx_v_ctx.node, __pyx_v_ctx.node->first_child, NULL);
 
-    /* "resiliparse_dom/extract/html2text.pyx":837
+    /* "resiliparse_dom/extract/html2text.pyx":844
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:
  *         ctx.root_node = next_element_node(ctx.node, ctx.node.first_child)
  *         ctx.node = ctx.root_node             # <<<<<<<<<<<<<<
@@ -11946,7 +12029,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_1 = __pyx_v_ctx.root_node;
     __pyx_v_ctx.node = __pyx_t_1;
 
-    /* "resiliparse_dom/extract/html2text.pyx":835
+    /* "resiliparse_dom/extract/html2text.pyx":842
  *         noscript]
  * 
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:             # <<<<<<<<<<<<<<
@@ -11955,7 +12038,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":840
+  /* "resiliparse_dom/extract/html2text.pyx":847
  * 
  *     # Calculate base depth
  *     cdef size_t base_depth = 0             # <<<<<<<<<<<<<<
@@ -11964,7 +12047,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_base_depth = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":841
+  /* "resiliparse_dom/extract/html2text.pyx":848
  *     # Calculate base depth
  *     cdef size_t base_depth = 0
  *     cdef lxb_dom_node_t* pnode = ctx.node             # <<<<<<<<<<<<<<
@@ -11974,7 +12057,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   __pyx_t_1 = __pyx_v_ctx.node;
   __pyx_v_pnode = __pyx_t_1;
 
-  /* "resiliparse_dom/extract/html2text.pyx":842
+  /* "resiliparse_dom/extract/html2text.pyx":849
  *     cdef size_t base_depth = 0
  *     cdef lxb_dom_node_t* pnode = ctx.node
  *     while pnode.local_name != LXB_TAG_BODY and pnode.parent:             # <<<<<<<<<<<<<<
@@ -11993,7 +12076,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_L6_bool_binop_done:;
     if (!__pyx_t_3) break;
 
-    /* "resiliparse_dom/extract/html2text.pyx":843
+    /* "resiliparse_dom/extract/html2text.pyx":850
  *     cdef lxb_dom_node_t* pnode = ctx.node
  *     while pnode.local_name != LXB_TAG_BODY and pnode.parent:
  *         preinc(base_depth)             # <<<<<<<<<<<<<<
@@ -12002,7 +12085,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
     (void)((++__pyx_v_base_depth));
 
-    /* "resiliparse_dom/extract/html2text.pyx":844
+    /* "resiliparse_dom/extract/html2text.pyx":851
  *     while pnode.local_name != LXB_TAG_BODY and pnode.parent:
  *         preinc(base_depth)
  *         pnode = pnode.parent             # <<<<<<<<<<<<<<
@@ -12013,7 +12096,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_v_pnode = __pyx_t_1;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":847
+  /* "resiliparse_dom/extract/html2text.pyx":854
  * 
  *     # Get blacklisted nodes using the skip selector
  *     cdef lxb_dom_collection_t* blacklist_coll = NULL             # <<<<<<<<<<<<<<
@@ -12022,7 +12105,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_blacklist_coll = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":852
+  /* "resiliparse_dom/extract/html2text.pyx":859
  *     cdef lxb_dom_node_t* descendant
  * 
  *     if skip_selector.size() > 0:             # <<<<<<<<<<<<<<
@@ -12032,7 +12115,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   __pyx_t_3 = (__pyx_v_skip_selector.size() > 0);
   if (__pyx_t_3) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":853
+    /* "resiliparse_dom/extract/html2text.pyx":860
  * 
  *     if skip_selector.size() > 0:
  *         blacklist_coll = query_selector_all_impl(ctx.root_node, tree,             # <<<<<<<<<<<<<<
@@ -12041,10 +12124,10 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
     __pyx_t_6.__pyx_n = 1;
     __pyx_t_6.init_size = 30;
-    __pyx_t_5 = __pyx_f_15resiliparse_dom_5parse_4html_query_selector_all_impl(__pyx_v_ctx.root_node, __pyx_v_tree, __pyx_v_skip_selector.data(), __pyx_v_skip_selector.size(), &__pyx_t_6); if (unlikely(__pyx_t_5 == ((lxb_dom_collection_t *)((lxb_dom_collection_t *)-1L)))) __PYX_ERR(0, 853, __pyx_L1_error)
+    __pyx_t_5 = __pyx_f_15resiliparse_dom_5parse_4html_query_selector_all_impl(__pyx_v_ctx.root_node, __pyx_v_tree, __pyx_v_skip_selector.data(), __pyx_v_skip_selector.size(), &__pyx_t_6); if (unlikely(__pyx_t_5 == ((lxb_dom_collection_t *)((lxb_dom_collection_t *)-1L)))) __PYX_ERR(0, 860, __pyx_L1_error)
     __pyx_v_blacklist_coll = __pyx_t_5;
 
-    /* "resiliparse_dom/extract/html2text.pyx":855
+    /* "resiliparse_dom/extract/html2text.pyx":862
  *         blacklist_coll = query_selector_all_impl(ctx.root_node, tree,
  *                                                skip_selector.data(), skip_selector.size(), 30)
  *         if blacklist_coll != NULL:             # <<<<<<<<<<<<<<
@@ -12054,7 +12137,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_3 = (__pyx_v_blacklist_coll != NULL);
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":856
+      /* "resiliparse_dom/extract/html2text.pyx":863
  *                                                skip_selector.data(), skip_selector.size(), 30)
  *         if blacklist_coll != NULL:
  *             for i in range(lxb_dom_collection_length(blacklist_coll)):             # <<<<<<<<<<<<<<
@@ -12066,7 +12149,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
         __pyx_v_i = __pyx_t_9;
 
-        /* "resiliparse_dom/extract/html2text.pyx":857
+        /* "resiliparse_dom/extract/html2text.pyx":864
  *         if blacklist_coll != NULL:
  *             for i in range(lxb_dom_collection_length(blacklist_coll)):
  *                 node = lxb_dom_collection_node(blacklist_coll, i)             # <<<<<<<<<<<<<<
@@ -12075,7 +12158,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
         __pyx_v_node = lxb_dom_collection_node(__pyx_v_blacklist_coll, __pyx_v_i);
 
-        /* "resiliparse_dom/extract/html2text.pyx":858
+        /* "resiliparse_dom/extract/html2text.pyx":865
  *             for i in range(lxb_dom_collection_length(blacklist_coll)):
  *                 node = lxb_dom_collection_node(blacklist_coll, i)
  *                 blacklisted_nodes.insert(node)             # <<<<<<<<<<<<<<
@@ -12092,10 +12175,10 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
           #ifdef WITH_THREAD
           __Pyx_PyGILState_Release(__pyx_gilstate_save);
           #endif
-          __PYX_ERR(0, 858, __pyx_L1_error)
+          __PYX_ERR(0, 865, __pyx_L1_error)
         }
 
-        /* "resiliparse_dom/extract/html2text.pyx":860
+        /* "resiliparse_dom/extract/html2text.pyx":867
  *                 blacklisted_nodes.insert(node)
  *                 # Also blacklist all descendants
  *                 descendant = node.first_child             # <<<<<<<<<<<<<<
@@ -12105,7 +12188,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_t_1 = __pyx_v_node->first_child;
         __pyx_v_descendant = __pyx_t_1;
 
-        /* "resiliparse_dom/extract/html2text.pyx":861
+        /* "resiliparse_dom/extract/html2text.pyx":868
  *                 # Also blacklist all descendants
  *                 descendant = node.first_child
  *                 while descendant:             # <<<<<<<<<<<<<<
@@ -12116,7 +12199,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
           __pyx_t_3 = (__pyx_v_descendant != 0);
           if (!__pyx_t_3) break;
 
-          /* "resiliparse_dom/extract/html2text.pyx":862
+          /* "resiliparse_dom/extract/html2text.pyx":869
  *                 descendant = node.first_child
  *                 while descendant:
  *                     blacklisted_nodes.insert(descendant)             # <<<<<<<<<<<<<<
@@ -12133,10 +12216,10 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
             #ifdef WITH_THREAD
             __Pyx_PyGILState_Release(__pyx_gilstate_save);
             #endif
-            __PYX_ERR(0, 862, __pyx_L1_error)
+            __PYX_ERR(0, 869, __pyx_L1_error)
           }
 
-          /* "resiliparse_dom/extract/html2text.pyx":863
+          /* "resiliparse_dom/extract/html2text.pyx":870
  *                 while descendant:
  *                     blacklisted_nodes.insert(descendant)
  *                     descendant = next_element_node(node, descendant)             # <<<<<<<<<<<<<<
@@ -12147,7 +12230,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         }
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":864
+      /* "resiliparse_dom/extract/html2text.pyx":871
  *                     blacklisted_nodes.insert(descendant)
  *                     descendant = next_element_node(node, descendant)
  *             lxb_dom_collection_destroy(blacklist_coll, True)             # <<<<<<<<<<<<<<
@@ -12156,7 +12239,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
       (void)(lxb_dom_collection_destroy(__pyx_v_blacklist_coll, 1));
 
-      /* "resiliparse_dom/extract/html2text.pyx":855
+      /* "resiliparse_dom/extract/html2text.pyx":862
  *         blacklist_coll = query_selector_all_impl(ctx.root_node, tree,
  *                                                skip_selector.data(), skip_selector.size(), 30)
  *         if blacklist_coll != NULL:             # <<<<<<<<<<<<<<
@@ -12165,7 +12248,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":852
+    /* "resiliparse_dom/extract/html2text.pyx":859
  *     cdef lxb_dom_node_t* descendant
  * 
  *     if skip_selector.size() > 0:             # <<<<<<<<<<<<<<
@@ -12174,7 +12257,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":867
+  /* "resiliparse_dom/extract/html2text.pyx":874
  * 
  *     # Modified traversal logic
  *     cdef bint is_end_tag = False             # <<<<<<<<<<<<<<
@@ -12183,7 +12266,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_is_end_tag = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":868
+  /* "resiliparse_dom/extract/html2text.pyx":875
  *     # Modified traversal logic
  *     cdef bint is_end_tag = False
  *     cdef lxb_dom_node_t* current = ctx.root_node             # <<<<<<<<<<<<<<
@@ -12193,7 +12276,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   __pyx_t_1 = __pyx_v_ctx.root_node;
   __pyx_v_current = __pyx_t_1;
 
-  /* "resiliparse_dom/extract/html2text.pyx":869
+  /* "resiliparse_dom/extract/html2text.pyx":876
  *     cdef bint is_end_tag = False
  *     cdef lxb_dom_node_t* current = ctx.root_node
  *     cdef lxb_dom_node_t* next_node = NULL             # <<<<<<<<<<<<<<
@@ -12202,7 +12285,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_next_node = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":870
+  /* "resiliparse_dom/extract/html2text.pyx":877
  *     cdef lxb_dom_node_t* current = ctx.root_node
  *     cdef lxb_dom_node_t* next_node = NULL
  *     cdef lxb_dom_node_t* parent = NULL             # <<<<<<<<<<<<<<
@@ -12211,7 +12294,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_parent = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":873
+  /* "resiliparse_dom/extract/html2text.pyx":880
  *     cdef const lxb_char_t* tag_name
  *     cdef size_t tag_name_len
  *     cdef lxb_dom_node_t* child = NULL             # <<<<<<<<<<<<<<
@@ -12220,7 +12303,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_child = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":874
+  /* "resiliparse_dom/extract/html2text.pyx":881
  *     cdef size_t tag_name_len
  *     cdef lxb_dom_node_t* child = NULL
  *     cdef lxb_dom_node_t* next_child = NULL             # <<<<<<<<<<<<<<
@@ -12229,7 +12312,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_next_child = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":875
+  /* "resiliparse_dom/extract/html2text.pyx":882
  *     cdef lxb_dom_node_t* child = NULL
  *     cdef lxb_dom_node_t* next_child = NULL
  *     cdef size_t depth = 0             # <<<<<<<<<<<<<<
@@ -12238,7 +12321,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
   __pyx_v_depth = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":877
+  /* "resiliparse_dom/extract/html2text.pyx":884
  *     cdef size_t depth = 0
  * 
  *     while current:             # <<<<<<<<<<<<<<
@@ -12249,7 +12332,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_3 = (__pyx_v_current != 0);
     if (!__pyx_t_3) break;
 
-    /* "resiliparse_dom/extract/html2text.pyx":879
+    /* "resiliparse_dom/extract/html2text.pyx":886
  *     while current:
  *         # Store the next node before potentially removing current
  *         parent = current.parent             # <<<<<<<<<<<<<<
@@ -12259,7 +12342,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_1 = __pyx_v_current->parent;
     __pyx_v_parent = __pyx_t_1;
 
-    /* "resiliparse_dom/extract/html2text.pyx":882
+    /* "resiliparse_dom/extract/html2text.pyx":889
  * 
  *         # Determine next node in traversal order
  *         if current.first_child:             # <<<<<<<<<<<<<<
@@ -12269,7 +12352,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_3 = (__pyx_v_current->first_child != 0);
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":883
+      /* "resiliparse_dom/extract/html2text.pyx":890
  *         # Determine next node in traversal order
  *         if current.first_child:
  *             next_node = current.first_child             # <<<<<<<<<<<<<<
@@ -12279,7 +12362,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       __pyx_t_1 = __pyx_v_current->first_child;
       __pyx_v_next_node = __pyx_t_1;
 
-      /* "resiliparse_dom/extract/html2text.pyx":882
+      /* "resiliparse_dom/extract/html2text.pyx":889
  * 
  *         # Determine next node in traversal order
  *         if current.first_child:             # <<<<<<<<<<<<<<
@@ -12289,7 +12372,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       goto __pyx_L16;
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":884
+    /* "resiliparse_dom/extract/html2text.pyx":891
  *         if current.first_child:
  *             next_node = current.first_child
  *         elif current.next:             # <<<<<<<<<<<<<<
@@ -12299,7 +12382,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_3 = (__pyx_v_current->next != 0);
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":885
+      /* "resiliparse_dom/extract/html2text.pyx":892
  *             next_node = current.first_child
  *         elif current.next:
  *             next_node = current.next             # <<<<<<<<<<<<<<
@@ -12309,7 +12392,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       __pyx_t_1 = __pyx_v_current->next;
       __pyx_v_next_node = __pyx_t_1;
 
-      /* "resiliparse_dom/extract/html2text.pyx":884
+      /* "resiliparse_dom/extract/html2text.pyx":891
  *         if current.first_child:
  *             next_node = current.first_child
  *         elif current.next:             # <<<<<<<<<<<<<<
@@ -12319,7 +12402,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       goto __pyx_L16;
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":887
+    /* "resiliparse_dom/extract/html2text.pyx":894
  *             next_node = current.next
  *         else:
  *             next_node = parent             # <<<<<<<<<<<<<<
@@ -12329,7 +12412,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     /*else*/ {
       __pyx_v_next_node = __pyx_v_parent;
 
-      /* "resiliparse_dom/extract/html2text.pyx":888
+      /* "resiliparse_dom/extract/html2text.pyx":895
  *         else:
  *             next_node = parent
  *             while next_node and not next_node.next:             # <<<<<<<<<<<<<<
@@ -12348,7 +12431,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_L19_bool_binop_done:;
         if (!__pyx_t_3) break;
 
-        /* "resiliparse_dom/extract/html2text.pyx":889
+        /* "resiliparse_dom/extract/html2text.pyx":896
  *             next_node = parent
  *             while next_node and not next_node.next:
  *                 next_node = next_node.parent             # <<<<<<<<<<<<<<
@@ -12359,7 +12442,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_v_next_node = __pyx_t_1;
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":890
+      /* "resiliparse_dom/extract/html2text.pyx":897
  *             while next_node and not next_node.next:
  *                 next_node = next_node.parent
  *             if next_node:             # <<<<<<<<<<<<<<
@@ -12369,7 +12452,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       __pyx_t_3 = (__pyx_v_next_node != 0);
       if (__pyx_t_3) {
 
-        /* "resiliparse_dom/extract/html2text.pyx":891
+        /* "resiliparse_dom/extract/html2text.pyx":898
  *                 next_node = next_node.parent
  *             if next_node:
  *                 next_node = next_node.next             # <<<<<<<<<<<<<<
@@ -12379,7 +12462,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_t_1 = __pyx_v_next_node->next;
         __pyx_v_next_node = __pyx_t_1;
 
-        /* "resiliparse_dom/extract/html2text.pyx":890
+        /* "resiliparse_dom/extract/html2text.pyx":897
  *             while next_node and not next_node.next:
  *                 next_node = next_node.parent
  *             if next_node:             # <<<<<<<<<<<<<<
@@ -12390,7 +12473,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     }
     __pyx_L16:;
 
-    /* "resiliparse_dom/extract/html2text.pyx":894
+    /* "resiliparse_dom/extract/html2text.pyx":901
  * 
  *         # Process node
  *         if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
@@ -12408,7 +12491,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     }
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":895
+      /* "resiliparse_dom/extract/html2text.pyx":902
  *         # Process node
  *         if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:
  *             lxb_dom_node_remove(current)             # <<<<<<<<<<<<<<
@@ -12417,7 +12500,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
       lxb_dom_node_remove(__pyx_v_current);
 
-      /* "resiliparse_dom/extract/html2text.pyx":894
+      /* "resiliparse_dom/extract/html2text.pyx":901
  * 
  *         # Process node
  *         if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
@@ -12427,7 +12510,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       goto __pyx_L22;
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":896
+    /* "resiliparse_dom/extract/html2text.pyx":903
  *         if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:
  *             lxb_dom_node_remove(current)
  *         elif blacklisted_nodes.find(current) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
@@ -12441,7 +12524,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       goto __pyx_L23_bool_binop_done;
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":897
+    /* "resiliparse_dom/extract/html2text.pyx":904
  *             lxb_dom_node_remove(current)
  *         elif blacklisted_nodes.find(current) != blacklisted_nodes.end() or \
  *              (main_content and not _is_main_content_node(current, depth + base_depth, False)):             # <<<<<<<<<<<<<<
@@ -12457,7 +12540,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_t_3 = __pyx_t_4;
     __pyx_L23_bool_binop_done:;
 
-    /* "resiliparse_dom/extract/html2text.pyx":896
+    /* "resiliparse_dom/extract/html2text.pyx":903
  *         if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:
  *             lxb_dom_node_remove(current)
  *         elif blacklisted_nodes.find(current) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
@@ -12466,7 +12549,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":900
+      /* "resiliparse_dom/extract/html2text.pyx":907
  *             # If we're about to remove a node that has children,
  *             # make sure next_node isn't pointing to one of them
  *             if next_node and (next_node == current.first_child or is_descendant(current, next_node)):             # <<<<<<<<<<<<<<
@@ -12485,12 +12568,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_t_3 = __pyx_t_4;
         goto __pyx_L27_bool_binop_done;
       }
-      __pyx_t_4 = __pyx_f_15resiliparse_dom_7extract_9html2text_is_descendant(__pyx_v_current, __pyx_v_next_node); if (unlikely(__pyx_t_4 == ((int)-1) && __Pyx_ErrOccurredWithGIL())) __PYX_ERR(0, 900, __pyx_L1_error)
+      __pyx_t_4 = __pyx_f_15resiliparse_dom_7extract_9html2text_is_descendant(__pyx_v_current, __pyx_v_next_node); if (unlikely(__pyx_t_4 == ((int)-1) && __Pyx_ErrOccurredWithGIL())) __PYX_ERR(0, 907, __pyx_L1_error)
       __pyx_t_3 = __pyx_t_4;
       __pyx_L27_bool_binop_done:;
       if (__pyx_t_3) {
 
-        /* "resiliparse_dom/extract/html2text.pyx":901
+        /* "resiliparse_dom/extract/html2text.pyx":908
  *             # make sure next_node isn't pointing to one of them
  *             if next_node and (next_node == current.first_child or is_descendant(current, next_node)):
  *                 if current.next:             # <<<<<<<<<<<<<<
@@ -12500,7 +12583,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_t_3 = (__pyx_v_current->next != 0);
         if (__pyx_t_3) {
 
-          /* "resiliparse_dom/extract/html2text.pyx":902
+          /* "resiliparse_dom/extract/html2text.pyx":909
  *             if next_node and (next_node == current.first_child or is_descendant(current, next_node)):
  *                 if current.next:
  *                     next_node = current.next             # <<<<<<<<<<<<<<
@@ -12510,7 +12593,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
           __pyx_t_1 = __pyx_v_current->next;
           __pyx_v_next_node = __pyx_t_1;
 
-          /* "resiliparse_dom/extract/html2text.pyx":901
+          /* "resiliparse_dom/extract/html2text.pyx":908
  *             # make sure next_node isn't pointing to one of them
  *             if next_node and (next_node == current.first_child or is_descendant(current, next_node)):
  *                 if current.next:             # <<<<<<<<<<<<<<
@@ -12520,7 +12603,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
           goto __pyx_L30;
         }
 
-        /* "resiliparse_dom/extract/html2text.pyx":904
+        /* "resiliparse_dom/extract/html2text.pyx":911
  *                     next_node = current.next
  *                 else:
  *                     next_node = parent             # <<<<<<<<<<<<<<
@@ -12530,7 +12613,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         /*else*/ {
           __pyx_v_next_node = __pyx_v_parent;
 
-          /* "resiliparse_dom/extract/html2text.pyx":905
+          /* "resiliparse_dom/extract/html2text.pyx":912
  *                 else:
  *                     next_node = parent
  *                     while next_node and not next_node.next:             # <<<<<<<<<<<<<<
@@ -12549,7 +12632,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
             __pyx_L33_bool_binop_done:;
             if (!__pyx_t_3) break;
 
-            /* "resiliparse_dom/extract/html2text.pyx":906
+            /* "resiliparse_dom/extract/html2text.pyx":913
  *                     next_node = parent
  *                     while next_node and not next_node.next:
  *                         next_node = next_node.parent             # <<<<<<<<<<<<<<
@@ -12560,7 +12643,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
             __pyx_v_next_node = __pyx_t_1;
           }
 
-          /* "resiliparse_dom/extract/html2text.pyx":907
+          /* "resiliparse_dom/extract/html2text.pyx":914
  *                     while next_node and not next_node.next:
  *                         next_node = next_node.parent
  *                     if next_node:             # <<<<<<<<<<<<<<
@@ -12570,7 +12653,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
           __pyx_t_3 = (__pyx_v_next_node != 0);
           if (__pyx_t_3) {
 
-            /* "resiliparse_dom/extract/html2text.pyx":908
+            /* "resiliparse_dom/extract/html2text.pyx":915
  *                         next_node = next_node.parent
  *                     if next_node:
  *                         next_node = next_node.next             # <<<<<<<<<<<<<<
@@ -12580,7 +12663,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
             __pyx_t_1 = __pyx_v_next_node->next;
             __pyx_v_next_node = __pyx_t_1;
 
-            /* "resiliparse_dom/extract/html2text.pyx":907
+            /* "resiliparse_dom/extract/html2text.pyx":914
  *                     while next_node and not next_node.next:
  *                         next_node = next_node.parent
  *                     if next_node:             # <<<<<<<<<<<<<<
@@ -12591,7 +12674,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         }
         __pyx_L30:;
 
-        /* "resiliparse_dom/extract/html2text.pyx":900
+        /* "resiliparse_dom/extract/html2text.pyx":907
  *             # If we're about to remove a node that has children,
  *             # make sure next_node isn't pointing to one of them
  *             if next_node and (next_node == current.first_child or is_descendant(current, next_node)):             # <<<<<<<<<<<<<<
@@ -12600,7 +12683,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":911
+      /* "resiliparse_dom/extract/html2text.pyx":918
  * 
  *             # Remove all children first
  *             child = current.first_child             # <<<<<<<<<<<<<<
@@ -12610,7 +12693,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
       __pyx_t_1 = __pyx_v_current->first_child;
       __pyx_v_child = __pyx_t_1;
 
-      /* "resiliparse_dom/extract/html2text.pyx":912
+      /* "resiliparse_dom/extract/html2text.pyx":919
  *             # Remove all children first
  *             child = current.first_child
  *             while child:             # <<<<<<<<<<<<<<
@@ -12621,7 +12704,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_t_3 = (__pyx_v_child != 0);
         if (!__pyx_t_3) break;
 
-        /* "resiliparse_dom/extract/html2text.pyx":913
+        /* "resiliparse_dom/extract/html2text.pyx":920
  *             child = current.first_child
  *             while child:
  *                 next_child = child.next             # <<<<<<<<<<<<<<
@@ -12631,7 +12714,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_t_1 = __pyx_v_child->next;
         __pyx_v_next_child = __pyx_t_1;
 
-        /* "resiliparse_dom/extract/html2text.pyx":914
+        /* "resiliparse_dom/extract/html2text.pyx":921
  *             while child:
  *                 next_child = child.next
  *                 lxb_dom_node_remove(child)             # <<<<<<<<<<<<<<
@@ -12640,7 +12723,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
         lxb_dom_node_remove(__pyx_v_child);
 
-        /* "resiliparse_dom/extract/html2text.pyx":915
+        /* "resiliparse_dom/extract/html2text.pyx":922
  *                 next_child = child.next
  *                 lxb_dom_node_remove(child)
  *                 child = next_child             # <<<<<<<<<<<<<<
@@ -12650,7 +12733,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
         __pyx_v_child = __pyx_v_next_child;
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":918
+      /* "resiliparse_dom/extract/html2text.pyx":925
  * 
  *             # Then remove the current node
  *             lxb_dom_node_remove(current)             # <<<<<<<<<<<<<<
@@ -12659,7 +12742,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
  */
       lxb_dom_node_remove(__pyx_v_current);
 
-      /* "resiliparse_dom/extract/html2text.pyx":896
+      /* "resiliparse_dom/extract/html2text.pyx":903
  *         if current.type != LXB_DOM_NODE_TYPE_ELEMENT and current.type != LXB_DOM_NODE_TYPE_TEXT:
  *             lxb_dom_node_remove(current)
  *         elif blacklisted_nodes.find(current) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
@@ -12669,7 +12752,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     }
     __pyx_L22:;
 
-    /* "resiliparse_dom/extract/html2text.pyx":920
+    /* "resiliparse_dom/extract/html2text.pyx":927
  *             lxb_dom_node_remove(current)
  * 
  *         current = next_node             # <<<<<<<<<<<<<<
@@ -12679,18 +12762,18 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
     __pyx_v_current = __pyx_v_next_node;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":922
+  /* "resiliparse_dom/extract/html2text.pyx":929
  *         current = next_node
  * 
  *     return rstrip_str(serialize_node(ctx.root_node))             # <<<<<<<<<<<<<<
  * 
  * cdef inline bint is_descendant(lxb_dom_node_t* ancestor, lxb_dom_node_t* descendant) nogil:
  */
-  __pyx_t_10 = __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(__pyx_v_ctx.root_node); if (unlikely(__Pyx_ErrOccurredWithGIL())) __PYX_ERR(0, 922, __pyx_L1_error)
+  __pyx_t_10 = __pyx_f_15resiliparse_dom_7extract_9html2text_serialize_node(__pyx_v_ctx.root_node); if (unlikely(__Pyx_ErrOccurredWithGIL())) __PYX_ERR(0, 929, __pyx_L1_error)
   __pyx_r = rstrip_str(__PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_10));
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":811
+  /* "resiliparse_dom/extract/html2text.pyx":818
  *     return extracted.decode(errors='ignore').replace('\x00', '')
  * 
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,             # <<<<<<<<<<<<<<
@@ -12712,7 +12795,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_simpli
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":924
+/* "resiliparse_dom/extract/html2text.pyx":931
  *     return rstrip_str(serialize_node(ctx.root_node))
  * 
  * cdef inline bint is_descendant(lxb_dom_node_t* ancestor, lxb_dom_node_t* descendant) nogil:             # <<<<<<<<<<<<<<
@@ -12725,7 +12808,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
   int __pyx_t_1;
   lxb_dom_node_t *__pyx_t_2;
 
-  /* "resiliparse_dom/extract/html2text.pyx":926
+  /* "resiliparse_dom/extract/html2text.pyx":933
  * cdef inline bint is_descendant(lxb_dom_node_t* ancestor, lxb_dom_node_t* descendant) nogil:
  *     """Check if one node is a descendant of another."""
  *     while descendant:             # <<<<<<<<<<<<<<
@@ -12736,7 +12819,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
     __pyx_t_1 = (__pyx_v_descendant != 0);
     if (!__pyx_t_1) break;
 
-    /* "resiliparse_dom/extract/html2text.pyx":927
+    /* "resiliparse_dom/extract/html2text.pyx":934
  *     """Check if one node is a descendant of another."""
  *     while descendant:
  *         if descendant.parent == ancestor:             # <<<<<<<<<<<<<<
@@ -12746,7 +12829,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
     __pyx_t_1 = (__pyx_v_descendant->parent == __pyx_v_ancestor);
     if (__pyx_t_1) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":928
+      /* "resiliparse_dom/extract/html2text.pyx":935
  *     while descendant:
  *         if descendant.parent == ancestor:
  *             return True             # <<<<<<<<<<<<<<
@@ -12756,7 +12839,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
       __pyx_r = 1;
       goto __pyx_L0;
 
-      /* "resiliparse_dom/extract/html2text.pyx":927
+      /* "resiliparse_dom/extract/html2text.pyx":934
  *     """Check if one node is a descendant of another."""
  *     while descendant:
  *         if descendant.parent == ancestor:             # <<<<<<<<<<<<<<
@@ -12765,7 +12848,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":929
+    /* "resiliparse_dom/extract/html2text.pyx":936
  *         if descendant.parent == ancestor:
  *             return True
  *         descendant = descendant.parent             # <<<<<<<<<<<<<<
@@ -12776,7 +12859,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
     __pyx_v_descendant = __pyx_t_2;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":930
+  /* "resiliparse_dom/extract/html2text.pyx":937
  *             return True
  *         descendant = descendant.parent
  *     return False             # <<<<<<<<<<<<<<
@@ -12786,7 +12869,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":924
+  /* "resiliparse_dom/extract/html2text.pyx":931
  *     return rstrip_str(serialize_node(ctx.root_node))
  * 
  * cdef inline bint is_descendant(lxb_dom_node_t* ancestor, lxb_dom_node_t* descendant) nogil:             # <<<<<<<<<<<<<<
@@ -12799,7 +12882,7 @@ static CYTHON_INLINE int __pyx_f_15resiliparse_dom_7extract_9html2text_is_descen
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":932
+/* "resiliparse_dom/extract/html2text.pyx":939
  *     return False
  * 
  * def extract_plain_text(html,             # <<<<<<<<<<<<<<
@@ -12856,7 +12939,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject **__pyx_pyargnames[] = {&__pyx_n_s_html,&__pyx_n_s_preserve_formatting,&__pyx_n_s_main_content,&__pyx_n_s_list_bullets,&__pyx_n_s_alt_texts,&__pyx_n_s_links,&__pyx_n_s_form_fields,&__pyx_n_s_noscript,&__pyx_n_s_comments,&__pyx_n_s_skip_elements,0};
 
-    /* "resiliparse_dom/extract/html2text.pyx":933
+    /* "resiliparse_dom/extract/html2text.pyx":940
  * 
  * def extract_plain_text(html,
  *                        preserve_formatting=True,             # <<<<<<<<<<<<<<
@@ -12865,7 +12948,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
  */
     values[1] = __Pyx_Arg_NewRef_FASTCALL(((PyObject *)((PyObject *)Py_True)));
 
-    /* "resiliparse_dom/extract/html2text.pyx":941
+    /* "resiliparse_dom/extract/html2text.pyx":948
  *                        bint noscript=False,
  *                        bint comments=True,
  *                        skip_elements=None):             # <<<<<<<<<<<<<<
@@ -12906,75 +12989,75 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_preserve_formatting);
           if (value) { values[1] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_main_content);
           if (value) { values[2] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_list_bullets);
           if (value) { values[3] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_alt_texts);
           if (value) { values[4] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_links);
           if (value) { values[5] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_form_fields);
           if (value) { values[6] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_noscript);
           if (value) { values[7] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_comments);
           if (value) { values[8] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  9:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_skip_elements);
           if (value) { values[9] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 932, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "extract_plain_text") < 0)) __PYX_ERR(0, 932, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "extract_plain_text") < 0)) __PYX_ERR(0, 939, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -13004,10 +13087,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     __pyx_v_html = values[0];
     __pyx_v_preserve_formatting = values[1];
     if (values[2]) {
-      __pyx_v_main_content = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_main_content == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 934, __pyx_L3_error)
+      __pyx_v_main_content = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_main_content == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 941, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":934
+      /* "resiliparse_dom/extract/html2text.pyx":941
  * def extract_plain_text(html,
  *                        preserve_formatting=True,
  *                        bint main_content=False,             # <<<<<<<<<<<<<<
@@ -13017,10 +13100,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_main_content = ((int)((int)0));
     }
     if (values[3]) {
-      __pyx_v_list_bullets = __Pyx_PyObject_IsTrue(values[3]); if (unlikely((__pyx_v_list_bullets == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 935, __pyx_L3_error)
+      __pyx_v_list_bullets = __Pyx_PyObject_IsTrue(values[3]); if (unlikely((__pyx_v_list_bullets == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 942, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":935
+      /* "resiliparse_dom/extract/html2text.pyx":942
  *                        preserve_formatting=True,
  *                        bint main_content=False,
  *                        bint list_bullets=True,             # <<<<<<<<<<<<<<
@@ -13030,10 +13113,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_list_bullets = ((int)((int)1));
     }
     if (values[4]) {
-      __pyx_v_alt_texts = __Pyx_PyObject_IsTrue(values[4]); if (unlikely((__pyx_v_alt_texts == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 936, __pyx_L3_error)
+      __pyx_v_alt_texts = __Pyx_PyObject_IsTrue(values[4]); if (unlikely((__pyx_v_alt_texts == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 943, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":936
+      /* "resiliparse_dom/extract/html2text.pyx":943
  *                        bint main_content=False,
  *                        bint list_bullets=True,
  *                        bint alt_texts=True,             # <<<<<<<<<<<<<<
@@ -13043,10 +13126,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_alt_texts = ((int)((int)1));
     }
     if (values[5]) {
-      __pyx_v_links = __Pyx_PyObject_IsTrue(values[5]); if (unlikely((__pyx_v_links == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 937, __pyx_L3_error)
+      __pyx_v_links = __Pyx_PyObject_IsTrue(values[5]); if (unlikely((__pyx_v_links == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 944, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":937
+      /* "resiliparse_dom/extract/html2text.pyx":944
  *                        bint list_bullets=True,
  *                        bint alt_texts=True,
  *                        bint links=False,             # <<<<<<<<<<<<<<
@@ -13056,10 +13139,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_links = ((int)((int)0));
     }
     if (values[6]) {
-      __pyx_v_form_fields = __Pyx_PyObject_IsTrue(values[6]); if (unlikely((__pyx_v_form_fields == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 938, __pyx_L3_error)
+      __pyx_v_form_fields = __Pyx_PyObject_IsTrue(values[6]); if (unlikely((__pyx_v_form_fields == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 945, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":938
+      /* "resiliparse_dom/extract/html2text.pyx":945
  *                        bint alt_texts=True,
  *                        bint links=False,
  *                        bint form_fields=False,             # <<<<<<<<<<<<<<
@@ -13069,10 +13152,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_form_fields = ((int)((int)0));
     }
     if (values[7]) {
-      __pyx_v_noscript = __Pyx_PyObject_IsTrue(values[7]); if (unlikely((__pyx_v_noscript == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
+      __pyx_v_noscript = __Pyx_PyObject_IsTrue(values[7]); if (unlikely((__pyx_v_noscript == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 946, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":939
+      /* "resiliparse_dom/extract/html2text.pyx":946
  *                        bint links=False,
  *                        bint form_fields=False,
  *                        bint noscript=False,             # <<<<<<<<<<<<<<
@@ -13082,10 +13165,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __pyx_v_noscript = ((int)((int)0));
     }
     if (values[8]) {
-      __pyx_v_comments = __Pyx_PyObject_IsTrue(values[8]); if (unlikely((__pyx_v_comments == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 940, __pyx_L3_error)
+      __pyx_v_comments = __Pyx_PyObject_IsTrue(values[8]); if (unlikely((__pyx_v_comments == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 947, __pyx_L3_error)
     } else {
 
-      /* "resiliparse_dom/extract/html2text.pyx":940
+      /* "resiliparse_dom/extract/html2text.pyx":947
  *                        bint form_fields=False,
  *                        bint noscript=False,
  *                        bint comments=True,             # <<<<<<<<<<<<<<
@@ -13098,7 +13181,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("extract_plain_text", 0, 1, 10, __pyx_nargs); __PYX_ERR(0, 932, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("extract_plain_text", 0, 1, 10, __pyx_nargs); __PYX_ERR(0, 939, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -13114,7 +13197,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __pyx_L4_argument_unpacking_done:;
   __pyx_r = __pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_text(__pyx_self, __pyx_v_html, __pyx_v_preserve_formatting, __pyx_v_main_content, __pyx_v_list_bullets, __pyx_v_alt_texts, __pyx_v_links, __pyx_v_form_fields, __pyx_v_noscript, __pyx_v_comments, __pyx_v_skip_elements);
 
-  /* "resiliparse_dom/extract/html2text.pyx":932
+  /* "resiliparse_dom/extract/html2text.pyx":939
  *     return False
  * 
  * def extract_plain_text(html,             # <<<<<<<<<<<<<<
@@ -13158,7 +13241,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("extract_plain_text", 1);
 
-  /* "resiliparse_dom/extract/html2text.pyx":986
+  /* "resiliparse_dom/extract/html2text.pyx":993
  * 
  *     cdef HTMLTree tree
  *     if isinstance(html, str):             # <<<<<<<<<<<<<<
@@ -13168,14 +13251,14 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_t_1 = PyUnicode_Check(__pyx_v_html); 
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":987
+    /* "resiliparse_dom/extract/html2text.pyx":994
  *     cdef HTMLTree tree
  *     if isinstance(html, str):
  *         tree = HTMLTree.parse(html)             # <<<<<<<<<<<<<<
  *     elif isinstance(html, HTMLTree):
  *         tree = <HTMLTree>html
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree), __pyx_n_s_parse); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 987, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree), __pyx_n_s_parse); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 994, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     __pyx_t_5 = 0;
@@ -13195,15 +13278,15 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
       PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_v_html};
       __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 987, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 994, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree))))) __PYX_ERR(0, 987, __pyx_L1_error)
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree))))) __PYX_ERR(0, 994, __pyx_L1_error)
     __pyx_v_tree = ((struct __pyx_obj_15resiliparse_dom_5parse_4html_HTMLTree *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":986
+    /* "resiliparse_dom/extract/html2text.pyx":993
  * 
  *     cdef HTMLTree tree
  *     if isinstance(html, str):             # <<<<<<<<<<<<<<
@@ -13213,7 +13296,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
     goto __pyx_L3;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":988
+  /* "resiliparse_dom/extract/html2text.pyx":995
  *     if isinstance(html, str):
  *         tree = HTMLTree.parse(html)
  *     elif isinstance(html, HTMLTree):             # <<<<<<<<<<<<<<
@@ -13223,7 +13306,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_html, __pyx_ptype_15resiliparse_dom_5parse_4html_HTMLTree); 
   if (likely(__pyx_t_1)) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":989
+    /* "resiliparse_dom/extract/html2text.pyx":996
  *         tree = HTMLTree.parse(html)
  *     elif isinstance(html, HTMLTree):
  *         tree = <HTMLTree>html             # <<<<<<<<<<<<<<
@@ -13235,7 +13318,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
     __pyx_v_tree = ((struct __pyx_obj_15resiliparse_dom_5parse_4html_HTMLTree *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":988
+    /* "resiliparse_dom/extract/html2text.pyx":995
  *     if isinstance(html, str):
  *         tree = HTMLTree.parse(html)
  *     elif isinstance(html, HTMLTree):             # <<<<<<<<<<<<<<
@@ -13245,7 +13328,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
     goto __pyx_L3;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":991
+  /* "resiliparse_dom/extract/html2text.pyx":998
  *         tree = <HTMLTree>html
  *     else:
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')             # <<<<<<<<<<<<<<
@@ -13253,29 +13336,29 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  *     if not check_node(tree.body):
  */
   /*else*/ {
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 991, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 998, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 991, __pyx_L1_error)
+    __PYX_ERR(0, 998, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "resiliparse_dom/extract/html2text.pyx":993
+  /* "resiliparse_dom/extract/html2text.pyx":1000
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')
  * 
  *     if not check_node(tree.body):             # <<<<<<<<<<<<<<
  *         return ''
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tree), __pyx_n_s_body); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 993, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tree), __pyx_n_s_body); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1000, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_DOMNode))))) __PYX_ERR(0, 993, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_15resiliparse_dom_5parse_4html_DOMNode))))) __PYX_ERR(0, 1000, __pyx_L1_error)
   __pyx_t_1 = (!__pyx_f_15resiliparse_dom_5parse_4html_check_node(((struct __pyx_obj_15resiliparse_dom_5parse_4html_DOMNode *)__pyx_t_2)));
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":994
+    /* "resiliparse_dom/extract/html2text.pyx":1001
  * 
  *     if not check_node(tree.body):
  *         return ''             # <<<<<<<<<<<<<<
@@ -13287,7 +13370,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
     __pyx_r = __pyx_kp_u__2;
     goto __pyx_L0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":993
+    /* "resiliparse_dom/extract/html2text.pyx":1000
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')
  * 
  *     if not check_node(tree.body):             # <<<<<<<<<<<<<<
@@ -13296,7 +13379,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":996
+  /* "resiliparse_dom/extract/html2text.pyx":1003
  *         return ''
  * 
  *     skip_selectors = {e.encode() for e in skip_elements or []}             # <<<<<<<<<<<<<<
@@ -13304,16 +13387,16 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  *     if not alt_texts:
  */
   { /* enter inner scope */
-    __pyx_t_2 = PySet_New(NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 996, __pyx_L7_error)
+    __pyx_t_2 = PySet_New(NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1003, __pyx_L7_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_skip_elements); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 996, __pyx_L7_error)
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_skip_elements); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 1003, __pyx_L7_error)
     if (!__pyx_t_1) {
     } else {
       __Pyx_INCREF(__pyx_v_skip_elements);
       __pyx_t_3 = __pyx_v_skip_elements;
       goto __pyx_L10_bool_binop_done;
     }
-    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 996, __pyx_L7_error)
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1003, __pyx_L7_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_t_4);
     __pyx_t_3 = __pyx_t_4;
@@ -13324,9 +13407,9 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
       __pyx_t_6 = 0;
       __pyx_t_7 = NULL;
     } else {
-      __pyx_t_6 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 996, __pyx_L7_error)
+      __pyx_t_6 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1003, __pyx_L7_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 996, __pyx_L7_error)
+      __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1003, __pyx_L7_error)
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     for (;;) {
@@ -13335,28 +13418,28 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
           {
             Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_4);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 996, __pyx_L7_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 1003, __pyx_L7_error)
             #endif
             if (__pyx_t_6 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 996, __pyx_L7_error)
+          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 1003, __pyx_L7_error)
           #else
-          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 996, __pyx_L7_error)
+          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1003, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         } else {
           {
             Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_4);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 996, __pyx_L7_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 1003, __pyx_L7_error)
             #endif
             if (__pyx_t_6 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 996, __pyx_L7_error)
+          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 1003, __pyx_L7_error)
           #else
-          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 996, __pyx_L7_error)
+          __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1003, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         }
@@ -13366,7 +13449,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 996, __pyx_L7_error)
+            else __PYX_ERR(0, 1003, __pyx_L7_error)
           }
           break;
         }
@@ -13374,7 +13457,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
       }
       __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_e, __pyx_t_3);
       __pyx_t_3 = 0;
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_8genexpr1__pyx_v_e, __pyx_n_s_encode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 996, __pyx_L7_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_8genexpr1__pyx_v_e, __pyx_n_s_encode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1003, __pyx_L7_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = NULL;
       __pyx_t_5 = 0;
@@ -13394,11 +13477,11 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
         PyObject *__pyx_callargs[2] = {__pyx_t_9, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_8, __pyx_callargs+1-__pyx_t_5, 0+__pyx_t_5);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 996, __pyx_L7_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1003, __pyx_L7_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
-      if (unlikely(PySet_Add(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 996, __pyx_L7_error)
+      if (unlikely(PySet_Add(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 1003, __pyx_L7_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -13412,26 +13495,26 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_v_skip_selectors = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":997
+  /* "resiliparse_dom/extract/html2text.pyx":1004
  * 
  *     skip_selectors = {e.encode() for e in skip_elements or []}
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})             # <<<<<<<<<<<<<<
  *     if not alt_texts:
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed' b'img', b'area',
  */
-  __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 997, __pyx_L1_error)
+  __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1004, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_script) < 0) __PYX_ERR(0, 997, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_style) < 0) __PYX_ERR(0, 997, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_iframe) < 0) __PYX_ERR(0, 997, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_frame) < 0) __PYX_ERR(0, 997, __pyx_L1_error)
-  if (PySet_Add(__pyx_t_2, __pyx_n_b_template) < 0) __PYX_ERR(0, 997, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 997, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_script) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_style) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_iframe) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_frame) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
+  if (PySet_Add(__pyx_t_2, __pyx_n_b_template) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1004, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":998
+  /* "resiliparse_dom/extract/html2text.pyx":1005
  *     skip_selectors = {e.encode() for e in skip_elements or []}
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})
  *     if not alt_texts:             # <<<<<<<<<<<<<<
@@ -13441,29 +13524,29 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_t_1 = (!__pyx_v_alt_texts);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":999
+    /* "resiliparse_dom/extract/html2text.pyx":1006
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})
  *     if not alt_texts:
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed' b'img', b'area',             # <<<<<<<<<<<<<<
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:
  */
-    __pyx_t_4 = PySet_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 999, __pyx_L1_error)
+    __pyx_t_4 = PySet_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1006, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_object) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_video) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_audio) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_embedimg) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_area) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_svg) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_figcaption) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_4, __pyx_n_b_figure) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-    __pyx_t_2 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 999, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_object) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_video) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_audio) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_embedimg) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_area) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_svg) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_figcaption) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_4, __pyx_n_b_figure) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1006, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":998
+    /* "resiliparse_dom/extract/html2text.pyx":1005
  *     skip_selectors = {e.encode() for e in skip_elements or []}
  *     skip_selectors.update({b'script', b'style', b'iframe', b'frame', b'template'})
  *     if not alt_texts:             # <<<<<<<<<<<<<<
@@ -13472,7 +13555,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1001
+  /* "resiliparse_dom/extract/html2text.pyx":1008
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed' b'img', b'area',
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:             # <<<<<<<<<<<<<<
@@ -13482,16 +13565,16 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_t_1 = (!__pyx_v_noscript);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1002
+    /* "resiliparse_dom/extract/html2text.pyx":1009
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:
  *         skip_selectors.add(b'noscript')             # <<<<<<<<<<<<<<
  *     if not form_fields:
  *         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
  */
-    __pyx_t_10 = PySet_Add(__pyx_v_skip_selectors, __pyx_n_b_noscript); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 1002, __pyx_L1_error)
+    __pyx_t_10 = PySet_Add(__pyx_v_skip_selectors, __pyx_n_b_noscript); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 1009, __pyx_L1_error)
 
-    /* "resiliparse_dom/extract/html2text.pyx":1001
+    /* "resiliparse_dom/extract/html2text.pyx":1008
  *         skip_selectors.update({b'object', b'video', b'audio', b'embed' b'img', b'area',
  *                                b'svg', b'figcaption', b'figure'})
  *     if not noscript:             # <<<<<<<<<<<<<<
@@ -13500,7 +13583,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1003
+  /* "resiliparse_dom/extract/html2text.pyx":1010
  *     if not noscript:
  *         skip_selectors.add(b'noscript')
  *     if not form_fields:             # <<<<<<<<<<<<<<
@@ -13510,27 +13593,27 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_t_1 = (!__pyx_v_form_fields);
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1004
+    /* "resiliparse_dom/extract/html2text.pyx":1011
  *         skip_selectors.add(b'noscript')
  *     if not form_fields:
  *         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })             # <<<<<<<<<<<<<<
  *     cdef string skip_selector = <string>b','.join(skip_selectors)
  * 
  */
-    __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1004, __pyx_L1_error)
+    __pyx_t_2 = PySet_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1011, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_textarea) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_input) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_button) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_select) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_option) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
-    if (PySet_Add(__pyx_t_2, __pyx_n_b_label) < 0) __PYX_ERR(0, 1004, __pyx_L1_error)
-    __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1004, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_textarea) < 0) __PYX_ERR(0, 1011, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_input) < 0) __PYX_ERR(0, 1011, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_button) < 0) __PYX_ERR(0, 1011, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_select) < 0) __PYX_ERR(0, 1011, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_option) < 0) __PYX_ERR(0, 1011, __pyx_L1_error)
+    if (PySet_Add(__pyx_t_2, __pyx_n_b_label) < 0) __PYX_ERR(0, 1011, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_skip_selectors, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1011, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1003
+    /* "resiliparse_dom/extract/html2text.pyx":1010
  *     if not noscript:
  *         skip_selectors.add(b'noscript')
  *     if not form_fields:             # <<<<<<<<<<<<<<
@@ -13539,20 +13622,20 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1005
+  /* "resiliparse_dom/extract/html2text.pyx":1012
  *     if not form_fields:
  *         skip_selectors.update({b'textarea', b'input', b'button', b'select', b'option', b'label', })
  *     cdef string skip_selector = <string>b','.join(skip_selectors)             # <<<<<<<<<<<<<<
  * 
  *     cdef FormattingOpts formatting_opts = FormattingOpts.FORMAT_OFF
  */
-  __pyx_t_4 = __Pyx_PyBytes_Join(__pyx_kp_b__3, __pyx_v_skip_selectors); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1005, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyBytes_Join(__pyx_kp_b__3, __pyx_v_skip_selectors); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1012, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_11 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1005, __pyx_L1_error)
+  __pyx_t_11 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1012, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_skip_selector = ((std::string)__pyx_t_11);
 
-  /* "resiliparse_dom/extract/html2text.pyx":1007
+  /* "resiliparse_dom/extract/html2text.pyx":1014
  *     cdef string skip_selector = <string>b','.join(skip_selectors)
  * 
  *     cdef FormattingOpts formatting_opts = FormattingOpts.FORMAT_OFF             # <<<<<<<<<<<<<<
@@ -13561,17 +13644,17 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
   __pyx_v_formatting_opts = FORMAT_OFF;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1008
+  /* "resiliparse_dom/extract/html2text.pyx":1015
  * 
  *     cdef FormattingOpts formatting_opts = FormattingOpts.FORMAT_OFF
  *     if preserve_formatting == 'minimal_html':             # <<<<<<<<<<<<<<
  *         formatting_opts = FormattingOpts.FORMAT_MINIMAL_HTML
  *     elif preserve_formatting:
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_preserve_formatting, __pyx_n_u_minimal_html, Py_EQ)); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_preserve_formatting, __pyx_n_u_minimal_html, Py_EQ)); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 1015, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1009
+    /* "resiliparse_dom/extract/html2text.pyx":1016
  *     cdef FormattingOpts formatting_opts = FormattingOpts.FORMAT_OFF
  *     if preserve_formatting == 'minimal_html':
  *         formatting_opts = FormattingOpts.FORMAT_MINIMAL_HTML             # <<<<<<<<<<<<<<
@@ -13580,7 +13663,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
     __pyx_v_formatting_opts = FORMAT_MINIMAL_HTML;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1008
+    /* "resiliparse_dom/extract/html2text.pyx":1015
  * 
  *     cdef FormattingOpts formatting_opts = FormattingOpts.FORMAT_OFF
  *     if preserve_formatting == 'minimal_html':             # <<<<<<<<<<<<<<
@@ -13590,17 +13673,17 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
     goto __pyx_L17;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1010
+  /* "resiliparse_dom/extract/html2text.pyx":1017
  *     if preserve_formatting == 'minimal_html':
  *         formatting_opts = FormattingOpts.FORMAT_MINIMAL_HTML
  *     elif preserve_formatting:             # <<<<<<<<<<<<<<
  *         formatting_opts = FormattingOpts.FORMAT_BASIC
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_preserve_formatting); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 1010, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_preserve_formatting); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 1017, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1011
+    /* "resiliparse_dom/extract/html2text.pyx":1018
  *         formatting_opts = FormattingOpts.FORMAT_MINIMAL_HTML
  *     elif preserve_formatting:
  *         formatting_opts = FormattingOpts.FORMAT_BASIC             # <<<<<<<<<<<<<<
@@ -13609,7 +13692,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  */
     __pyx_v_formatting_opts = FORMAT_BASIC;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1010
+    /* "resiliparse_dom/extract/html2text.pyx":1017
  *     if preserve_formatting == 'minimal_html':
  *         formatting_opts = FormattingOpts.FORMAT_MINIMAL_HTML
  *     elif preserve_formatting:             # <<<<<<<<<<<<<<
@@ -13619,7 +13702,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   }
   __pyx_L17:;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1014
+  /* "resiliparse_dom/extract/html2text.pyx":1021
  * 
  *     cdef string extracted
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -13635,7 +13718,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
       #endif
       /*try:*/ {
 
-        /* "resiliparse_dom/extract/html2text.pyx":1015
+        /* "resiliparse_dom/extract/html2text.pyx":1022
  *     cdef string extracted
  *     with nogil:
  *         extracted = _extract_plain_text_impl(             # <<<<<<<<<<<<<<
@@ -13645,7 +13728,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
         __pyx_v_extracted = __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_text_impl(__pyx_v_tree, __pyx_v_formatting_opts, __pyx_v_main_content, __pyx_v_list_bullets, __pyx_v_alt_texts, __pyx_v_links, __pyx_v_form_fields, __pyx_v_noscript, __pyx_v_comments, __pyx_v_skip_selector);
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":1014
+      /* "resiliparse_dom/extract/html2text.pyx":1021
  * 
  *     cdef string extracted
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -13664,7 +13747,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
       }
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1026
+  /* "resiliparse_dom/extract/html2text.pyx":1033
  *             comments,
  *             skip_selector)
  *     return extracted.decode(errors='ignore')             # <<<<<<<<<<<<<<
@@ -13672,15 +13755,15 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
  * cdef string _extract_plain_text_impl(HTMLTree tree,
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __pyx_convert_PyBytes_string_to_py_6libcpp_6string_std__in_string(__pyx_v_extracted); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  __pyx_t_4 = __pyx_convert_PyBytes_string_to_py_6libcpp_6string_std__in_string(__pyx_v_extracted); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_decode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_decode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_errors, __pyx_n_u_ignore) < 0) __PYX_ERR(0, 1026, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_errors, __pyx_n_u_ignore) < 0) __PYX_ERR(0, 1033, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -13688,7 +13771,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":932
+  /* "resiliparse_dom/extract/html2text.pyx":939
  *     return False
  * 
  * def extract_plain_text(html,             # <<<<<<<<<<<<<<
@@ -13714,7 +13797,7 @@ static PyObject *__pyx_pf_15resiliparse_dom_7extract_9html2text_2extract_plain_t
   return __pyx_r;
 }
 
-/* "resiliparse_dom/extract/html2text.pyx":1028
+/* "resiliparse_dom/extract/html2text.pyx":1035
  *     return extracted.decode(errors='ignore')
  * 
  * cdef string _extract_plain_text_impl(HTMLTree tree,             # <<<<<<<<<<<<<<
@@ -13757,7 +13840,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   PyGILState_STATE __pyx_gilstate_save;
   #endif
 
-  /* "resiliparse_dom/extract/html2text.pyx":1041
+  /* "resiliparse_dom/extract/html2text.pyx":1048
  * 
  *     cdef ExtractContext ctx
  *     ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body             # <<<<<<<<<<<<<<
@@ -13766,7 +13849,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_ctx.root_node = ((lxb_dom_node_t *)__pyx_v_tree->dom_document->body);
 
-  /* "resiliparse_dom/extract/html2text.pyx":1042
+  /* "resiliparse_dom/extract/html2text.pyx":1049
  *     cdef ExtractContext ctx
  *     ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body
  *     ctx.node = ctx.root_node             # <<<<<<<<<<<<<<
@@ -13776,7 +13859,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   __pyx_t_1 = __pyx_v_ctx.root_node;
   __pyx_v_ctx.node = __pyx_t_1;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1043
+  /* "resiliparse_dom/extract/html2text.pyx":1050
  *     ctx.root_node = <lxb_dom_node_t*>tree.dom_document.body
  *     ctx.node = ctx.root_node
  *     ctx.opts = [             # <<<<<<<<<<<<<<
@@ -13791,7 +13874,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   __pyx_t_2.noscript = __pyx_v_noscript;
   __pyx_v_ctx.opts = __pyx_t_2;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1051
+  /* "resiliparse_dom/extract/html2text.pyx":1058
  *         noscript]
  * 
  *     cdef const lxb_char_t* tag_name = NULL             # <<<<<<<<<<<<<<
@@ -13800,7 +13883,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_tag_name = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1055
+  /* "resiliparse_dom/extract/html2text.pyx":1062
  *     cdef string tag_name_str
  *     cdef size_t i
  *     cdef bint skip = False             # <<<<<<<<<<<<<<
@@ -13809,7 +13892,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_skip = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1056
+  /* "resiliparse_dom/extract/html2text.pyx":1063
  *     cdef size_t i
  *     cdef bint skip = False
  *     cdef bint is_end_tag = False             # <<<<<<<<<<<<<<
@@ -13818,7 +13901,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_is_end_tag = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1058
+  /* "resiliparse_dom/extract/html2text.pyx":1065
  *     cdef bint is_end_tag = False
  * 
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:             # <<<<<<<<<<<<<<
@@ -13828,7 +13911,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   __pyx_t_3 = (__pyx_v_ctx.node->type == LXB_DOM_NODE_TYPE_DOCUMENT);
   if (__pyx_t_3) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1059
+    /* "resiliparse_dom/extract/html2text.pyx":1066
  * 
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:
  *         ctx.root_node = next_element_node(ctx.node, ctx.node.first_child)             # <<<<<<<<<<<<<<
@@ -13837,7 +13920,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     __pyx_v_ctx.root_node = __pyx_f_15resiliparse_dom_5parse_4html_next_element_node(__pyx_v_ctx.node, __pyx_v_ctx.node->first_child, NULL);
 
-    /* "resiliparse_dom/extract/html2text.pyx":1060
+    /* "resiliparse_dom/extract/html2text.pyx":1067
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:
  *         ctx.root_node = next_element_node(ctx.node, ctx.node.first_child)
  *         ctx.node = ctx.root_node             # <<<<<<<<<<<<<<
@@ -13847,7 +13930,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_t_1 = __pyx_v_ctx.root_node;
     __pyx_v_ctx.node = __pyx_t_1;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1058
+    /* "resiliparse_dom/extract/html2text.pyx":1065
  *     cdef bint is_end_tag = False
  * 
  *     if ctx.node.type == LXB_DOM_NODE_TYPE_DOCUMENT:             # <<<<<<<<<<<<<<
@@ -13856,7 +13939,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1063
+  /* "resiliparse_dom/extract/html2text.pyx":1070
  * 
  *     cdef string main_content_selector
  *     cdef lxb_dom_collection_t* root_candidates = NULL             # <<<<<<<<<<<<<<
@@ -13865,7 +13948,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_root_candidates = NULL;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1064
+  /* "resiliparse_dom/extract/html2text.pyx":1071
  *     cdef string main_content_selector
  *     cdef lxb_dom_collection_t* root_candidates = NULL
  *     if main_content:             # <<<<<<<<<<<<<<
@@ -13874,7 +13957,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   if (__pyx_v_main_content) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1065
+    /* "resiliparse_dom/extract/html2text.pyx":1072
  *     cdef lxb_dom_collection_t* root_candidates = NULL
  *     if main_content:
  *         main_content_selector = string(b'.article-body, .articleBody, .contentBody, .article-text,'             # <<<<<<<<<<<<<<
@@ -13891,11 +13974,11 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
       #ifdef WITH_THREAD
       __Pyx_PyGILState_Release(__pyx_gilstate_save);
       #endif
-      __PYX_ERR(0, 1065, __pyx_L1_error)
+      __PYX_ERR(0, 1072, __pyx_L1_error)
     }
     __pyx_v_main_content_selector = __PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_4);
 
-    /* "resiliparse_dom/extract/html2text.pyx":1068
+    /* "resiliparse_dom/extract/html2text.pyx":1075
  *                                        b'.main-content, .postcontent, .post-content, .single-post,'
  *                                        b'[role="main"]')
  *         root_candidates = query_selector_all_impl(ctx.node, tree,             # <<<<<<<<<<<<<<
@@ -13904,10 +13987,10 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     __pyx_t_6.__pyx_n = 1;
     __pyx_t_6.init_size = 5;
-    __pyx_t_5 = __pyx_f_15resiliparse_dom_5parse_4html_query_selector_all_impl(__pyx_v_ctx.node, __pyx_v_tree, __pyx_v_main_content_selector.data(), __pyx_v_main_content_selector.size(), &__pyx_t_6); if (unlikely(__pyx_t_5 == ((lxb_dom_collection_t *)((lxb_dom_collection_t *)-1L)))) __PYX_ERR(0, 1068, __pyx_L1_error)
+    __pyx_t_5 = __pyx_f_15resiliparse_dom_5parse_4html_query_selector_all_impl(__pyx_v_ctx.node, __pyx_v_tree, __pyx_v_main_content_selector.data(), __pyx_v_main_content_selector.size(), &__pyx_t_6); if (unlikely(__pyx_t_5 == ((lxb_dom_collection_t *)((lxb_dom_collection_t *)-1L)))) __PYX_ERR(0, 1075, __pyx_L1_error)
     __pyx_v_root_candidates = __pyx_t_5;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1070
+    /* "resiliparse_dom/extract/html2text.pyx":1077
  *         root_candidates = query_selector_all_impl(ctx.node, tree,
  *                                                   main_content_selector.data(), main_content_selector.size(), 5)
  *         if root_candidates != NULL:             # <<<<<<<<<<<<<<
@@ -13917,7 +14000,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_t_3 = (__pyx_v_root_candidates != NULL);
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":1071
+      /* "resiliparse_dom/extract/html2text.pyx":1078
  *                                                   main_content_selector.data(), main_content_selector.size(), 5)
  *         if root_candidates != NULL:
  *             if lxb_dom_collection_length(root_candidates) == 1:             # <<<<<<<<<<<<<<
@@ -13927,7 +14010,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
       __pyx_t_3 = (lxb_dom_collection_length(__pyx_v_root_candidates) == 1);
       if (__pyx_t_3) {
 
-        /* "resiliparse_dom/extract/html2text.pyx":1073
+        /* "resiliparse_dom/extract/html2text.pyx":1080
  *             if lxb_dom_collection_length(root_candidates) == 1:
  *                 # Use result only if there is exactly one match
  *                 ctx.root_node = lxb_dom_collection_node(root_candidates, 0)             # <<<<<<<<<<<<<<
@@ -13936,7 +14019,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
         __pyx_v_ctx.root_node = lxb_dom_collection_node(__pyx_v_root_candidates, 0);
 
-        /* "resiliparse_dom/extract/html2text.pyx":1074
+        /* "resiliparse_dom/extract/html2text.pyx":1081
  *                 # Use result only if there is exactly one match
  *                 ctx.root_node = lxb_dom_collection_node(root_candidates, 0)
  *                 ctx.node = ctx.root_node             # <<<<<<<<<<<<<<
@@ -13946,7 +14029,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
         __pyx_t_1 = __pyx_v_ctx.root_node;
         __pyx_v_ctx.node = __pyx_t_1;
 
-        /* "resiliparse_dom/extract/html2text.pyx":1071
+        /* "resiliparse_dom/extract/html2text.pyx":1078
  *                                                   main_content_selector.data(), main_content_selector.size(), 5)
  *         if root_candidates != NULL:
  *             if lxb_dom_collection_length(root_candidates) == 1:             # <<<<<<<<<<<<<<
@@ -13955,7 +14038,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
       }
 
-      /* "resiliparse_dom/extract/html2text.pyx":1075
+      /* "resiliparse_dom/extract/html2text.pyx":1082
  *                 ctx.root_node = lxb_dom_collection_node(root_candidates, 0)
  *                 ctx.node = ctx.root_node
  *             lxb_dom_collection_destroy(root_candidates, True)             # <<<<<<<<<<<<<<
@@ -13964,7 +14047,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
       (void)(lxb_dom_collection_destroy(__pyx_v_root_candidates, 1));
 
-      /* "resiliparse_dom/extract/html2text.pyx":1076
+      /* "resiliparse_dom/extract/html2text.pyx":1083
  *                 ctx.node = ctx.root_node
  *             lxb_dom_collection_destroy(root_candidates, True)
  *             root_candidates = NULL             # <<<<<<<<<<<<<<
@@ -13973,7 +14056,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
       __pyx_v_root_candidates = NULL;
 
-      /* "resiliparse_dom/extract/html2text.pyx":1070
+      /* "resiliparse_dom/extract/html2text.pyx":1077
  *         root_candidates = query_selector_all_impl(ctx.node, tree,
  *                                                   main_content_selector.data(), main_content_selector.size(), 5)
  *         if root_candidates != NULL:             # <<<<<<<<<<<<<<
@@ -13982,7 +14065,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":1064
+    /* "resiliparse_dom/extract/html2text.pyx":1071
  *     cdef string main_content_selector
  *     cdef lxb_dom_collection_t* root_candidates = NULL
  *     if main_content:             # <<<<<<<<<<<<<<
@@ -13991,7 +14074,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1079
+  /* "resiliparse_dom/extract/html2text.pyx":1086
  * 
  *     # Select all blacklisted elements and store them in a set
  *     cdef lxb_dom_collection_t* blacklist_coll = query_selector_all_impl(ctx.root_node, tree,             # <<<<<<<<<<<<<<
@@ -14000,10 +14083,10 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_t_6.__pyx_n = 1;
   __pyx_t_6.init_size = 30;
-  __pyx_t_5 = __pyx_f_15resiliparse_dom_5parse_4html_query_selector_all_impl(__pyx_v_ctx.root_node, __pyx_v_tree, __pyx_v_skip_selector.data(), __pyx_v_skip_selector.size(), &__pyx_t_6); if (unlikely(__pyx_t_5 == ((lxb_dom_collection_t *)((lxb_dom_collection_t *)-1L)))) __PYX_ERR(0, 1079, __pyx_L1_error)
+  __pyx_t_5 = __pyx_f_15resiliparse_dom_5parse_4html_query_selector_all_impl(__pyx_v_ctx.root_node, __pyx_v_tree, __pyx_v_skip_selector.data(), __pyx_v_skip_selector.size(), &__pyx_t_6); if (unlikely(__pyx_t_5 == ((lxb_dom_collection_t *)((lxb_dom_collection_t *)-1L)))) __PYX_ERR(0, 1086, __pyx_L1_error)
   __pyx_v_blacklist_coll = __pyx_t_5;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1082
+  /* "resiliparse_dom/extract/html2text.pyx":1089
  *                                                                         skip_selector.data(), skip_selector.size(), 30)
  *     cdef stl_set[lxb_dom_node_t*] blacklisted_nodes
  *     if blacklist_coll != NULL:             # <<<<<<<<<<<<<<
@@ -14013,7 +14096,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   __pyx_t_3 = (__pyx_v_blacklist_coll != NULL);
   if (__pyx_t_3) {
 
-    /* "resiliparse_dom/extract/html2text.pyx":1083
+    /* "resiliparse_dom/extract/html2text.pyx":1090
  *     cdef stl_set[lxb_dom_node_t*] blacklisted_nodes
  *     if blacklist_coll != NULL:
  *         for i in range(lxb_dom_collection_length(blacklist_coll)):             # <<<<<<<<<<<<<<
@@ -14025,7 +14108,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "resiliparse_dom/extract/html2text.pyx":1084
+      /* "resiliparse_dom/extract/html2text.pyx":1091
  *     if blacklist_coll != NULL:
  *         for i in range(lxb_dom_collection_length(blacklist_coll)):
  *             blacklisted_nodes.insert(lxb_dom_collection_node(blacklist_coll, i))             # <<<<<<<<<<<<<<
@@ -14042,11 +14125,11 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
         #ifdef WITH_THREAD
         __Pyx_PyGILState_Release(__pyx_gilstate_save);
         #endif
-        __PYX_ERR(0, 1084, __pyx_L1_error)
+        __PYX_ERR(0, 1091, __pyx_L1_error)
       }
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":1085
+    /* "resiliparse_dom/extract/html2text.pyx":1092
  *         for i in range(lxb_dom_collection_length(blacklist_coll)):
  *             blacklisted_nodes.insert(lxb_dom_collection_node(blacklist_coll, i))
  *         lxb_dom_collection_destroy(blacklist_coll, True)             # <<<<<<<<<<<<<<
@@ -14055,7 +14138,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     (void)(lxb_dom_collection_destroy(__pyx_v_blacklist_coll, 1));
 
-    /* "resiliparse_dom/extract/html2text.pyx":1082
+    /* "resiliparse_dom/extract/html2text.pyx":1089
  *                                                                         skip_selector.data(), skip_selector.size(), 30)
  *     cdef stl_set[lxb_dom_node_t*] blacklisted_nodes
  *     if blacklist_coll != NULL:             # <<<<<<<<<<<<<<
@@ -14064,7 +14147,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1087
+  /* "resiliparse_dom/extract/html2text.pyx":1094
  *         lxb_dom_collection_destroy(blacklist_coll, True)
  * 
  *     cdef size_t base_depth = 0             # <<<<<<<<<<<<<<
@@ -14073,7 +14156,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_base_depth = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1088
+  /* "resiliparse_dom/extract/html2text.pyx":1095
  * 
  *     cdef size_t base_depth = 0
  *     cdef lxb_dom_node_t* pnode = ctx.node             # <<<<<<<<<<<<<<
@@ -14083,7 +14166,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   __pyx_t_1 = __pyx_v_ctx.node;
   __pyx_v_pnode = __pyx_t_1;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1089
+  /* "resiliparse_dom/extract/html2text.pyx":1096
  *     cdef size_t base_depth = 0
  *     cdef lxb_dom_node_t* pnode = ctx.node
  *     while pnode.local_name != LXB_TAG_BODY and pnode.parent:             # <<<<<<<<<<<<<<
@@ -14102,7 +14185,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_L12_bool_binop_done:;
     if (!__pyx_t_3) break;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1090
+    /* "resiliparse_dom/extract/html2text.pyx":1097
  *     cdef lxb_dom_node_t* pnode = ctx.node
  *     while pnode.local_name != LXB_TAG_BODY and pnode.parent:
  *         preinc(base_depth)             # <<<<<<<<<<<<<<
@@ -14111,7 +14194,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     (void)((++__pyx_v_base_depth));
 
-    /* "resiliparse_dom/extract/html2text.pyx":1091
+    /* "resiliparse_dom/extract/html2text.pyx":1098
  *     while pnode.local_name != LXB_TAG_BODY and pnode.parent:
  *         preinc(base_depth)
  *         pnode = pnode.parent             # <<<<<<<<<<<<<<
@@ -14122,7 +14205,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_v_pnode = __pyx_t_1;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1094
+  /* "resiliparse_dom/extract/html2text.pyx":1101
  * 
  *     cdef vector[shared_ptr[ExtractNode]] extract_nodes
  *     cdef size_t chars_extracted = 0             # <<<<<<<<<<<<<<
@@ -14131,7 +14214,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_chars_extracted = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1095
+  /* "resiliparse_dom/extract/html2text.pyx":1102
  *     cdef vector[shared_ptr[ExtractNode]] extract_nodes
  *     cdef size_t chars_extracted = 0
  *     cdef size_t nodes_extracted = 0             # <<<<<<<<<<<<<<
@@ -14140,7 +14223,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
   __pyx_v_nodes_extracted = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1096
+  /* "resiliparse_dom/extract/html2text.pyx":1103
  *     cdef size_t chars_extracted = 0
  *     cdef size_t nodes_extracted = 0
  *     extract_nodes.reserve(150)             # <<<<<<<<<<<<<<
@@ -14157,10 +14240,10 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     #ifdef WITH_THREAD
     __Pyx_PyGILState_Release(__pyx_gilstate_save);
     #endif
-    __PYX_ERR(0, 1096, __pyx_L1_error)
+    __PYX_ERR(0, 1103, __pyx_L1_error)
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1097
+  /* "resiliparse_dom/extract/html2text.pyx":1104
  *     cdef size_t nodes_extracted = 0
  *     extract_nodes.reserve(150)
  *     while ctx.node:             # <<<<<<<<<<<<<<
@@ -14171,7 +14254,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_t_3 = (__pyx_v_ctx.node != 0);
     if (!__pyx_t_3) break;
 
-    /* "resiliparse_dom/extract/html2text.pyx":1099
+    /* "resiliparse_dom/extract/html2text.pyx":1106
  *     while ctx.node:
  *         # Skip everything except element and text nodes
  *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
@@ -14189,88 +14272,9 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     }
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":1100
- *         # Skip everything except element and text nodes
- *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:
- *             is_end_tag = True             # <<<<<<<<<<<<<<
- *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
- *             continue
- */
-      __pyx_v_is_end_tag = 1;
-
-      /* "resiliparse_dom/extract/html2text.pyx":1101
- *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:
- *             is_end_tag = True
- *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)             # <<<<<<<<<<<<<<
- *             continue
- * 
- */
-      __pyx_t_11.__pyx_n = 2;
-      __pyx_t_11.depth = (&__pyx_v_ctx.depth);
-      __pyx_t_11.end_tag = (&__pyx_v_is_end_tag);
-      __pyx_t_1 = __pyx_f_15resiliparse_dom_5parse_4html_next_node(__pyx_v_ctx.root_node, __pyx_v_ctx.node, &__pyx_t_11); 
-      __pyx_v_ctx.node = __pyx_t_1;
-
-      /* "resiliparse_dom/extract/html2text.pyx":1102
- *             is_end_tag = True
- *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
- *             continue             # <<<<<<<<<<<<<<
- * 
- *         # Skip blacklisted or non-main-content nodes
- */
-      goto __pyx_L14_continue;
-
-      /* "resiliparse_dom/extract/html2text.pyx":1099
- *     while ctx.node:
- *         # Skip everything except element and text nodes
- *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
- *             is_end_tag = True
- *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
- */
-    }
-
-    /* "resiliparse_dom/extract/html2text.pyx":1105
- * 
- *         # Skip blacklisted or non-main-content nodes
- *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
- *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
- *             is_end_tag = True
- */
-    __pyx_t_10 = (__pyx_v_blacklisted_nodes.find(__pyx_v_ctx.node) != __pyx_v_blacklisted_nodes.end());
-    if (!__pyx_t_10) {
-    } else {
-      __pyx_t_3 = __pyx_t_10;
-      goto __pyx_L18_bool_binop_done;
-    }
-
-    /* "resiliparse_dom/extract/html2text.pyx":1106
- *         # Skip blacklisted or non-main-content nodes
- *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \
- *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):             # <<<<<<<<<<<<<<
- *             is_end_tag = True
- *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
- */
-    if (__pyx_v_main_content) {
-    } else {
-      __pyx_t_3 = __pyx_v_main_content;
-      goto __pyx_L18_bool_binop_done;
-    }
-    __pyx_t_10 = (!__pyx_f_15resiliparse_dom_7extract_9html2text__is_main_content_node(__pyx_v_ctx.node, (__pyx_v_ctx.depth + __pyx_v_base_depth), __pyx_v_comments));
-    __pyx_t_3 = __pyx_t_10;
-    __pyx_L18_bool_binop_done:;
-
-    /* "resiliparse_dom/extract/html2text.pyx":1105
- * 
- *         # Skip blacklisted or non-main-content nodes
- *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
- *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
- *             is_end_tag = True
- */
-    if (__pyx_t_3) {
-
       /* "resiliparse_dom/extract/html2text.pyx":1107
- *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \
- *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
+ *         # Skip everything except element and text nodes
+ *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:
  *             is_end_tag = True             # <<<<<<<<<<<<<<
  *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
  *             continue
@@ -14278,7 +14282,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
       __pyx_v_is_end_tag = 1;
 
       /* "resiliparse_dom/extract/html2text.pyx":1108
- *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
+ *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:
  *             is_end_tag = True
  *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)             # <<<<<<<<<<<<<<
  *             continue
@@ -14295,11 +14299,90 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
  *             continue             # <<<<<<<<<<<<<<
  * 
+ *         # Skip blacklisted or non-main-content nodes
+ */
+      goto __pyx_L14_continue;
+
+      /* "resiliparse_dom/extract/html2text.pyx":1106
+ *     while ctx.node:
+ *         # Skip everything except element and text nodes
+ *         if ctx.node.type != LXB_DOM_NODE_TYPE_ELEMENT and ctx.node.type != LXB_DOM_NODE_TYPE_TEXT:             # <<<<<<<<<<<<<<
+ *             is_end_tag = True
+ *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
+ */
+    }
+
+    /* "resiliparse_dom/extract/html2text.pyx":1112
+ * 
+ *         # Skip blacklisted or non-main-content nodes
+ *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
+ *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
+ *             is_end_tag = True
+ */
+    __pyx_t_10 = (__pyx_v_blacklisted_nodes.find(__pyx_v_ctx.node) != __pyx_v_blacklisted_nodes.end());
+    if (!__pyx_t_10) {
+    } else {
+      __pyx_t_3 = __pyx_t_10;
+      goto __pyx_L18_bool_binop_done;
+    }
+
+    /* "resiliparse_dom/extract/html2text.pyx":1113
+ *         # Skip blacklisted or non-main-content nodes
+ *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \
+ *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):             # <<<<<<<<<<<<<<
+ *             is_end_tag = True
+ *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
+ */
+    if (__pyx_v_main_content) {
+    } else {
+      __pyx_t_3 = __pyx_v_main_content;
+      goto __pyx_L18_bool_binop_done;
+    }
+    __pyx_t_10 = (!__pyx_f_15resiliparse_dom_7extract_9html2text__is_main_content_node(__pyx_v_ctx.node, (__pyx_v_ctx.depth + __pyx_v_base_depth), __pyx_v_comments));
+    __pyx_t_3 = __pyx_t_10;
+    __pyx_L18_bool_binop_done:;
+
+    /* "resiliparse_dom/extract/html2text.pyx":1112
+ * 
+ *         # Skip blacklisted or non-main-content nodes
+ *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
+ *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
+ *             is_end_tag = True
+ */
+    if (__pyx_t_3) {
+
+      /* "resiliparse_dom/extract/html2text.pyx":1114
+ *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \
+ *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
+ *             is_end_tag = True             # <<<<<<<<<<<<<<
+ *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
+ *             continue
+ */
+      __pyx_v_is_end_tag = 1;
+
+      /* "resiliparse_dom/extract/html2text.pyx":1115
+ *                 (main_content and not _is_main_content_node(ctx.node, ctx.depth + base_depth, comments)):
+ *             is_end_tag = True
+ *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)             # <<<<<<<<<<<<<<
+ *             continue
+ * 
+ */
+      __pyx_t_11.__pyx_n = 2;
+      __pyx_t_11.depth = (&__pyx_v_ctx.depth);
+      __pyx_t_11.end_tag = (&__pyx_v_is_end_tag);
+      __pyx_t_1 = __pyx_f_15resiliparse_dom_5parse_4html_next_node(__pyx_v_ctx.root_node, __pyx_v_ctx.node, &__pyx_t_11); 
+      __pyx_v_ctx.node = __pyx_t_1;
+
+      /* "resiliparse_dom/extract/html2text.pyx":1116
+ *             is_end_tag = True
+ *             ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
+ *             continue             # <<<<<<<<<<<<<<
+ * 
  *         _extract_cb(extract_nodes, ctx, is_end_tag)
  */
       goto __pyx_L14_continue;
 
-      /* "resiliparse_dom/extract/html2text.pyx":1105
+      /* "resiliparse_dom/extract/html2text.pyx":1112
  * 
  *         # Skip blacklisted or non-main-content nodes
  *         if blacklisted_nodes.find(ctx.node) != blacklisted_nodes.end() or \             # <<<<<<<<<<<<<<
@@ -14308,7 +14391,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":1111
+    /* "resiliparse_dom/extract/html2text.pyx":1118
  *             continue
  * 
  *         _extract_cb(extract_nodes, ctx, is_end_tag)             # <<<<<<<<<<<<<<
@@ -14317,7 +14400,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     __pyx_f_15resiliparse_dom_7extract_9html2text__extract_cb(__pyx_v_extract_nodes, __pyx_v_ctx, __pyx_v_is_end_tag);
 
-    /* "resiliparse_dom/extract/html2text.pyx":1112
+    /* "resiliparse_dom/extract/html2text.pyx":1119
  * 
  *         _extract_cb(extract_nodes, ctx, is_end_tag)
  *         if extract_nodes.size() > nodes_extracted and deref(extract_nodes.back()).text_contents:             # <<<<<<<<<<<<<<
@@ -14335,7 +14418,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_L22_bool_binop_done:;
     if (__pyx_t_3) {
 
-      /* "resiliparse_dom/extract/html2text.pyx":1113
+      /* "resiliparse_dom/extract/html2text.pyx":1120
  *         _extract_cb(extract_nodes, ctx, is_end_tag)
  *         if extract_nodes.size() > nodes_extracted and deref(extract_nodes.back()).text_contents:
  *             chars_extracted += deref(deref(extract_nodes.back()).text_contents).size()             # <<<<<<<<<<<<<<
@@ -14344,7 +14427,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
       __pyx_v_chars_extracted = (__pyx_v_chars_extracted + (*(*__pyx_v_extract_nodes.back()).text_contents).size());
 
-      /* "resiliparse_dom/extract/html2text.pyx":1114
+      /* "resiliparse_dom/extract/html2text.pyx":1121
  *         if extract_nodes.size() > nodes_extracted and deref(extract_nodes.back()).text_contents:
  *             chars_extracted += deref(deref(extract_nodes.back()).text_contents).size()
  *             preinc(nodes_extracted)             # <<<<<<<<<<<<<<
@@ -14353,7 +14436,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
       (void)((++__pyx_v_nodes_extracted));
 
-      /* "resiliparse_dom/extract/html2text.pyx":1112
+      /* "resiliparse_dom/extract/html2text.pyx":1119
  * 
  *         _extract_cb(extract_nodes, ctx, is_end_tag)
  *         if extract_nodes.size() > nodes_extracted and deref(extract_nodes.back()).text_contents:             # <<<<<<<<<<<<<<
@@ -14362,7 +14445,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
  */
     }
 
-    /* "resiliparse_dom/extract/html2text.pyx":1116
+    /* "resiliparse_dom/extract/html2text.pyx":1123
  *             preinc(nodes_extracted)
  * 
  *         ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)             # <<<<<<<<<<<<<<
@@ -14377,7 +14460,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
     __pyx_L14_continue:;
   }
 
-  /* "resiliparse_dom/extract/html2text.pyx":1118
+  /* "resiliparse_dom/extract/html2text.pyx":1125
  *         ctx.node = next_node(ctx.root_node, ctx.node, &ctx.depth, &is_end_tag)
  * 
  *     return rstrip_str(_serialize_extract_nodes(extract_nodes, ctx.opts, <size_t>(chars_extracted * 1.2)))             # <<<<<<<<<<<<<<
@@ -14385,7 +14468,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__extract_plain_
   __pyx_r = rstrip_str(__pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extract_nodes(__pyx_v_extract_nodes, __pyx_v_ctx.opts, ((size_t)(__pyx_v_chars_extracted * 1.2))));
   goto __pyx_L0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":1028
+  /* "resiliparse_dom/extract/html2text.pyx":1035
  *     return extracted.decode(errors='ignore')
  * 
  * cdef string _extract_plain_text_impl(HTMLTree tree,             # <<<<<<<<<<<<<<
@@ -14517,7 +14600,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 119, __pyx_L1_error)
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 778, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 785, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -14528,51 +14611,51 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "resiliparse_dom/extract/html2text.pyx":778
+  /* "resiliparse_dom/extract/html2text.pyx":785
  *         tree = <HTMLTree>html
  *     else:
  *         raise TypeError('Parameter "html" is neither string nor HTMLTree.')             # <<<<<<<<<<<<<<
  * 
  *     if not check_node(tree.body):
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_Parameter_html_is_neither_string); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 778, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_Parameter_html_is_neither_string); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 785, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "resiliparse_dom/extract/html2text.pyx":809
+  /* "resiliparse_dom/extract/html2text.pyx":816
  *             comments,
  *             skip_selector)
  *     return extracted.decode(errors='ignore').replace('\x00', '')             # <<<<<<<<<<<<<<
  * 
  * cdef string _extract_simplified_dom_impl(HTMLTree tree,
  */
-  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_kp_u__4, __pyx_kp_u__2); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 809, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_kp_u__4, __pyx_kp_u__2); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 816, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "resiliparse_dom/extract/html2text.pyx":756
+  /* "resiliparse_dom/extract/html2text.pyx":763
  * 
  * 
  * def extract_simplified_dom(html,             # <<<<<<<<<<<<<<
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,
  */
-  __pyx_tuple__6 = PyTuple_Pack(15, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(15, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 763, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
-  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_simplified_dom, 756, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_simplified_dom, 763, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 763, __pyx_L1_error)
 
-  /* "resiliparse_dom/extract/html2text.pyx":932
+  /* "resiliparse_dom/extract/html2text.pyx":939
  *     return False
  * 
  * def extract_plain_text(html,             # <<<<<<<<<<<<<<
  *                        preserve_formatting=True,
  *                        bint main_content=False,
  */
-  __pyx_tuple__8 = PyTuple_Pack(16, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_formatting_opts, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(16, __pyx_n_s_html, __pyx_n_s_preserve_formatting, __pyx_n_s_main_content, __pyx_n_s_list_bullets, __pyx_n_s_alt_texts, __pyx_n_s_links, __pyx_n_s_form_fields, __pyx_n_s_noscript, __pyx_n_s_comments, __pyx_n_s_skip_elements, __pyx_n_s_tree, __pyx_n_s_skip_selectors, __pyx_n_s_skip_selector, __pyx_n_s_formatting_opts, __pyx_n_s_extracted, __pyx_n_s_e); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 939, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
-  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_plain_text, 932, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_resiliparse_dom_extract_html2tex, __pyx_n_s_extract_plain_text, 939, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 939, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -15267,114 +15350,114 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_15resiliparse_dom_7extract_9html2text_blacklist_aria_roles = __PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_3);
 
-  /* "resiliparse_dom/extract/html2text.pyx":757
+  /* "resiliparse_dom/extract/html2text.pyx":764
  * 
  * def extract_simplified_dom(html,
  *                           bint preserve_formatting=True,             # <<<<<<<<<<<<<<
  *                           bint main_content=False,
  *                           bint list_bullets=True,
  */
-  __pyx_t_2 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 757, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 764, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "resiliparse_dom/extract/html2text.pyx":758
+  /* "resiliparse_dom/extract/html2text.pyx":765
  * def extract_simplified_dom(html,
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,             # <<<<<<<<<<<<<<
  *                           bint list_bullets=True,
  *                           bint alt_texts=True,
  */
-  __pyx_t_4 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 758, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 765, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "resiliparse_dom/extract/html2text.pyx":759
+  /* "resiliparse_dom/extract/html2text.pyx":766
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,
  *                           bint list_bullets=True,             # <<<<<<<<<<<<<<
  *                           bint alt_texts=True,
  *                           bint links=False,
  */
-  __pyx_t_5 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 759, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 766, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "resiliparse_dom/extract/html2text.pyx":760
+  /* "resiliparse_dom/extract/html2text.pyx":767
  *                           bint main_content=False,
  *                           bint list_bullets=True,
  *                           bint alt_texts=True,             # <<<<<<<<<<<<<<
  *                           bint links=False,
  *                           bint form_fields=False,
  */
-  __pyx_t_6 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 760, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 767, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
 
-  /* "resiliparse_dom/extract/html2text.pyx":761
+  /* "resiliparse_dom/extract/html2text.pyx":768
  *                           bint list_bullets=True,
  *                           bint alt_texts=True,
  *                           bint links=False,             # <<<<<<<<<<<<<<
  *                           bint form_fields=False,
  *                           bint noscript=False,
  */
-  __pyx_t_7 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 761, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 768, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
 
-  /* "resiliparse_dom/extract/html2text.pyx":762
+  /* "resiliparse_dom/extract/html2text.pyx":769
  *                           bint alt_texts=True,
  *                           bint links=False,
  *                           bint form_fields=False,             # <<<<<<<<<<<<<<
  *                           bint noscript=False,
  *                           bint comments=True,
  */
-  __pyx_t_8 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 762, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 769, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
 
-  /* "resiliparse_dom/extract/html2text.pyx":763
+  /* "resiliparse_dom/extract/html2text.pyx":770
  *                           bint links=False,
  *                           bint form_fields=False,
  *                           bint noscript=False,             # <<<<<<<<<<<<<<
  *                           bint comments=True,
  *                           skip_elements=None):
  */
-  __pyx_t_9 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 763, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 770, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
 
-  /* "resiliparse_dom/extract/html2text.pyx":764
+  /* "resiliparse_dom/extract/html2text.pyx":771
  *                           bint form_fields=False,
  *                           bint noscript=False,
  *                           bint comments=True,             # <<<<<<<<<<<<<<
  *                           skip_elements=None):
  *     """
  */
-  __pyx_t_10 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 764, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 771, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
 
-  /* "resiliparse_dom/extract/html2text.pyx":756
+  /* "resiliparse_dom/extract/html2text.pyx":763
  * 
  * 
  * def extract_simplified_dom(html,             # <<<<<<<<<<<<<<
  *                           bint preserve_formatting=True,
  *                           bint main_content=False,
  */
-  __pyx_t_11 = PyTuple_New(9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __pyx_t_11 = PyTuple_New(9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 763, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_4)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_4)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_t_5)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_t_5)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_6);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 3, __pyx_t_6)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 3, __pyx_t_6)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_7);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 4, __pyx_t_7)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 4, __pyx_t_7)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_8);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 5, __pyx_t_8)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 5, __pyx_t_8)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_9);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 6, __pyx_t_9)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 6, __pyx_t_9)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_10);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 7, __pyx_t_10)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 7, __pyx_t_10)) __PYX_ERR(0, 763, __pyx_L1_error);
   __Pyx_INCREF(Py_None);
   __Pyx_GIVEREF(Py_None);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 8, Py_None)) __PYX_ERR(0, 756, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 8, Py_None)) __PYX_ERR(0, 763, __pyx_L1_error);
   __pyx_t_2 = 0;
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
@@ -15383,112 +15466,112 @@ if (!__Pyx_RefNanny) {
   __pyx_t_8 = 0;
   __pyx_t_9 = 0;
   __pyx_t_10 = 0;
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_1extract_simplified_dom, 0, __pyx_n_s_extract_simplified_dom, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_1extract_simplified_dom, 0, __pyx_n_s_extract_simplified_dom, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 763, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_extract_simplified_dom, __pyx_t_10) < 0) __PYX_ERR(0, 756, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_extract_simplified_dom, __pyx_t_10) < 0) __PYX_ERR(0, 763, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "resiliparse_dom/extract/html2text.pyx":934
+  /* "resiliparse_dom/extract/html2text.pyx":941
  * def extract_plain_text(html,
  *                        preserve_formatting=True,
  *                        bint main_content=False,             # <<<<<<<<<<<<<<
  *                        bint list_bullets=True,
  *                        bint alt_texts=True,
  */
-  __pyx_t_10 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 934, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 941, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
 
-  /* "resiliparse_dom/extract/html2text.pyx":935
+  /* "resiliparse_dom/extract/html2text.pyx":942
  *                        preserve_formatting=True,
  *                        bint main_content=False,
  *                        bint list_bullets=True,             # <<<<<<<<<<<<<<
  *                        bint alt_texts=True,
  *                        bint links=False,
  */
-  __pyx_t_11 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 935, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 942, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
 
-  /* "resiliparse_dom/extract/html2text.pyx":936
+  /* "resiliparse_dom/extract/html2text.pyx":943
  *                        bint main_content=False,
  *                        bint list_bullets=True,
  *                        bint alt_texts=True,             # <<<<<<<<<<<<<<
  *                        bint links=False,
  *                        bint form_fields=False,
  */
-  __pyx_t_9 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 936, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 943, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
 
-  /* "resiliparse_dom/extract/html2text.pyx":937
+  /* "resiliparse_dom/extract/html2text.pyx":944
  *                        bint list_bullets=True,
  *                        bint alt_texts=True,
  *                        bint links=False,             # <<<<<<<<<<<<<<
  *                        bint form_fields=False,
  *                        bint noscript=False,
  */
-  __pyx_t_8 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 937, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 944, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
 
-  /* "resiliparse_dom/extract/html2text.pyx":938
+  /* "resiliparse_dom/extract/html2text.pyx":945
  *                        bint alt_texts=True,
  *                        bint links=False,
  *                        bint form_fields=False,             # <<<<<<<<<<<<<<
  *                        bint noscript=False,
  *                        bint comments=True,
  */
-  __pyx_t_7 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 938, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 945, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
 
-  /* "resiliparse_dom/extract/html2text.pyx":939
+  /* "resiliparse_dom/extract/html2text.pyx":946
  *                        bint links=False,
  *                        bint form_fields=False,
  *                        bint noscript=False,             # <<<<<<<<<<<<<<
  *                        bint comments=True,
  *                        skip_elements=None):
  */
-  __pyx_t_6 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 939, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyBool_FromLong(((int)0)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 946, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
 
-  /* "resiliparse_dom/extract/html2text.pyx":940
+  /* "resiliparse_dom/extract/html2text.pyx":947
  *                        bint form_fields=False,
  *                        bint noscript=False,
  *                        bint comments=True,             # <<<<<<<<<<<<<<
  *                        skip_elements=None):
  *     """
  */
-  __pyx_t_5 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 940, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyBool_FromLong(((int)1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 947, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "resiliparse_dom/extract/html2text.pyx":932
+  /* "resiliparse_dom/extract/html2text.pyx":939
  *     return False
  * 
  * def extract_plain_text(html,             # <<<<<<<<<<<<<<
  *                        preserve_formatting=True,
  *                        bint main_content=False,
  */
-  __pyx_t_4 = PyTuple_New(9); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(9); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 939, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(((PyObject *)Py_True));
   __Pyx_GIVEREF(((PyObject *)Py_True));
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, ((PyObject *)Py_True))) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, ((PyObject *)Py_True))) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_10);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_10)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_10)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_11);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_t_11)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_t_11)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_9);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 3, __pyx_t_9)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 3, __pyx_t_9)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_8);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 4, __pyx_t_8)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 4, __pyx_t_8)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_7);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 5, __pyx_t_7)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 5, __pyx_t_7)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_6);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 6, __pyx_t_6)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 6, __pyx_t_6)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 7, __pyx_t_5)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 7, __pyx_t_5)) __PYX_ERR(0, 939, __pyx_L1_error);
   __Pyx_INCREF(Py_None);
   __Pyx_GIVEREF(Py_None);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 8, Py_None)) __PYX_ERR(0, 932, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 8, Py_None)) __PYX_ERR(0, 939, __pyx_L1_error);
   __pyx_t_10 = 0;
   __pyx_t_11 = 0;
   __pyx_t_9 = 0;
@@ -15496,11 +15579,11 @@ if (!__Pyx_RefNanny) {
   __pyx_t_7 = 0;
   __pyx_t_6 = 0;
   __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_3extract_plain_text, 0, __pyx_n_s_extract_plain_text, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__9)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 932, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_15resiliparse_dom_7extract_9html2text_3extract_plain_text, 0, __pyx_n_s_extract_plain_text, NULL, __pyx_n_s_resiliparse_dom_extract_html2tex_2, __pyx_d, ((PyObject *)__pyx_codeobj__9)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 939, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_extract_plain_text, __pyx_t_5) < 0) __PYX_ERR(0, 932, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_extract_plain_text, __pyx_t_5) < 0) __PYX_ERR(0, 939, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
   /* "resiliparse_dom/extract/html2text.pyx":1

@@ -540,6 +540,17 @@ cdef inline bint _is_main_content_node(lxb_dom_node_t* node, size_t body_depth, 
     elif node.type != LXB_DOM_NODE_TYPE_ELEMENT:
         return True
 
+    # Lists in article content should be preserved regardless of depth
+    if node.local_name == LXB_TAG_UL and node.parent and (
+        node.parent.local_name in [LXB_TAG_ARTICLE, LXB_TAG_MAIN] or
+        regex_search_not_empty(get_node_attr_sv(node.parent, b'class'), article_cls_regex)
+    ):
+        return True
+
+    # Original list depth check, but only for navigation/menu lists
+    elif node.local_name == LXB_TAG_UL:
+        if _is_link_cluster(node, 0.2, 0):
+            return False
 
     # ------ Section 1: Tag name matching ------
 
@@ -562,10 +573,6 @@ cdef inline bint _is_main_content_node(lxb_dom_node_t* node, size_t body_depth, 
                 return True
             pnode = pnode.parent
         return False
-
-    elif node.local_name == LXB_TAG_UL:
-        if body_depth < 4 or _is_link_cluster(node, 0.2, 0):
-            return False
 
     # Teaser articles
     elif node.local_name == LXB_TAG_ARTICLE:
