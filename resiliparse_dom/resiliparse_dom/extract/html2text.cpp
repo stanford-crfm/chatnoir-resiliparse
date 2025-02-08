@@ -8321,7 +8321,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:             # <<<<<<<<<<<<<<
  *             if not output.empty() and output.back() != b'\n':
- *                 output.append(b'\t')
+ *                 output.append(b'\t\t')
  */
     __pyx_t_5 = (__pyx_v_opts.preserve_formatting >= FORMAT_BASIC);
     if (__pyx_t_5) {
@@ -8347,7 +8347,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
  *             if not output.empty() and output.back() != b'\n':             # <<<<<<<<<<<<<<
- *                 output.append(b'\t')
+ *                 output.append(b'\t\t')
  * 
  */
       __pyx_t_6 = (!__pyx_v_output.empty());
@@ -8364,12 +8364,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
         /* "resiliparse_dom/extract/html2text.pyx":430
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
  *             if not output.empty() and output.back() != b'\n':
- *                 output.append(b'\t')             # <<<<<<<<<<<<<<
+ *                 output.append(b'\t\t')             # <<<<<<<<<<<<<<
  * 
  *         output.append(element_text_prefix)
  */
         try {
-          __pyx_v_output.append(((char const *)"\t"));
+          __pyx_v_output.append(((char const *)"\t\t"));
         } catch(...) {
           #ifdef WITH_THREAD
           PyGILState_STATE __pyx_gilstate_save = __Pyx_PyGILState_Ensure();
@@ -8385,7 +8385,7 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:
  *             if not output.empty() and output.back() != b'\n':             # <<<<<<<<<<<<<<
- *                 output.append(b'\t')
+ *                 output.append(b'\t\t')
  * 
  */
       }
@@ -8395,12 +8395,12 @@ static std::string __pyx_f_15resiliparse_dom_7extract_9html2text__serialize_extr
  * 
  *         if opts.preserve_formatting >= FormattingOpts.FORMAT_BASIC and current_node.tag_id in [LXB_TAG_TD, LXB_TAG_TH]:             # <<<<<<<<<<<<<<
  *             if not output.empty() and output.back() != b'\n':
- *                 output.append(b'\t')
+ *                 output.append(b'\t\t')
  */
     }
 
     /* "resiliparse_dom/extract/html2text.pyx":432
- *                 output.append(b'\t')
+ *                 output.append(b'\t\t')
  * 
  *         output.append(element_text_prefix)             # <<<<<<<<<<<<<<
  *         element_text_prefix.clear()
