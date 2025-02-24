@@ -549,7 +549,7 @@ cdef inline bint _is_main_content_node(lxb_dom_node_t* node, size_t body_depth, 
 
     # Original list depth check, but only for navigation/menu lists
     elif node.local_name == LXB_TAG_UL:
-        if _is_link_cluster(node, 0.2, 0):
+        if _is_link_cluster(node, 1, 0):
             return False
 
     # ------ Section 1: Tag name matching ------
