@@ -96,6 +96,21 @@ jobs:
           sudo make install
           cd ../..
           
+          # Apply lexbor API compatibility patch for html.pyx
+          cat > lexbor_api_patch.sed << 'EOF'
+          s/lxb_selectors_t/lxb_css_selectors_t/g
+          s/lxb_selectors_create/lxb_css_selectors_create/g
+          s/lxb_selectors_init/lxb_css_selectors_init/g
+          s/lxb_selectors_destroy/lxb_css_selectors_destroy/g
+          s/lxb_selectors_find/lxb_css_selectors_find/g
+          s/lxb_selectors_cb_f/lxb_css_selectors_cb_f/g
+          EOF
+          
+          # Apply the patch to the source files
+          echo "Applying lexbor API compatibility patch"
+          sed -i.bak -f lexbor_api_patch.sed resiliparse_dom/resiliparse_dom/parse/html.pyx
+          sed -i.bak -f lexbor_api_patch.sed resiliparse_dom/resiliparse_inc/lexbor.pxd
+          
           # Install uchardet
           brew install uchardet
           
@@ -289,10 +304,6 @@ jobs:
           echo "LZ4 include path: $LZ4_INCLUDE"
           echo "LZ4 library path: $LZ4_LIB"
           
-          # List the contents of the LZ4 include directory
-          echo "LZ4 include directory contents:"
-          ls -la $LZ4_INCLUDE
-          
           # Create a local directory for LZ4 headers in the user's home directory
           mkdir -p $HOME/lz4_include
           cp $(brew --prefix lz4)/include/lz4*.h $HOME/lz4_include/
@@ -324,6 +335,21 @@ jobs:
           make
           sudo make install
           cd ../..
+          
+          # Apply lexbor API compatibility patch for html.pyx
+          cat > lexbor_api_patch.sed << 'EOF'
+          s/lxb_selectors_t/lxb_css_selectors_t/g
+          s/lxb_selectors_create/lxb_css_selectors_create/g
+          s/lxb_selectors_init/lxb_css_selectors_init/g
+          s/lxb_selectors_destroy/lxb_css_selectors_destroy/g
+          s/lxb_selectors_find/lxb_css_selectors_find/g
+          s/lxb_selectors_cb_f/lxb_css_selectors_cb_f/g
+          EOF
+          
+          # Apply the patch to the source files
+          echo "Applying lexbor API compatibility patch"
+          sed -i.bak -f lexbor_api_patch.sed resiliparse_dom/resiliparse_dom/parse/html.pyx
+          sed -i.bak -f lexbor_api_patch.sed resiliparse_dom/resiliparse_inc/lexbor.pxd
           
           # Install uchardet
           brew install uchardet
