@@ -6,6 +6,10 @@ on:
       - "v*.*.*"
   workflow_dispatch:  # Allow manual trigger
 
+env:
+  PYTHON_VERSION: "3.10"
+  MACOSX_DEPLOYMENT_TARGET: "12.0"
+
 jobs:
   # First build resiliparse_dom as fastwarc depends on it
   build-resiliparse-dom:
@@ -17,96 +21,49 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      # Install system dependencies for Linux
-      - name: Install Linux dependencies
+      # Setup QEMU for Linux builds
+      - name: Set up QEMU
         if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y liblz4-dev zlib1g-dev
-          
-          # Install lexbor from source (since it's not in default repos)
-          git clone https://github.com/lexbor/lexbor.git
-          cd lexbor
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          make
-          sudo make install
-          sudo ldconfig
-          cd ../..
-          
-          # Install Google RE2
-          git clone https://github.com/google/re2.git
-          cd re2
-          make
-          sudo make install
-          sudo ldconfig
-          cd ..
-          
-          # Install abseil-cpp
-          git clone https://github.com/abseil/abseil-cpp.git
-          cd abseil-cpp
-          mkdir build && cd build
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_STANDARD=17 ..
-          make
-          sudo make install
-          sudo ldconfig
-          cd ../..
-          
-          # Install uchardet
-          git clone https://gitlab.freedesktop.org/uchardet/uchardet.git
-          cd uchardet
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 ..
-          make
-          sudo make install
-          sudo ldconfig
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
 
-      # Install dependencies for macOS
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew install lz4 re2 abseil zlib
-          
-          # Install lexbor from source
-          git clone https://github.com/lexbor/lexbor.git
-          cd lexbor
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          make
-          sudo make install
-          cd ../..
-          
-          # Install uchardet
-          brew install uchardet
+      # Cache Vcpkg for macOS and Windows
+      - name: Cache Vcpkg
+        uses: actions/cache@v4
+        id: cache-vcpkg
+        if: runner.os == 'macOS' || runner.os == 'Windows'
+        with:
+          path: ./vcpkg_installed
+          key: ${{ runner.os }}-vcpkg-1
 
-      # Install dependencies for Windows
-      - name: Install Windows dependencies
-        if: runner.os == 'Windows'
+      # Install dependencies for macOS and Windows
+      - name: Install Vcpkg Dependencies
+        if: (runner.os == 'macOS' || runner.os == 'Windows') && steps.cache-vcpkg.outputs.cache-hit != 'true'
+        shell: bash
         run: |
-          # Use vcpkg to install dependencies
-          git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
-          C:\vcpkg\bootstrap-vcpkg.bat
-          C:\vcpkg\vcpkg install lz4:x64-windows re2:x64-windows abseil:x64-windows zlib:x64-windows
-          
-          # Build and install lexbor
-          git clone https://github.com/lexbor/lexbor.git C:\lexbor
-          cd C:\lexbor
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          cmake --build . --config Release
-          cmake --install . --config Release
-          
-          # Install uchardet
-          git clone https://gitlab.freedesktop.org/uchardet/uchardet.git C:\uchardet
-          cd C:\uchardet
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 ..
-          cmake --build . --config Release
-          cmake --install . --config Release
+          set -xe
+
+          # Windows
+          if [ -d /c/vcpkg ]; then
+            git clone https://github.com/Microsoft/vcpkg C:/vcpkg
+            C:/vcpkg/bootstrap-vcpkg.bat
+            C:/vcpkg/vcpkg install lz4:x64-windows re2:x64-windows abseil:x64-windows zlib:x64-windows
+
+          # MacOS
+          elif [ "$(uname -s)" == "Darwin" ]; then
+            brew install lz4 re2 abseil zlib uchardet
+            
+            # Install lexbor from source
+            git clone https://github.com/lexbor/lexbor.git
+            cd lexbor
+            mkdir build && cd build
+            cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+            make
+            sudo make install
+          fi
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
@@ -115,53 +72,26 @@ jobs:
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./resiliparse_dom
         env:
+          # Skip musllinux and use only specific Python versions
+          CIBW_SKIP: "*-musllinux*"
           CIBW_BUILD: "cp3*"
-          CIBW_ARCHS: "auto64"
-          # For Linux, install dependencies in the manylinux containers
-          CIBW_BEFORE_ALL_LINUX: |
-            yum install -y lz4-devel zlib-devel || (yum install -y epel-release && yum install -y lz4-devel zlib-devel) || (apt-get update && apt-get install -y liblz4-dev zlib1g-dev)
-            # Install cmake for building dependencies
-            yum install -y cmake3 || yum install -y cmake || apt-get install -y cmake
+          
+          # Set architecture
+          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_LINUX: "x86_64"
+          
+          # Use the project's custom container for Linux builds
+          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/chatnoir-eu/resiliparse-manylinux_2_28_x86_64:latest
+          
+          # MacOS repair command
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >-
+            DYLD_LIBRARY_PATH=$(pwd)/vcpkg_installed/$(echo {delocate_archs} | sed s/x86_64/x64/)-osx/lib
+            delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
             
-            # Install lexbor
-            git clone https://github.com/lexbor/lexbor.git
-            cd lexbor
-            mkdir build && cd build
-            cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-            make
-            make install
-            ldconfig
-            cd ../..
-            
-            # Install Google RE2
-            git clone --branch 2024-04-01 https://github.com/google/re2.git
-            cd re2
-            make
-            make install
-            ldconfig
-            cd ..
-            
-            # Install abseil-cpp
-            git clone --branch 20240116.1 https://github.com/abseil/abseil-cpp.git
-            cd abseil-cpp
-            mkdir build && cd build
-            cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_STANDARD=17 ..
-            make
-            make install
-            ldconfig
-            cd ../..
-            
-            # Install uchardet
-            git clone https://gitlab.freedesktop.org/uchardet/uchardet.git
-            cd uchardet
-            mkdir build && cd build
-            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 ..
-            make
-            make install
-            ldconfig
-          # For Windows, set the path to vcpkg include and lib directories
-          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\uchardet\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\uchardet\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
-          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
+          # Windows build and repair setup
+          CIBW_BEFORE_BUILD_WINDOWS: "python -m pip install delvewheel"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >-
+            delvewheel repair --add-path vcpkg_installed\x64-windows\bin -w {dest_dir} {wheel}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -179,163 +109,95 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      # Install system dependencies for Linux
-      - name: Install Linux dependencies
+      # Setup QEMU for Linux builds
+      - name: Set up QEMU
         if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y liblz4-dev zlib1g-dev
-          
-          # Install lexbor from source (since it's not in default repos)
-          git clone https://github.com/lexbor/lexbor.git
-          cd lexbor
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          make
-          sudo make install
-          sudo ldconfig
-          cd ../..
-          
-          # Install Google RE2
-          git clone https://github.com/google/re2.git
-          cd re2
-          make
-          sudo make install
-          sudo ldconfig
-          cd ..
-          
-          # Install abseil-cpp
-          git clone https://github.com/abseil/abseil-cpp.git
-          cd abseil-cpp
-          mkdir build && cd build
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_STANDARD=17 ..
-          make
-          sudo make install
-          sudo ldconfig
-          cd ../..
-          
-          # Install uchardet
-          git clone https://gitlab.freedesktop.org/uchardet/uchardet.git
-          cd uchardet
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 ..
-          make
-          sudo make install
-          sudo ldconfig
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
 
-      # Install dependencies for macOS
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew install lz4 re2 abseil zlib
-          
-          # Install lexbor from source
-          git clone https://github.com/lexbor/lexbor.git
-          cd lexbor
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          make
-          sudo make install
-          cd ../..
-          
-          # Install uchardet
-          brew install uchardet
+      # Cache Vcpkg for macOS and Windows
+      - name: Cache Vcpkg
+        uses: actions/cache@v4
+        id: cache-vcpkg
+        if: runner.os == 'macOS' || runner.os == 'Windows'
+        with:
+          path: ./vcpkg_installed
+          key: ${{ runner.os }}-vcpkg-1
 
-      # Install dependencies for Windows
-      - name: Install Windows dependencies
-        if: runner.os == 'Windows'
+      # Install dependencies for macOS and Windows
+      - name: Install Vcpkg Dependencies
+        if: (runner.os == 'macOS' || runner.os == 'Windows') && steps.cache-vcpkg.outputs.cache-hit != 'true'
+        shell: bash
         run: |
-          # Use vcpkg to install dependencies
-          git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
-          C:\vcpkg\bootstrap-vcpkg.bat
-          C:\vcpkg\vcpkg install lz4:x64-windows re2:x64-windows abseil:x64-windows zlib:x64-windows
-          
-          # Build and install lexbor
-          git clone https://github.com/lexbor/lexbor.git C:\lexbor
-          cd C:\lexbor
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          cmake --build . --config Release
-          cmake --install . --config Release
-          
-          # Install uchardet
-          git clone https://gitlab.freedesktop.org/uchardet/uchardet.git C:\uchardet
-          cd C:\uchardet
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 ..
-          cmake --build . --config Release
-          cmake --install . --config Release
+          set -xe
+
+          # Windows
+          if [ -d /c/vcpkg ]; then
+            git clone https://github.com/Microsoft/vcpkg C:/vcpkg
+            C:/vcpkg/bootstrap-vcpkg.bat
+            C:/vcpkg/vcpkg install lz4:x64-windows re2:x64-windows abseil:x64-windows zlib:x64-windows
+
+          # MacOS
+          elif [ "$(uname -s)" == "Darwin" ]; then
+            brew install lz4 re2 abseil zlib uchardet
+            
+            # Install lexbor from source
+            git clone https://github.com/lexbor/lexbor.git
+            cd lexbor
+            mkdir build && cd build
+            cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+            make
+            sudo make install
+          fi
 
       # Setup resiliparse_inc header files for fastwarc build
       - name: Setup resiliparse headers
         run: |
           # Copy resiliparse_inc directory to fastwarc
           mkdir -p fastwarc/resiliparse_inc
-          cp -r resiliparse_dom/resiliparse_inc/* fastwarc/resiliparse_inc/
+          cp -r resiliparse_dom/resiliparse_inc/* fastwarc/resiliparse_inc/ || echo "Failed to copy headers"
+          find resiliparse_dom -name "resiliparse_inc" -type d
         shell: bash
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
 
+      - name: Download resiliparse_dom wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: resiliparse-dom-wheels-${{ matrix.os }}
+          path: ./resiliparse_dom_wheels
+
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./fastwarc
         env:
+          # Skip musllinux and use only specific Python versions
+          CIBW_SKIP: "*-musllinux*"
           CIBW_BUILD: "cp3*"
-          CIBW_ARCHS: "auto64"
-          # For Linux, install dependencies in the manylinux containers
-          CIBW_BEFORE_ALL_LINUX: |
-            yum install -y lz4-devel zlib-devel || (yum install -y epel-release && yum install -y lz4-devel zlib-devel) || (apt-get update && apt-get install -y liblz4-dev zlib1g-dev)
-            # Install cmake for building dependencies
-            yum install -y cmake3 || yum install -y cmake || apt-get install -y cmake
+          
+          # Set architecture
+          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_LINUX: "x86_64"
+          
+          # Use the project's custom container for Linux builds
+          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/chatnoir-eu/resiliparse-manylinux_2_28_x86_64:latest
+          
+          # Setup container to have access to resiliparse_inc headers
+          CIBW_ENVIRONMENT: "RESILIPARSE_ROOT=/project"
+          
+          # MacOS repair command
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >-
+            DYLD_LIBRARY_PATH=$(pwd)/vcpkg_installed/$(echo {delocate_archs} | sed s/x86_64/x64/)-osx/lib
+            delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
             
-            # Install lexbor
-            git clone https://github.com/lexbor/lexbor.git
-            cd lexbor
-            mkdir build && cd build
-            cmake -DCMAKE_BUILD_TYPE=Release -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-            make
-            make install
-            ldconfig
-            cd ../..
-            
-            # Install Google RE2
-            git clone --branch 2024-04-01 https://github.com/google/re2.git
-            cd re2
-            make
-            make install
-            ldconfig
-            cd ..
-            
-            # Install abseil-cpp
-            git clone --branch 20240116.1 https://github.com/abseil/abseil-cpp.git
-            cd abseil-cpp
-            mkdir build && cd build
-            cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_STANDARD=17 ..
-            make
-            make install
-            ldconfig
-            cd ../..
-            
-            # Install uchardet
-            git clone https://gitlab.freedesktop.org/uchardet/uchardet.git
-            cd uchardet
-            mkdir build && cd build
-            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 ..
-            make
-            make install
-            ldconfig
-            
-            # Copy resiliparse_inc headers into the container
-            mkdir -p /project/resiliparse_inc
-            cp -r /host/project/resiliparse_inc/* /project/resiliparse_inc/ || echo "Failed to copy headers, checking path" && ls -la /host/
-          # For Windows, set the path to vcpkg include and lib directories
-          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\uchardet\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\uchardet\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
-          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
+          # Windows build and repair setup
+          CIBW_BEFORE_BUILD_WINDOWS: "python -m pip install delvewheel"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >-
+            delvewheel repair --add-path vcpkg_installed\x64-windows\bin -w {dest_dir} {wheel}
 
       - uses: actions/upload-artifact@v4
         with:
