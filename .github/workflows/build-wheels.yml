@@ -157,8 +157,9 @@ jobs:
       # Setup resiliparse_inc header files for fastwarc build
       - name: Setup resiliparse headers
         run: |
+          # Copy resiliparse_inc directory to fastwarc
           mkdir -p fastwarc/resiliparse_inc
-          cp -r resiliparse_dom/include/* fastwarc/resiliparse_inc/
+          cp -r resiliparse_dom/resiliparse_inc/* fastwarc/resiliparse_inc/
         shell: bash
 
       - name: Install cibuildwheel
@@ -184,7 +185,7 @@ jobs:
             ldconfig
             # Copy resiliparse_inc headers into the container
             mkdir -p /project/resiliparse_inc
-            cp -r /host/home/project/resiliparse_inc/* /project/resiliparse_inc/
+            cp -r /host/project/resiliparse_inc/* /project/resiliparse_inc/ || echo "Failed to copy headers, checking path" && ls -la /host/
           # For Windows, set the path to vcpkg include and lib directories
           CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
           CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
