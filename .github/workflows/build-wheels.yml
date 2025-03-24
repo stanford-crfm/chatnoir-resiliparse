@@ -91,7 +91,7 @@ jobs:
           package-dir: resiliparse_dom
           output-dir: wheelhouse
         env:
-          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse_dom
+          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {package}/tests
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
@@ -130,7 +130,7 @@ jobs:
           package-dir: resiliparse_dom
           output-dir: wheelhouse
         env:
-          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse_dom
+          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {package}/tests
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
@@ -181,6 +181,11 @@ jobs:
           set -e
           python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
 
+      - name: Run Tests
+        run: |
+          export LD_PRELOAD="$(ldconfig -p | grep libasan | head -n1 | awk '{print $4}')"
+          python${PYTHON_VERSION} -m pytest --capture=sys --verbose resiliparse_dom/tests/
+
   build-coverage:
     runs-on: ubuntu-latest
     container:
@@ -199,6 +204,9 @@ jobs:
           set -e
           python${PYTHON_VERSION} -m pip install cython codecov-cli
           python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
+
+      - name: Run Tests
+        run: python${PYTHON_VERSION} -m pytest --cov --cov-report xml --junitxml=report.junit.xml resiliparse_dom/tests/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -244,6 +252,12 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [ build-wheels, build-wheels-aarch64, build-asan, build-sdist, build-documentation ]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Download Wheels
         uses: actions/download-artifact@v4
         with:
@@ -254,3 +268,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sdist
+          
+      - name: Push Git Tag
+        if: success()
+        run: |
+          VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//')
+          
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+          
+          # For a regular release, the tag would already exist
+          # This step is mainly useful for hotfixes or specific version pushes
+          if ! git show-ref --tags v$VERSION; then
+            git tag -a v$VERSION -m "Version $VERSION"
+            git push origin v$VERSION
+          fi
