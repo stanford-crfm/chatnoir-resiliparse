@@ -263,7 +263,7 @@ jobs:
         env:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_WINDOWS: "AMD64"
-          CIBW_ENVIRONMENT_WINDOWS: >-
+          CIBW_ENVIRONMENT_WINDOWS: |
             INCLUDE=C:\abseil\install\include;C:\re2\install\include;C:\lexbor\include;C:\vcpkg\installed\x64-windows\include;%INCLUDE%
             LIB=C:\abseil\install\lib;C:\re2\install\lib;C:\lexbor\lib;C:\vcpkg\installed\x64-windows\lib;%LIB%
             PATH=C:\vcpkg\installed\x64-windows\bin;%PATH%
@@ -542,7 +542,7 @@ jobs:
         env:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_WINDOWS: "AMD64"
-          CIBW_ENVIRONMENT_WINDOWS: >-
+          CIBW_ENVIRONMENT_WINDOWS: |
             INCLUDE=C:\abseil\install\include;C:\re2\install\include;C:\lexbor\include;C:\vcpkg\installed\x64-windows\include;%INCLUDE%
             LIB=C:\abseil\install\lib;C:\re2\install\lib;C:\lexbor\lib;C:\vcpkg\installed\x64-windows\lib;%LIB%
             PATH=C:\vcpkg\installed\x64-windows\bin;%PATH%
