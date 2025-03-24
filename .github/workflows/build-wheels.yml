@@ -7,93 +7,7 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  build-fastwarc:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      # Install system dependencies for Linux
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y liblz4-dev
-          # Install lexbor from source (since it's not in default repos)
-          git clone https://github.com/lexbor/lexbor.git
-          cd lexbor
-          mkdir build && cd build
-          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          make
-          sudo make install
-          sudo ldconfig
-
-      # Install dependencies for macOS
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew install lz4
-          # Install lexbor from source
-          git clone https://github.com/lexbor/lexbor.git
-          cd lexbor
-          mkdir build && cd build
-          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          make
-          sudo make install
-
-      # Install dependencies for Windows
-      - name: Install Windows dependencies
-        if: runner.os == 'Windows'
-        run: |
-          # Use vcpkg to install lz4
-          git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
-          C:\vcpkg\bootstrap-vcpkg.bat
-          C:\vcpkg\vcpkg install lz4:x64-windows
-          
-          # Build and install lexbor
-          git clone https://github.com/lexbor/lexbor.git C:\lexbor
-          cd C:\lexbor
-          mkdir build
-          cd build
-          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-          cmake --build . --config Release
-          cmake --install . --config Release
-
-      - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel
-
-      - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
-        working-directory: ./fastwarc
-        env:
-          CIBW_BUILD: "cp3*"
-          CIBW_ARCHS: "auto64"
-          # For Linux, install dependencies in the manylinux containers
-          CIBW_BEFORE_ALL_LINUX: |
-            yum install -y lz4-devel || (yum install -y epel-release && yum install -y lz4-devel) || (apt-get update && apt-get install -y liblz4-dev)
-            # Install cmake for lexbor build
-            yum install -y cmake3 || yum install -y cmake || apt-get install -y cmake
-            git clone https://github.com/lexbor/lexbor.git
-            cd lexbor
-            mkdir build && cd build
-            cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
-            make
-            make install
-            ldconfig
-          # For Windows, set the path to vcpkg include and lib directories
-          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
-          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: fastwarc-wheels-${{ matrix.os }}
-          path: fastwarc/wheelhouse/*.whl
-
+  # First build resiliparse_dom as fastwarc depends on it
   build-resiliparse-dom:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -180,6 +94,105 @@ jobs:
         with:
           name: resiliparse-dom-wheels-${{ matrix.os }}
           path: resiliparse_dom/wheelhouse/*.whl
+
+  # Then build fastwarc with resiliparse_inc headers available
+  build-fastwarc:
+    needs: build-resiliparse-dom
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Install system dependencies for Linux
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y liblz4-dev
+          # Install lexbor from source (since it's not in default repos)
+          git clone https://github.com/lexbor/lexbor.git
+          cd lexbor
+          mkdir build && cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          make
+          sudo make install
+          sudo ldconfig
+
+      # Install dependencies for macOS
+      - name: Install macOS dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install lz4
+          # Install lexbor from source
+          git clone https://github.com/lexbor/lexbor.git
+          cd lexbor
+          mkdir build && cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          make
+          sudo make install
+
+      # Install dependencies for Windows
+      - name: Install Windows dependencies
+        if: runner.os == 'Windows'
+        run: |
+          # Use vcpkg to install lz4
+          git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
+          C:\vcpkg\bootstrap-vcpkg.bat
+          C:\vcpkg\vcpkg install lz4:x64-windows
+          
+          # Build and install lexbor
+          git clone https://github.com/lexbor/lexbor.git C:\lexbor
+          cd C:\lexbor
+          mkdir build
+          cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          cmake --build . --config Release
+          cmake --install . --config Release
+
+      # Setup resiliparse_inc header files for fastwarc build
+      - name: Setup resiliparse headers
+        run: |
+          mkdir -p fastwarc/resiliparse_inc
+          cp -r resiliparse_dom/include/* fastwarc/resiliparse_inc/
+        shell: bash
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        working-directory: ./fastwarc
+        env:
+          CIBW_BUILD: "cp3*"
+          CIBW_ARCHS: "auto64"
+          # For Linux, install dependencies in the manylinux containers
+          CIBW_BEFORE_ALL_LINUX: |
+            yum install -y lz4-devel || (yum install -y epel-release && yum install -y lz4-devel) || (apt-get update && apt-get install -y liblz4-dev)
+            # Install cmake for lexbor build
+            yum install -y cmake3 || yum install -y cmake || apt-get install -y cmake
+            git clone https://github.com/lexbor/lexbor.git
+            cd lexbor
+            mkdir build && cd build
+            cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+            make
+            make install
+            ldconfig
+            # Copy resiliparse_inc headers into the container
+            mkdir -p /project/resiliparse_inc
+            cp -r /host/home/project/resiliparse_inc/* /project/resiliparse_inc/
+          # For Windows, set the path to vcpkg include and lib directories
+          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
+          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fastwarc-wheels-${{ matrix.os }}
+          path: fastwarc/wheelhouse/*.whl
 
   release:
     needs: [build-fastwarc, build-resiliparse-dom]
