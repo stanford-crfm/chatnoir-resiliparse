@@ -62,3 +62,21 @@ RUN set -x \
             -B build \
         && cmake --build build -j$(nproc) --target install) \
     && rm -rf re2*
+
+# Make sure RE2 headers are in the correct location
+RUN set -x \
+    && mkdir -p /usr/include/re2 \
+    && find /usr -name "re2.h" -exec cp -f {} /usr/include/re2/ \; \
+    && find /usr -path "*/re2/*.h" -exec cp -f {} /usr/include/re2/ \; \
+    && echo "RE2 headers in /usr/include:" \
+    && find /usr/include -name "*re2*" \
+    && echo "Setting up additional symlinks:" \
+    && ln -sf /usr/include/re2/re2.h /usr/include/ \
+    && ldconfig
+
+# Final verification of installed dependencies
+RUN set -x \
+    && echo "Verifying dependencies:" \
+    && ldconfig -p | grep -E 're2|absl|lexbor|uchardet|lz4' \
+    && echo "Include files:" \
+    && find /usr/include -type f -name "*.h" | grep -E 're2|absl|lexbor|uchardet|lz4'

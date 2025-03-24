@@ -177,19 +177,39 @@ jobs:
       - name: Build Linux wheels
         if: runner.os == 'Linux'
         run: |
+          # Debug information about the Docker image
+          docker run --rm manylinux-resiliparse:latest find /usr -name "re2.h" || echo "re2.h not found"
+          docker run --rm manylinux-resiliparse:latest find /usr -name "libabsl*" || echo "libabsl not found"
+          docker run --rm manylinux-resiliparse:latest find /usr -name "liblexbor*" || echo "liblexbor not found"
+          
+          # Run cibuildwheel with additional debugging environment
+          CIBW_ENVIRONMENT_LINUX="CPATH=/usr/include:/usr/local/include:${CPATH} LIBRARY_PATH=/usr/lib64:/usr/lib:/usr/local/lib64:/usr/local/lib:${LIBRARY_PATH} PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH} PYTHONDONTWRITEBYTECODE=1" \
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./resiliparse_dom
         env:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_LINUX: "x86_64"
-          CIBW_ENVIRONMENT: "PYTHONDONTWRITEBYTECODE=1"
           # Use the custom Docker container we built
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux-resiliparse:latest
           CIBW_BEFORE_ALL_LINUX: |
             # Make sure the linker can find all libraries
             ldconfig
             # Show available libraries
+            echo "Installed libraries:"
             ldconfig -p | grep -E 're2|absl|lexbor|uchardet|lz4'
+            
+            # Create debug links in case paths are incorrect
+            mkdir -p /usr/include/re2
+            find /usr -name "re2.h" -exec cp -f {} /usr/include/re2/ \;
+            
+            # Debug information to check paths
+            echo "Path environment:"
+            echo "CPATH=$CPATH"
+            echo "LIBRARY_PATH=$LIBRARY_PATH"
+            echo "Contents of /usr/include directory:"
+            ls -la /usr/include
+            echo "Contents of /usr/local/include directory:"
+            ls -la /usr/local/include 2>/dev/null || echo "Directory not found"
 
       - name: Build macOS wheels
         if: runner.os == 'macOS'
@@ -432,19 +452,40 @@ jobs:
       - name: Build Linux wheels
         if: runner.os == 'Linux'
         run: |
+          # Debug information about the Docker image
+          docker run --rm manylinux-resiliparse:latest find /usr -name "re2.h" || echo "re2.h not found"
+          docker run --rm manylinux-resiliparse:latest find /usr -name "libabsl*" || echo "libabsl not found"
+          docker run --rm manylinux-resiliparse:latest find /usr -name "liblexbor*" || echo "liblexbor not found"
+          
+          # Run cibuildwheel with additional debugging environment
+          CIBW_ENVIRONMENT_LINUX="CPATH=/usr/include:/usr/local/include:${CPATH} LIBRARY_PATH=/usr/lib64:/usr/lib:/usr/local/lib64:/usr/local/lib:${LIBRARY_PATH} PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH} PYTHONDONTWRITEBYTECODE=1" \
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./fastwarc
         env:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_LINUX: "x86_64"
-          CIBW_ENVIRONMENT: "PYTHONDONTWRITEBYTECODE=1"
           # Use the custom Docker container we built
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux-resiliparse:latest
           CIBW_BEFORE_ALL_LINUX: |
             # Make sure the linker can find all libraries
             ldconfig
             # Show available libraries
+            echo "Installed libraries:"
             ldconfig -p | grep -E 're2|absl|lexbor|uchardet|lz4'
+            
+            # Create debug links in case paths are incorrect
+            mkdir -p /usr/include/re2
+            find /usr -name "re2.h" -exec cp -f {} /usr/include/re2/ \;
+            
+            # Debug information to check paths
+            echo "Path environment:"
+            echo "CPATH=$CPATH"
+            echo "LIBRARY_PATH=$LIBRARY_PATH"
+            echo "Contents of /usr/include directory:"
+            ls -la /usr/include
+            echo "Contents of /usr/local/include directory:"
+            ls -la /usr/local/include 2>/dev/null || echo "Directory not found"
+            
             # Copy resiliparse_inc headers into the container
             mkdir -p /project/resiliparse_inc
             cp -r /host/project/resiliparse_inc/* /project/resiliparse_inc/ || echo "Failed to copy headers, checking path" && ls -la /host/
