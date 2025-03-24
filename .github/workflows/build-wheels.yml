@@ -60,6 +60,14 @@ jobs:
           echo "LZ4 include path: $LZ4_INCLUDE"
           echo "LZ4 library path: $LZ4_LIB"
           
+          # List the contents of the LZ4 include directory
+          echo "LZ4 include directory contents:"
+          ls -la $LZ4_INCLUDE
+          
+          # Create a local directory for LZ4 headers in the user's home directory
+          mkdir -p $HOME/lz4_include
+          cp $(brew --prefix lz4)/include/lz4*.h $HOME/lz4_include/
+          
           # Explicitly install specific version of Abseil
           git clone https://github.com/abseil/abseil-cpp.git --branch ${{ env.ABSEIL_VERSION }}
           cd abseil-cpp
@@ -91,15 +99,17 @@ jobs:
           # Install uchardet
           brew install uchardet
           
-          # Create symbolic links to make sure headers are found
-          mkdir -p /usr/local/include/lz4
-          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/
-          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
+          # Create LZ4 directories with sudo and copy headers
+          sudo mkdir -p /usr/local/include/lz4
+          # Copy LZ4 headers to both locations
+          sudo cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/
+          sudo cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
           
           # Set environment variables for this job
-          echo "CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH" >> $GITHUB_ENV
+          echo "CPATH=$HOME/lz4_include:$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH" >> $GITHUB_ENV
           echo "LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          echo "LZ4_PREFIX=$(brew --prefix lz4)" >> $GITHUB_ENV
 
       # Install dependencies for Windows
       - name: Install Windows dependencies
@@ -176,10 +186,21 @@ jobs:
           echo "CPATH: $CPATH"
           echo "LIBRARY_PATH: $LIBRARY_PATH"
           echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          echo "LZ4_PREFIX: $LZ4_PREFIX"
           
           # Find LZ4 installation
-          ls -la $(brew --prefix lz4)/include
-          ls -la $(brew --prefix lz4)/lib
+          echo "LZ4 include directory contents:"
+          ls -la "$LZ4_PREFIX/include"
+          echo "LZ4 lib directory contents:"
+          ls -la "$LZ4_PREFIX/lib"
+          echo "Home directory LZ4 include contents:"
+          ls -la "$HOME/lz4_include"
+          
+          # Print the contents of /usr/local/include to verify our headers
+          echo "Contents of /usr/local/include:"
+          ls -la /usr/local/include | grep lz4
+          echo "Contents of /usr/local/include/lz4:"
+          ls -la /usr/local/include/lz4 || echo "Directory not found"
           
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./resiliparse_dom
@@ -187,15 +208,17 @@ jobs:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ENVIRONMENT_MACOS: >-
-            CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH
-            LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH
-            PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH
+            CPATH=$HOME/lz4_include:$LZ4_PREFIX/include:/usr/local/include:$CPATH
+            LIBRARY_PATH=$LZ4_PREFIX/lib:/usr/local/lib:$LIBRARY_PATH
+            PKG_CONFIG_PATH=$LZ4_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
             MACOSX_DEPLOYMENT_TARGET=${{ env.MACOSX_DEPLOYMENT_TARGET }}
+            LZ4_PREFIX=$LZ4_PREFIX
+            HOME=$HOME
           CIBW_BEFORE_BUILD_MACOS: >-
             brew install pkg-config &&
-            mkdir -p /usr/local/include/lz4 &&
-            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/ &&
-            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
+            mkdir -p $HOME/lz4_include_cibw &&
+            cp -f $LZ4_PREFIX/include/lz4*.h $HOME/lz4_include_cibw/ &&
+            export CPATH=$HOME/lz4_include_cibw:$CPATH
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}"
 
       - name: Build Windows wheels
@@ -262,6 +285,14 @@ jobs:
           echo "LZ4 include path: $LZ4_INCLUDE"
           echo "LZ4 library path: $LZ4_LIB"
           
+          # List the contents of the LZ4 include directory
+          echo "LZ4 include directory contents:"
+          ls -la $LZ4_INCLUDE
+          
+          # Create a local directory for LZ4 headers in the user's home directory
+          mkdir -p $HOME/lz4_include
+          cp $(brew --prefix lz4)/include/lz4*.h $HOME/lz4_include/
+          
           # Explicitly install specific version of Abseil
           git clone https://github.com/abseil/abseil-cpp.git --branch ${{ env.ABSEIL_VERSION }}
           cd abseil-cpp
@@ -293,15 +324,17 @@ jobs:
           # Install uchardet
           brew install uchardet
           
-          # Create symbolic links to make sure headers are found
-          mkdir -p /usr/local/include/lz4
-          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/
-          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
+          # Create LZ4 directories with sudo and copy headers
+          sudo mkdir -p /usr/local/include/lz4
+          # Copy LZ4 headers to both locations
+          sudo cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/
+          sudo cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
           
           # Set environment variables for this job
-          echo "CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH" >> $GITHUB_ENV
+          echo "CPATH=$HOME/lz4_include:$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH" >> $GITHUB_ENV
           echo "LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          echo "LZ4_PREFIX=$(brew --prefix lz4)" >> $GITHUB_ENV
 
       # Install dependencies for Windows
       - name: Install Windows dependencies
@@ -396,10 +429,21 @@ jobs:
           echo "CPATH: $CPATH"
           echo "LIBRARY_PATH: $LIBRARY_PATH"
           echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          echo "LZ4_PREFIX: $LZ4_PREFIX"
           
           # Find LZ4 installation
-          ls -la $(brew --prefix lz4)/include
-          ls -la $(brew --prefix lz4)/lib
+          echo "LZ4 include directory contents:"
+          ls -la "$LZ4_PREFIX/include"
+          echo "LZ4 lib directory contents:"
+          ls -la "$LZ4_PREFIX/lib"
+          echo "Home directory LZ4 include contents:"
+          ls -la "$HOME/lz4_include"
+          
+          # Print the contents of /usr/local/include to verify our headers
+          echo "Contents of /usr/local/include:"
+          ls -la /usr/local/include | grep lz4
+          echo "Contents of /usr/local/include/lz4:"
+          ls -la /usr/local/include/lz4 || echo "Directory not found"
           
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./fastwarc
@@ -407,15 +451,17 @@ jobs:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ENVIRONMENT_MACOS: >-
-            CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH
-            LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH
-            PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH
+            CPATH=$HOME/lz4_include:$LZ4_PREFIX/include:/usr/local/include:$CPATH
+            LIBRARY_PATH=$LZ4_PREFIX/lib:/usr/local/lib:$LIBRARY_PATH
+            PKG_CONFIG_PATH=$LZ4_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
             MACOSX_DEPLOYMENT_TARGET=${{ env.MACOSX_DEPLOYMENT_TARGET }}
+            LZ4_PREFIX=$LZ4_PREFIX
+            HOME=$HOME
           CIBW_BEFORE_BUILD_MACOS: >-
             brew install pkg-config &&
-            mkdir -p /usr/local/include/lz4 &&
-            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/ &&
-            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
+            mkdir -p $HOME/lz4_include_cibw &&
+            cp -f $LZ4_PREFIX/include/lz4*.h $HOME/lz4_include_cibw/ &&
+            export CPATH=$HOME/lz4_include_cibw:$CPATH
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}"
 
       - name: Build Windows wheels
