@@ -52,7 +52,13 @@ jobs:
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install lz4 zlib
+          brew install lz4 zlib pkg-config
+          
+          # Find and export LZ4 locations
+          export LZ4_INCLUDE=$(brew --prefix lz4)/include
+          export LZ4_LIB=$(brew --prefix lz4)/lib
+          echo "LZ4 include path: $LZ4_INCLUDE"
+          echo "LZ4 library path: $LZ4_LIB"
           
           # Explicitly install specific version of Abseil
           git clone https://github.com/abseil/abseil-cpp.git --branch ${{ env.ABSEIL_VERSION }}
@@ -84,6 +90,16 @@ jobs:
           
           # Install uchardet
           brew install uchardet
+          
+          # Create symbolic links to make sure headers are found
+          mkdir -p /usr/local/include/lz4
+          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/
+          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
+          
+          # Set environment variables for this job
+          echo "CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH" >> $GITHUB_ENV
+          echo "LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
 
       # Install dependencies for Windows
       - name: Install Windows dependencies
@@ -155,12 +171,31 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           pip install delocate
+          
+          # Print environment for debugging
+          echo "CPATH: $CPATH"
+          echo "LIBRARY_PATH: $LIBRARY_PATH"
+          echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          
+          # Find LZ4 installation
+          ls -la $(brew --prefix lz4)/include
+          ls -la $(brew --prefix lz4)/lib
+          
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./resiliparse_dom
         env:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
-          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
+          CIBW_ENVIRONMENT_MACOS: >-
+            CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH
+            LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH
+            PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH
+            MACOSX_DEPLOYMENT_TARGET=${{ env.MACOSX_DEPLOYMENT_TARGET }}
+          CIBW_BEFORE_BUILD_MACOS: >-
+            brew install pkg-config &&
+            mkdir -p /usr/local/include/lz4 &&
+            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/ &&
+            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}"
 
       - name: Build Windows wheels
@@ -219,7 +254,13 @@ jobs:
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install lz4 zlib
+          brew install lz4 zlib pkg-config
+          
+          # Find and export LZ4 locations
+          export LZ4_INCLUDE=$(brew --prefix lz4)/include
+          export LZ4_LIB=$(brew --prefix lz4)/lib
+          echo "LZ4 include path: $LZ4_INCLUDE"
+          echo "LZ4 library path: $LZ4_LIB"
           
           # Explicitly install specific version of Abseil
           git clone https://github.com/abseil/abseil-cpp.git --branch ${{ env.ABSEIL_VERSION }}
@@ -251,6 +292,16 @@ jobs:
           
           # Install uchardet
           brew install uchardet
+          
+          # Create symbolic links to make sure headers are found
+          mkdir -p /usr/local/include/lz4
+          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/
+          sudo ln -sf $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
+          
+          # Set environment variables for this job
+          echo "CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH" >> $GITHUB_ENV
+          echo "LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
 
       # Install dependencies for Windows
       - name: Install Windows dependencies
@@ -340,12 +391,31 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           pip install delocate
+          
+          # Print environment for debugging
+          echo "CPATH: $CPATH"
+          echo "LIBRARY_PATH: $LIBRARY_PATH"
+          echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          
+          # Find LZ4 installation
+          ls -la $(brew --prefix lz4)/include
+          ls -la $(brew --prefix lz4)/lib
+          
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: ./fastwarc
         env:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
-          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
+          CIBW_ENVIRONMENT_MACOS: >-
+            CPATH=$(brew --prefix lz4)/include:$(brew --prefix)/include:/usr/local/include:$CPATH
+            LIBRARY_PATH=$(brew --prefix lz4)/lib:$(brew --prefix)/lib:/usr/local/lib:$LIBRARY_PATH
+            PKG_CONFIG_PATH=$(brew --prefix lz4)/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH
+            MACOSX_DEPLOYMENT_TARGET=${{ env.MACOSX_DEPLOYMENT_TARGET }}
+          CIBW_BEFORE_BUILD_MACOS: >-
+            brew install pkg-config &&
+            mkdir -p /usr/local/include/lz4 &&
+            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/ &&
+            cp -f $(brew --prefix lz4)/include/lz4*.h /usr/local/include/lz4/
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}"
 
       - name: Build Windows wheels
