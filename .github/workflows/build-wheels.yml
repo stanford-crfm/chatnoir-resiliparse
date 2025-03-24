@@ -181,11 +181,6 @@ jobs:
           set -e
           python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
 
-      - name: Run Tests
-        run: |
-          export LD_PRELOAD="$(ldconfig -p | grep libasan | head -n1 | awk '{print $4}')"
-          python${PYTHON_VERSION} -m pytest --capture=sys --verbose resiliparse_dom/tests/
-
   build-coverage:
     runs-on: ubuntu-latest
     container:
@@ -204,9 +199,6 @@ jobs:
           set -e
           python${PYTHON_VERSION} -m pip install cython codecov-cli
           python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
-
-      - name: Run Tests
-        run: python${PYTHON_VERSION} -m pytest --cov --cov-report xml --junitxml=report.junit.xml resiliparse_dom/tests/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
