@@ -85,13 +85,13 @@ jobs:
       #   with:
       #     platforms: aarch64
 
-      - name: Build FastWARC
+      - name: Build Resiliparse DOM
         uses: pypa/cibuildwheel@v2.16.5
         with:
-          package-dir: fastwarc
+          package-dir: resiliparse_dom
           output-dir: wheelhouse
         env:
-          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/fastwarc
+          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse_dom
 
       - name: Build Resiliparse
         uses: pypa/cibuildwheel@v2.16.5
@@ -100,8 +100,8 @@ jobs:
           output-dir: wheelhouse
         env:
           CIBW_BEFORE_TEST: >-
-            python -c "import glob, platform; open('fastwarc.txt', 'w').write(glob.glob('wheelhouse/FastWARC-*cp' + ''.join(map(str, platform.python_version_tuple()[:2])) + '-*_' + platform.machine().lower() + '.whl')[0])" &&
-            python -m pip install -r fastwarc.txt
+            python -c "import glob, platform; open('resiliparse_dom.txt', 'w').write(glob.glob('wheelhouse/resiliparse_dom-*cp' + ''.join(map(str, platform.python_version_tuple()[:2])) + '-*_' + platform.machine().lower() + '.whl')[0])" &&
+            python -m pip install -r resiliparse_dom.txt
           CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse
 
       - name: Upload Wheels
@@ -135,13 +135,13 @@ jobs:
         with:
           platforms: all
 
-      - name: Build FastWARC
+      - name: Build Resiliparse DOM
         uses: pypa/cibuildwheel@v2.16.5
         with:
-          package-dir: fastwarc
+          package-dir: resiliparse_dom
           output-dir: wheelhouse
         env:
-          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/fastwarc
+          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse_dom
 
       - name: Build Resiliparse
         uses: pypa/cibuildwheel@v2.16.5
@@ -150,8 +150,8 @@ jobs:
           output-dir: wheelhouse
         env:
           CIBW_BEFORE_TEST: >-
-            python -c "import glob, platform; open('fastwarc.txt', 'w').write(glob.glob('wheelhouse/FastWARC-*cp' + ''.join(map(str, platform.python_version_tuple()[:2])) + '-*_' + platform.machine().lower() + '.whl')[0])" &&
-            python -m pip install -r fastwarc.txt
+            python -c "import glob, platform; open('resiliparse_dom.txt', 'w').write(glob.glob('wheelhouse/resiliparse_dom-*cp' + ''.join(map(str, platform.python_version_tuple()[:2])) + '-*_' + platform.machine().lower() + '.whl')[0])" &&
+            python -m pip install -r resiliparse_dom.txt
           CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse
 
       - name: Upload Wheels
@@ -174,8 +174,8 @@ jobs:
       - name: Install Build Module
         run: python -m pip install build
 
-      - name: Build FastWARC Source Dist
-        run: python -m build --sdist --outdir dist fastwarc
+      - name: Build Resiliparse DOM Source Dist
+        run: python -m build --sdist --outdir dist resiliparse_dom
 
       - name: Build Resiliparse Source Dist
         run: python -m build --sdist --outdir dist resiliparse
@@ -204,7 +204,7 @@ jobs:
       - name: Build Extensions
         run: |
           set -e
-          python${PYTHON_VERSION} -m pip install -e "fastwarc[all,test]"
+          python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
           python${PYTHON_VERSION} -m pip install -e "resiliparse[all,test]"
 
       - name: Run Tests
@@ -229,44 +229,11 @@ jobs:
         run: |
           set -e
           python${PYTHON_VERSION} -m pip install cython codecov-cli
-          python${PYTHON_VERSION} -m pip install -e "fastwarc[all,test]"
+          python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
           python${PYTHON_VERSION} -m pip install -e "resiliparse[all,test]"
 
       - name: Run Tests
         run: python${PYTHON_VERSION} -m pytest --cov --cov-report xml --junitxml=report.junit.xml tests/
-
-      # We cannot use the Codecov GitHub action due to incompatible Glibc versions
-      - name: Upload to Codecov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          TOKENLESS: ${{ github.event.pull_request.head.label }}
-        run: |
-          set -e
-
-          PR=""
-          if [ -n '${{ github.event.pull_request.head.sha }}' ]; then
-            PR="--pr ${{ github.event.number }}"
-          fi
-
-          python${PYTHON_VERSION} -m codecov_cli.main do-upload \
-            --file report.junit.xml \
-            --report-type test_results \
-            --sha ${{ github.event.pull_request.head.sha || github.sha }} \
-            --branch ${{ github.event.pull_request.head.label || github.ref_name }} \
-            $PR \
-            --slug ${{ github.repository }} \
-            --git-service github \
-            --fail-on-error
-
-          python${PYTHON_VERSION} -m codecov_cli.main upload-process \
-            --file coverage.xml \
-            --report-type coverage \
-            --sha ${{ github.event.pull_request.head.sha || github.sha }} \
-            --branch ${{ github.event.pull_request.head.label || github.ref_name }} \
-            $PR \
-            --slug ${{ github.repository }} \
-            --git-service github \
-            --fail-on-error
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -299,22 +266,14 @@ jobs:
           set -e
 
           python -m pip install twine
-          grep -vE "fastwarc|resiliparse" docs/requirements.txt | xargs python -m pip install
+          grep -vE "resiliparse_dom|resiliparse" docs/requirements.txt | xargs python -m pip install
 
           PYTHON_ABI="cp${PYTHON_VERSION/./}"
-          find wheelhouse -name "FastWARC-*-${PYTHON_ABI}-*-manylinux_x86_64.whl" | xargs -I% python -m pip install "%[all]"
+          find wheelhouse -name "resiliparse_dom-*-${PYTHON_ABI}-*-manylinux_x86_64.whl" | xargs -I% python -m pip install "%[all]"
           find wheelhouse -name "Resiliparse-*-${PYTHON_ABI}-*-manylinux_x86_64.whl" | xargs -I% python -m pip install "%[all]"
 
           cd docs
           make html
-
-      - name: Trigger Readthedocs Build
-        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/v')
-        uses: dfm/rtds-action@v1
-        with:
-          webhook_url: ${{ secrets.RTDS_WEBHOOK_URL }}
-          webhook_token: ${{ secrets.RTDS_WEBHOOK_TOKEN }}
-          commit_ref: ${{ github.ref }}
 
   publish-wheels:
     runs-on: ubuntu-latest
@@ -331,26 +290,3 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sdist
-
-      - name: Publish to PyPi
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD1: ${{ secrets.PYPI_FASTWARC_API_TOKEN }}
-          TWINE_PASSWORD2: ${{ secrets.PYPI_RESILIPARSE_API_TOKEN }}
-        run: |
-          set -e
-
-          python3 -m pip install twine
-
-          TWINE_PASSWORD="$TWINE_PASSWORD1" python3 -m twine upload FastWARC-*.whl fastwarc-*.tar.gz
-          TWINE_PASSWORD="$TWINE_PASSWORD2" python3 -m twine upload Resiliparse-*.whl resiliparse-*.tar.gz
-
-      - name: Wait
-        run: sleep 30
-
-      - name: Trigger Readthedocs Build
-        uses: dfm/rtds-action@v1
-        with:
-          webhook_url: ${{ secrets.RTDS_WEBHOOK_URL }}
-          webhook_token: ${{ secrets.RTDS_WEBHOOK_TOKEN }}
-          commit_ref: ${{ github.ref }}
