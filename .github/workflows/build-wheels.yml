@@ -24,12 +24,27 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y liblz4-dev
+          # Install lexbor from source (since it's not in default repos)
+          git clone https://github.com/lexbor/lexbor.git
+          cd lexbor
+          mkdir build && cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          make
+          sudo make install
+          sudo ldconfig
 
       # Install dependencies for macOS
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
           brew install lz4
+          # Install lexbor from source
+          git clone https://github.com/lexbor/lexbor.git
+          cd lexbor
+          mkdir build && cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          make
+          sudo make install
 
       # Install dependencies for Windows
       - name: Install Windows dependencies
@@ -39,6 +54,15 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
           C:\vcpkg\bootstrap-vcpkg.bat
           C:\vcpkg\vcpkg install lz4:x64-windows
+          
+          # Build and install lexbor
+          git clone https://github.com/lexbor/lexbor.git C:\lexbor
+          cd C:\lexbor
+          mkdir build
+          cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          cmake --build . --config Release
+          cmake --install . --config Release
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
@@ -50,9 +74,20 @@ jobs:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS: "auto64"
           # For Linux, install dependencies in the manylinux containers
-          CIBW_BEFORE_ALL_LINUX: "yum install -y lz4-devel || (yum install -y epel-release && yum install -y lz4-devel) || (apt-get update && apt-get install -y liblz4-dev)"
+          CIBW_BEFORE_ALL_LINUX: |
+            yum install -y lz4-devel || (yum install -y epel-release && yum install -y lz4-devel) || (apt-get update && apt-get install -y liblz4-dev)
+            # Install cmake for lexbor build
+            yum install -y cmake3 || yum install -y cmake || apt-get install -y cmake
+            git clone https://github.com/lexbor/lexbor.git
+            cd lexbor
+            mkdir build && cd build
+            cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+            make
+            make install
+            ldconfig
           # For Windows, set the path to vcpkg include and lib directories
-          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
+          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
+          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -76,12 +111,27 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y liblz4-dev
+          # Install lexbor from source (since it's not in default repos)
+          git clone https://github.com/lexbor/lexbor.git
+          cd lexbor
+          mkdir build && cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          make
+          sudo make install
+          sudo ldconfig
 
       # Install dependencies for macOS
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
           brew install lz4
+          # Install lexbor from source
+          git clone https://github.com/lexbor/lexbor.git
+          cd lexbor
+          mkdir build && cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          make
+          sudo make install
 
       # Install dependencies for Windows
       - name: Install Windows dependencies
@@ -91,6 +141,15 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
           C:\vcpkg\bootstrap-vcpkg.bat
           C:\vcpkg\vcpkg install lz4:x64-windows
+          
+          # Build and install lexbor
+          git clone https://github.com/lexbor/lexbor.git C:\lexbor
+          cd C:\lexbor
+          mkdir build
+          cd build
+          cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+          cmake --build . --config Release
+          cmake --install . --config Release
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
@@ -102,9 +161,20 @@ jobs:
           CIBW_BUILD: "cp3*"
           CIBW_ARCHS: "auto64"
           # For Linux, install dependencies in the manylinux containers
-          CIBW_BEFORE_ALL_LINUX: "yum install -y lz4-devel || (yum install -y epel-release && yum install -y lz4-devel) || (apt-get update && apt-get install -y liblz4-dev)"
+          CIBW_BEFORE_ALL_LINUX: |
+            yum install -y lz4-devel || (yum install -y epel-release && yum install -y lz4-devel) || (apt-get update && apt-get install -y liblz4-dev)
+            # Install cmake for lexbor build
+            yum install -y cmake3 || yum install -y cmake || apt-get install -y cmake
+            git clone https://github.com/lexbor/lexbor.git
+            cd lexbor
+            mkdir build && cd build
+            cmake -DLEXBOR_BUILD_SHARED=ON -DLEXBOR_BUILD_STATIC=ON ..
+            make
+            make install
+            ldconfig
           # For Windows, set the path to vcpkg include and lib directories
-          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
+          CIBW_ENVIRONMENT_WINDOWS: "INCLUDE=C:\\lexbor\\include;C:\\vcpkg\\installed\\x64-windows\\include;$INCLUDE LIB=C:\\lexbor\\lib;C:\\vcpkg\\installed\\x64-windows\\lib;$LIB"
+          CIBW_ENVIRONMENT_MACOS: "CPATH=/usr/local/include:$CPATH LIBRARY_PATH=/usr/local/lib:$LIBRARY_PATH"
 
       - uses: actions/upload-artifact@v4
         with:
