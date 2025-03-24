@@ -93,17 +93,6 @@ jobs:
         env:
           CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse_dom
 
-      - name: Build Resiliparse
-        uses: pypa/cibuildwheel@v2.16.5
-        with:
-          package-dir: resiliparse
-          output-dir: wheelhouse
-        env:
-          CIBW_BEFORE_TEST: >-
-            python -c "import glob, platform; open('resiliparse_dom.txt', 'w').write(glob.glob('wheelhouse/resiliparse_dom-*cp' + ''.join(map(str, platform.python_version_tuple()[:2])) + '-*_' + platform.machine().lower() + '.whl')[0])" &&
-            python -m pip install -r resiliparse_dom.txt
-          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse
-
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
         with:
@@ -143,17 +132,6 @@ jobs:
         env:
           CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse_dom
 
-      - name: Build Resiliparse
-        uses: pypa/cibuildwheel@v2.16.5
-        with:
-          package-dir: resiliparse
-          output-dir: wheelhouse
-        env:
-          CIBW_BEFORE_TEST: >-
-            python -c "import glob, platform; open('resiliparse_dom.txt', 'w').write(glob.glob('wheelhouse/resiliparse_dom-*cp' + ''.join(map(str, platform.python_version_tuple()[:2])) + '-*_' + platform.machine().lower() + '.whl')[0])" &&
-            python -m pip install -r resiliparse_dom.txt
-          CIBW_TEST_COMMAND: python -m pytest --capture=sys --verbose {project}/tests/resiliparse
-
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
         with:
@@ -176,9 +154,6 @@ jobs:
 
       - name: Build Resiliparse DOM Source Dist
         run: python -m build --sdist --outdir dist resiliparse_dom
-
-      - name: Build Resiliparse Source Dist
-        run: python -m build --sdist --outdir dist resiliparse
 
       - name: Upload Source Dists
         uses: actions/upload-artifact@v4
@@ -205,7 +180,6 @@ jobs:
         run: |
           set -e
           python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
-          python${PYTHON_VERSION} -m pip install -e "resiliparse[all,test]"
 
       - name: Run Tests
         run: |
@@ -230,7 +204,6 @@ jobs:
           set -e
           python${PYTHON_VERSION} -m pip install cython codecov-cli
           python${PYTHON_VERSION} -m pip install -e "resiliparse_dom[all,test]"
-          python${PYTHON_VERSION} -m pip install -e "resiliparse[all,test]"
 
       - name: Run Tests
         run: python${PYTHON_VERSION} -m pytest --cov --cov-report xml --junitxml=report.junit.xml tests/
@@ -266,11 +239,10 @@ jobs:
           set -e
 
           python -m pip install twine
-          grep -vE "resiliparse_dom|resiliparse" docs/requirements.txt | xargs python -m pip install
+          grep -vE "resiliparse_dom" docs/requirements.txt | xargs python -m pip install
 
           PYTHON_ABI="cp${PYTHON_VERSION/./}"
           find wheelhouse -name "resiliparse_dom-*-${PYTHON_ABI}-*-manylinux_x86_64.whl" | xargs -I% python -m pip install "%[all]"
-          find wheelhouse -name "Resiliparse-*-${PYTHON_ABI}-*-manylinux_x86_64.whl" | xargs -I% python -m pip install "%[all]"
 
           cd docs
           make html
